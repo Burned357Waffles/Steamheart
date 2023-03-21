@@ -11,9 +11,6 @@ public class MoveCamera : MonoBehaviour
     public float movementSpeed;
     public float movementTime;
     public float rotationAmount;
-    public float angleChangeSpeed;
-    public float minZoomAngle;
-    public float maxZoomAngle;
     public float minZoom;
     public float maxZoom;
     public float worldBorderX;
@@ -35,7 +32,6 @@ public class MoveCamera : MonoBehaviour
         newPosition = transform.position;
         newRotation = transform.rotation;
         newZoom = cameraTransform.localPosition;
-        newAngle = cameraTransform.localRotation;
     }
 
     public void Update()
@@ -49,7 +45,6 @@ public class MoveCamera : MonoBehaviour
         if(Input.mouseScrollDelta.y != 0)
         {
             newZoom += Input.mouseScrollDelta.y * zoomAmount;
-            //newAngle
         }
         if(Input.GetMouseButtonDown(0))
         {
@@ -139,21 +134,17 @@ public class MoveCamera : MonoBehaviour
         if (Input.GetKey(KeyCode.R))
         {
             newZoom += zoomAmount;
-            newAngle *= Quaternion.Euler(Vector3.left * angleChangeSpeed);
         }
 
         if (Input.GetKey(KeyCode.F))
         {
             newZoom += -zoomAmount;
-            newAngle *= Quaternion.Euler(Vector3.left * -angleChangeSpeed);
         }
 
         clampCamera();
         transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
         transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * movementTime);
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);
-        cameraTransform.localRotation = Quaternion.Lerp(cameraTransform.localRotation, newAngle, Time.deltaTime * movementTime);
-        
+        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);        
     }
 
     private void clampCamera()
@@ -167,8 +158,6 @@ public class MoveCamera : MonoBehaviour
         float clampedZoomY = Mathf.Clamp(newZoom.y, minZoom, maxZoom);
         float clampedZoomZ = Mathf.Clamp(newZoom.z, -maxZoom, -minZoom);
         newZoom = new Vector3(0, clampedZoomY, clampedZoomZ);
-
-        //float clampedAngle
     }
 
 }

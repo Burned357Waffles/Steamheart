@@ -552,12 +552,16 @@ PrefabInstance:
       value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 8527135030149635125, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
+      propertyPath: maxZoomAngle
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8527135030149635125, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: worldBorderX
       value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 8527135030149635125, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: angleChangeSpeed
-      value: 5
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
