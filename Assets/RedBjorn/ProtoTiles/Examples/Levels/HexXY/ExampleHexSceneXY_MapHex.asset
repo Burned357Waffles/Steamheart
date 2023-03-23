@@ -27,15 +27,13 @@ MonoBehaviour:
   - Type: Ground
     Id: 3fb50556f4d83c042b582eae91f31f30
     MapColor: {r: 1, g: 1, b: 1, a: 0.5}
-    Prefab: {fileID: 7362454568944323520, guid: f09410557b289ed47ac4b79146338c4f,
-      type: 3}
+    Prefab: {fileID: 919132149155446097, guid: 8b45bce8bf6c73847a5be70308db9dac, type: 3}
     GridOffset: 0
     Tags: []
   - Type: Water
     Id: 0e229ecb286fb5e4ea56cb97ad94f1b8
     MapColor: {r: 0, g: 1, b: 0.83468914, a: 0.5}
-    Prefab: {fileID: 7362454568944323520, guid: e170c74911861954cbd6649d9348f39a,
-      type: 3}
+    Prefab: {fileID: 7362454568944323520, guid: e170c74911861954cbd6649d9348f39a, type: 3}
     GridOffset: 0
     Tags:
     - {fileID: 11400000, guid: 25b8c40cae2c9684985e9ebdc6331b8e, type: 2}
