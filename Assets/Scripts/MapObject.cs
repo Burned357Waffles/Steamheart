@@ -18,9 +18,9 @@ using UnityEngine;
  */
 public abstract class MapObject : MonoBehaviour
 {
-    public abstract int[] coordinates = new int[2];
-    public abstract int Health;
-    public abstract int Damage;
+    public int[] coordinates = new int[2];
+    public int Health;
+    public int Damage;
 
     // checks if this object is selected. (this might be handled in unity instead)
     protected virtual void isSelected()
