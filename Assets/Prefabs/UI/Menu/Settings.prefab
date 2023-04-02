@@ -483,7 +483,6 @@ GameObject:
   - component: {fileID: 3704619616231872878}
   - component: {fileID: 7378639901375815207}
   - component: {fileID: 9190020644266348323}
-  - component: {fileID: 1963119048580789625}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -593,31 +592,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7378639901375815207}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11500000, guid: 2ab73a0194f792c4fbad29cda98ef960, type: 3}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
---- !u!114 &1963119048580789625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1379126147249388240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ab73a0194f792c4fbad29cda98ef960, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+      m_Calls: []
 --- !u!1 &1537798445461845911
 GameObject:
   m_ObjectHideFlags: 0
@@ -2196,7 +2171,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
