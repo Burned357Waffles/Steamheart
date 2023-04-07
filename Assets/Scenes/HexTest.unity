@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -152,6 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f8e596c58eb0f42ab16072a948fc9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hex: {fileID: 1493733526}
+  water_hex: {fileID: 0}
+  grass_hex: {fileID: 0}
 --- !u!4 &250597339
 Transform:
   m_ObjectHideFlags: 0
@@ -462,6 +465,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+--- !u!1 &1493733526 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1403481857482767476, guid: 3eba1bc0434034a418950aa16d1c05e5, type: 3}
+  m_PrefabInstance: {fileID: 1603648273}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1603648273
 PrefabInstance:
   m_ObjectHideFlags: 0
