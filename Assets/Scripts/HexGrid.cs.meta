@@ -3,7 +3,12 @@ guid: 83f8e596c58eb0f42ab16072a948fc9d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - hexPrefab: {instanceID: 0}
+  - airHex: {fileID: 1110042821952968574, guid: 7d16008831e9a064688ec4c586062af1, type: 3}
+  - basicHex: {fileID: 1403481857482767476, guid: 3eba1bc0434034a418950aa16d1c05e5, type: 3}
+  - forestHex: {fileID: 2381303314478614838, guid: d142008f7a6bda842bd715d4abca1adb, type: 3}
+  - mountainHex: {fileID: 4246958186261016714, guid: 6d3f5f99bd82ef84ebde30243dfc393a, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -15,7 +15,7 @@ public class Hex
     {
         this.Q = q;
         this.R = r;
-        this.S = -(q - r);
+        this.S = -(q + r);
     }
 
     public Vector3 Position()
@@ -28,5 +28,10 @@ public class Hex
         float horizontal = width;
 
         return new Vector3(horizontal * (this.Q + this.R / 2f), 0, vertical * this.R);
+    }
+
+    public Vector3 GetVectorCoordinates()
+    {
+        return new Vector3(Q, R, S);
     }
 }
