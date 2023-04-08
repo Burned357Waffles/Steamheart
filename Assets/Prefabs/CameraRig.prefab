@@ -145,8 +145,8 @@ MonoBehaviour:
   rotationAmount: 1
   minZoom: 5
   maxZoom: 200
-  worldBorderX: 100
-  wordBorderZ: 100
+  worldBorderX: 50
+  wordBorderZ: 50
   zoomAmount: {x: 0, y: -10, z: 10}
   newPosition: {x: 0, y: 0, z: 0}
   newZoom: {x: 0, y: 0, z: 0}
