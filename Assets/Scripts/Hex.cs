@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Hex
 {
+    // go to https://www.redblobgames.com/grids/hexagons/ to see how grid system works
     // Q + R + S = 0
     // S = -(Q + R)
     public readonly int Q;
@@ -17,7 +18,11 @@ public class Hex
         this.R = r;
         this.S = -(q + r);
     }
-
+    
+    /// <summary> ***********************************************
+    /// This function returns the world position for the hex so
+    /// that they properly tile. The resulting vector is returned
+    /// </summary> **********************************************
     public Vector3 Position()
     {
         float radius = 1f;
@@ -29,7 +34,11 @@ public class Hex
 
         return new Vector3(horizontal * (this.Q + this.R / 2f), 0, vertical * this.R);
     }
-
+    
+    /// <summary> ***********************************************
+    /// This function returns the coordinates of this hex in
+    /// a Vector3
+    /// </summary> **********************************************
     public Vector3 GetVectorCoordinates()
     {
         return new Vector3(Q, R, S);

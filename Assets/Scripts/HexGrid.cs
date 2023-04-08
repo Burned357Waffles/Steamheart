@@ -1,21 +1,25 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+/// <summary> ******************************************************
+/// This file will generate the map by creating a center hex,
+/// then creating each one in a spiraling pattern outwards.
+/// The variable mapRadius can be changed within Unity to change
+/// the size of the map. Later on this can be used to generate
+/// different map sizes in match creation via user selection. 
+/// </summary> *****************************************************
 public class HexGrid : MonoBehaviour
 {
-    [SerializeField] private GameObject hexPrefab;
+    [SerializeField] private GameObject hexPrefab; // to be set as one of the below types
     [SerializeField] private GameObject airHex;
     [SerializeField] private GameObject basicHex;
     [SerializeField] private GameObject forestHex;
     [SerializeField] private GameObject mountainHex;
 
     public int mapRadius;
-    private List<Hex> hexList = new List<Hex>();
-    private Vector3[] directionVectors =
+    private List<Hex> _hexList = new List<Hex>();
+    private readonly Vector3[] _directionVectors =
     {
         new Vector3(1, 0, -1),
         new Vector3(1, -1, 0),
@@ -29,12 +33,17 @@ public class HexGrid : MonoBehaviour
         GenerateGrid();
      }
 
-    // the map will generate in a spiral pattern
+    /// <summary> ***********************************************
+    /// This function creates the center tile at (0, 0, 0)
+    /// then calls HexRing consecutively from the center outward.
+    /// After all hexes are created and stored in _hexList,
+    /// InstantiateHexes() is called
+    /// </summary> **********************************************
     private void GenerateGrid()
     {
         // store the center of the map
         Hex center = new Hex(0, 0);
-        hexList.Add(center);
+        _hexList.Add(center);
         // call ring from center outward. while i < 4, generate only land for center island
         for (int i = 1; i < mapRadius; i++)
         {
@@ -43,69 +52,88 @@ public class HexGrid : MonoBehaviour
         InstantiateHexes();
     }
 
-    private void InstantiateHexes()
-    {
-        GameObject new_hex;
-        int hexCount = 1;
-        foreach (var hex in hexList)
-        {
-            // get the tile type
-            if (hexCount > 37) GetHexType(hex.Q, hex.R, true); // no longer the center island
-            else GetHexType(hex.Q, hex.R, false); // still is center island
-            float hexRotation = Random.Range(0, 7) * 60;
-            Debug.Log(hexRotation);
-            new_hex = Instantiate(hexPrefab,
-                                  hex.Position(),
-                                  Quaternion.identity,
-                                  this.transform);
-            new_hex.transform.Rotate(0f, hexRotation, 0f, Space.Self);
-            hexCount++;
-        }
-    }
-
-    private void GetHexType(int q, int r, bool hasAir)
-    {
-        int randomOffset = Random.Range(0, 1000);
-        float noise = Mathf.PerlinNoise(randomOffset + q/(float)mapRadius, randomOffset + r/(float)mapRadius);
-        //Debug.Log("Q: " + q +", R: " + r + ", N: " + noise);
-        if (noise > .7 && noise < .8) hexPrefab = basicHex;
-        else if (noise > .8 && noise < .9) hexPrefab = forestHex;
-        else if (noise > .9 && noise < 1) hexPrefab = mountainHex;
-        else
-        {
-            if (hasAir) hexPrefab = airHex;
-            else hexPrefab = basicHex;
-        }
-    }
-
-    private Vector3 AddCoordinates(Vector3 hexCoordinates, Vector3 addCoordinates)
-    {
-        return hexCoordinates + addCoordinates;
-    }
-    private Vector3 CoordinateScale(Vector3 coordinates, int factor)
-    {
-        return coordinates * factor;
-    }
-    private Vector3 hexNeighbor(Vector3 coordinates, int direction)
-    { 
-        return AddCoordinates(coordinates, directionVectors[direction]);
-    }
-    // this function will generate hexes in a ring with given radius
+    /// <summary> ***********************************************
+    /// This function generates a ring of hexes in a radius from
+    /// the center tile. It starts at corner number 4 and works
+    /// its way counter-clockwise.
+    /// </summary> **********************************************
     private void HexRing(Vector3 center, int radius)
     {
         Vector3 hexCoordinates = AddCoordinates(center,
-                                    CoordinateScale(directionVectors[4], radius));
+            CoordinateScale(_directionVectors[4], radius));
         for (int i = 0; i < 6; i++)
         {
             for(int j = 0; j < radius; j++)
             {
-                hexList.Add(new Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
-                hexCoordinates = hexNeighbor(hexCoordinates, i);
+                _hexList.Add(new Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
+                hexCoordinates = HexNeighbor(hexCoordinates, i);
             }
         }
     }
+    
+    /// <summary> ***********************************************
+    /// This function returns the result of adding the two
+    /// passed Vectors
+    /// </summary> ***********************************************
+    private Vector3 AddCoordinates(Vector3 hexCoordinates, Vector3 addCoordinates)
+    {
+        return hexCoordinates + addCoordinates;
+    }
+    
+    /// <summary> ***********************************************
+    /// This function returns the result of multiplying the
+    /// passed Vector by a scalar value.
+    /// </summary> **********************************************
+    private Vector3 CoordinateScale(Vector3 coordinates, int factor)
+    {
+        return coordinates * factor;
+    }
+    
+    /// <summary> ***********************************************
+    /// This functions the neighbor of a tile in the direction
+    /// given using the array of direction vectors.
+    /// </summary> **********************************************
+    private Vector3 HexNeighbor(Vector3 coordinates, int direction)
+    { 
+        return AddCoordinates(coordinates, _directionVectors[direction]);
+    }
 
+    /// <summary> ***********************************************
+    /// This function first checks if the center island is
+    /// being generated, if so, then make sure no air tiles
+    /// spawn. If not, then allow air tiles to spawn. After
+    /// this check, a new GameObject is instantiated and
+    /// a random rotation is applied.
+    /// </summary> **********************************************
+    private void InstantiateHexes()
+    {
+        int hexCount = 1;
+        foreach (var hex in _hexList)
+        {
+            // get the tile type
+            GetHexType(hex.Q, hex.R, hexCount > 37); 
+            GameObject newHex = Instantiate(hexPrefab,
+                hex.Position(),
+                Quaternion.identity,
+                this.transform);
+            newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+            hexCount++;
+        }
+    }
 
+    /// <summary> ***********************************************
+    /// This function assigns which type each hex will be.
+    /// It takes in coordinates and a boolean to signify if
+    /// air hexes will be generated.
+    /// </summary> **********************************************
+    private void GetHexType(int q, int r, bool hasAir)
+    {
+        int randomOffset = Random.Range(0, 1000); // random offset so generation is different each run
+        float noise = Mathf.PerlinNoise(randomOffset + q/(float)mapRadius, randomOffset + r/(float)mapRadius);
 
-
+        if (noise > .7 && noise < .8) hexPrefab = basicHex;
+        else if (noise > .8 && noise < .9) hexPrefab = forestHex;
+        else if (noise > .9 && noise < 1) hexPrefab = mountainHex;
+        else hexPrefab = hasAir ? airHex : basicHex;
+    }
 }
