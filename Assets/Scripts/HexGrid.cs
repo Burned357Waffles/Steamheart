@@ -18,6 +18,7 @@ public class HexGrid : MonoBehaviour
     [SerializeField] private GameObject mountainHex;
 
     public int mapRadius;
+    public int centerIslandRadius;
     private List<Hex> _hexList = new List<Hex>();
     private readonly Vector3[] _directionVectors =
     {
@@ -111,12 +112,15 @@ public class HexGrid : MonoBehaviour
         foreach (var hex in _hexList)
         {
             // get the tile type
-            GetHexType(hex.Q, hex.R, hexCount > 37); 
+            GetHexType(hex, hexCount > centerIslandRadius * 12 + 1); 
+            hex.SetHexType(hexPrefab.gameObject.name);
+            
             GameObject newHex = Instantiate(hexPrefab,
                 hex.Position(),
                 Quaternion.identity,
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+            
             hexCount++;
         }
     }
@@ -126,14 +130,58 @@ public class HexGrid : MonoBehaviour
     /// It takes in coordinates and a boolean to signify if
     /// air hexes will be generated.
     /// </summary> **********************************************
-    private void GetHexType(int q, int r, bool hasAir)
+    private void GetHexType(Hex hex, bool hasAir)
     {
-        int randomOffset = Random.Range(0, 1000); // random offset so generation is different each run
-        float noise = Mathf.PerlinNoise(randomOffset + q/(float)mapRadius, randomOffset + r/(float)mapRadius);
+        // air, basic, forest, mountain
+        int[] typeCount = new int[4];
+        // get all neighbors
+        for (int i = 0; i < 6; i++)
+        {
+            Hex neighbor = GetHexAt(HexNeighbor(hex.GetVectorCoordinates(), i));
 
-        if (noise > .7 && noise < .8) hexPrefab = basicHex;
+            if (neighbor == null) ; // do nothing
+            else if (neighbor.GetHexType() == Hex.HexType.Air) typeCount[0]++;
+            else if (neighbor.GetHexType() == Hex.HexType.Basic) typeCount[1]++;
+            else if (neighbor.GetHexType() == Hex.HexType.Forest) typeCount[2]++;
+            else if (neighbor.GetHexType() == Hex.HexType.Mountain) typeCount[3]++;
+        }
+
+        Debug.Log(" " + typeCount[0] + ", " + typeCount[1] + ", " + typeCount[2] + ", " + typeCount[3]);
+        // calculate probability here
+        
+        int randomOffset = Random.Range(0, 1000); // random offset so generation is different each run
+        float noise = Mathf.PerlinNoise(randomOffset + hex.Q/(float)mapRadius, 
+                                        randomOffset + hex.R/(float)mapRadius);
+        
+        if (noise > .65 && noise < .8) hexPrefab = basicHex;
         else if (noise > .8 && noise < .9) hexPrefab = forestHex;
         else if (noise > .9 && noise < 1) hexPrefab = mountainHex;
-        else hexPrefab = hasAir ? airHex : basicHex;
+        else if (hasAir)
+        {
+            if (typeCount[1] + typeCount[2] + typeCount[3] > 2) hexPrefab = basicHex;
+            else if (typeCount[2] > 2) hexPrefab = forestHex;
+            else if (typeCount[3] > 2) hexPrefab = mountainHex;
+            else hexPrefab = airHex;   
+        }
+        else hexPrefab = basicHex;
+        
+        Debug.Log(hexPrefab.name);
+    }
+
+    /// <summary> ***********************************************
+    /// This function takes in a Vector3 and returns the hex at
+    /// those coordinates. Returns null if hex doesn't exist.
+    /// </summary> **********************************************
+    public Hex GetHexAt(Vector3 coordinates)
+    {
+        foreach (Hex hex in _hexList)
+        {
+            if (hex.Q == (int)coordinates.x &&
+                hex.R == (int)coordinates.y &&
+                hex.S == (int)coordinates.z)
+                return hex;
+        }
+
+        return null;
     }
 }
