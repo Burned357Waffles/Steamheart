@@ -4,7 +4,7 @@ using UI.Menu;
 using Unity.VisualScripting;
 
 namespace UI.Menu
-{
+{ 
     public class MainMenu : MonoBehaviour
     {
         [SerializeField] private GameObject mainMenu;
