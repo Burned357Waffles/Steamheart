@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -21,6 +20,8 @@ public class HexGrid : MonoBehaviour
     public int mapRadius;
     public int centerIslandRadius;
     private List<Hex> _hexList = new List<Hex>();
+    private List<GameObject> _gameObjects = new List<GameObject>();
+    
     // TODO: this will probably be changed once we implement multiplayer
     private List<Hex> _ownedHexes = new List<Hex>(); 
     private readonly Vector3[] _directionVectors =
@@ -124,7 +125,7 @@ public class HexGrid : MonoBehaviour
                 Quaternion.identity,
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
-            
+            _gameObjects.Add(newHex);
             hexCount++;
         }
     }
@@ -185,4 +186,5 @@ public class HexGrid : MonoBehaviour
     }
     
     public List<Hex> GetHexList() { return _hexList; }
+    public List<GameObject> GetGameObjectList() { return _gameObjects; }
 }

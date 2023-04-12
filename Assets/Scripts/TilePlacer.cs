@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 /// <summary>
 /// this will convert an air tile to a land tile. It can 
@@ -27,9 +24,9 @@ public class TilePlacer : MonoBehaviour
             
             if (Physics.Raycast(ray, out hit))
             {
-                Hex hexClicked = GetHexAt(hit.transform.position);
-                ConvertHex(hexClicked);
-                Debug.Log("Hex at: " + hexClicked.Q + ", " + hexClicked.R);
+                int hexIndex = GetHexIndexAt(hit.transform.position);
+                ConvertHex(hexIndex);
+                Debug.Log("Hex at: " + _hexGrid.GetHexList()[hexIndex].Q + ", " + _hexGrid.GetHexList()[hexIndex].R);
             }
         }
     }
@@ -38,26 +35,33 @@ public class TilePlacer : MonoBehaviour
     /// This function takes in a Vector3 of world coordinates and
     /// returns the Hex at that position.
     /// </summary> **********************************************
-    private Hex GetHexAt(Vector3 coordinates)
+    private int GetHexIndexAt(Vector3 coordinates)
     {
-        Hex hexClicked = null;
-        foreach (Hex hex in _hexGrid.GetHexList())
+        int hexIndex = -1;
+        for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
         {
-            if (hex.Position() == coordinates)
+            if (_hexGrid.GetHexList()[i].Position() == coordinates)
             {
-                hexClicked = hex;
+                hexIndex = i;
                 break;
             }
         }
-        return hexClicked;
+        return hexIndex;
     }
 
-    private void ConvertHex(Hex hex)
+    private void ConvertHex(int hexIndex)
     {
-        if (hex.GetHexType() == Hex.HexType.Air)
+        if (_hexGrid.GetHexList()[hexIndex].GetHexType() == Hex.HexType.Air)
         {
-            Debug.Log(_hexGrid.basicHex.name);
-            hex.SetHexType("basic_tile");
+            Destroy(_hexGrid.GetGameObjectList()[hexIndex]);
+            
+            GameObject newHex = Instantiate(_hexGrid.basicHex,
+                _hexGrid.GetHexList()[hexIndex].Position(),
+                Quaternion.identity,
+                this.transform);
+            newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+            _hexGrid.GetGameObjectList()[hexIndex] = newHex;
+            _hexGrid.GetHexList()[hexIndex].SetHexType("basic_tile");
         }
     }
 }
