@@ -180,9 +180,11 @@ public class HexGrid : MonoBehaviour
                                               && hex.S == (int)coordinates.z);
     }
     
+    /// <summary> ***********************************************
+    /// These are getter methods. Not much to say about these.
+    /// </summary> **********************************************
     public List<Hex> GetHexList() { return _hexList; }
     public List<GameObject> GetGameObjectList() { return _gameObjects; }
-
     public Vector3[] GetDirectionVector(){ return _directionVectors; }
 
 }

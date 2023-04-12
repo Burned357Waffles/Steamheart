@@ -1,12 +1,19 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-/// <summary>
-/// this will convert an air tile to a land tile. It can 
-/// </summary>
+/// <summary> ******************************************************
+/// This will detect if a grid position is clicked and will convert
+/// an air tile to a land tile. Currently, it is constantly
+/// listening for click on Update(), but it will eventually only
+/// start listening when tile selection is active.
+/// </summary> *****************************************************
 public class HexPlacer : MonoBehaviour
 {
-    [SerializeField] private HexGrid _hexGrid;
+    [SerializeField] private HexGrid hexGrid;
     [SerializeField] public GameObject hexPrefab; // this will be changed depending on button selected
+
+    // TODO: this will be set in the future to true or false depending if in tile placer mode
+    private bool _selectionActive = true;
     
     private void Update()
     {
@@ -18,9 +25,10 @@ public class HexPlacer : MonoBehaviour
     /// </summary> **********************************************
     private void DetectClick()
     {
+        if (_selectionActive == false) return;
         if (!Input.GetMouseButtonDown(1)) return;
         RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
 
         if (!Physics.Raycast(ray, out hit)) return;
         
@@ -36,9 +44,9 @@ public class HexPlacer : MonoBehaviour
     private int GetHexIndexAtWorldPos(Vector3 coordinates)
     {
         int hexIndex = -1;
-        for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
+        for (int i = 0; i < hexGrid.GetHexList().Count; i++)
         {
-            if (_hexGrid.GetHexList()[i].Position() != coordinates) continue;
+            if (hexGrid.GetHexList()[i].Position() != coordinates) continue;
             hexIndex = i;
             break;
         }
@@ -52,9 +60,9 @@ public class HexPlacer : MonoBehaviour
     private int GetHexIndexAtGridPos(Vector3 coordinates)
     {
         int hexIndex = -1;
-        for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
+        for (int i = 0; i < hexGrid.GetHexList().Count; i++)
         {
-            if (_hexGrid.GetHexList()[i].GetVectorCoordinates() == coordinates)
+            if (hexGrid.GetHexList()[i].GetVectorCoordinates() == coordinates)
             {
                 hexIndex = i;
                 break;
@@ -70,8 +78,8 @@ public class HexPlacer : MonoBehaviour
     /// </summary> **********************************************
     private void ConvertHex(int hexIndex)
     {
-        Hex selectedHex = _hexGrid.GetHexList()[hexIndex];
-        GameObject hexObject = _hexGrid.GetGameObjectList()[hexIndex];
+        Hex selectedHex = hexGrid.GetHexList()[hexIndex];
+        GameObject hexObject = hexGrid.GetGameObjectList()[hexIndex];
         if (selectedHex.GetHexType() != Hex.HexType.Air) return;
         if (!CheckForNeighbors(selectedHex)) return;
         
@@ -91,23 +99,24 @@ public class HexPlacer : MonoBehaviour
     /// adjacent land hex and returns true if there is false if
     /// not.
     /// </summary> **********************************************
+    /// TODO: check for ownership 
     private bool CheckForNeighbors(Hex selectedHex)
     {
-        Vector3 hexCoordinates = _hexGrid.AddCoordinates(selectedHex.GetVectorCoordinates(),
-            _hexGrid.CoordinateScale(_hexGrid.GetDirectionVector()[4], 1));
+        Vector3 hexCoordinates = hexGrid.AddCoordinates(selectedHex.GetVectorCoordinates(),
+            hexGrid.CoordinateScale(hexGrid.GetDirectionVector()[4], 1));
         int landCount = 0;
         for (int i = 0; i < 6; i++)
         {
             for(int j = 0; j < 1; j++)
             {
                 int hexIndex = GetHexIndexAtGridPos(hexCoordinates);
-                if (_hexGrid.GetHexList()[hexIndex].isLand())
+                if (hexGrid.GetHexList()[hexIndex].isLand())
                 {
                     landCount++;
                     break;
                 }
                 
-                hexCoordinates = _hexGrid.HexNeighbor(hexCoordinates, i);
+                hexCoordinates = hexGrid.HexNeighbor(hexCoordinates, i);
             }
         }
         
@@ -118,9 +127,10 @@ public class HexPlacer : MonoBehaviour
     /// This function will set the hex type based on the player's
     /// selection.
     /// </summary> **********************************************
+    /// TODO: the current implementation should be replaced by the buttons when the buttons work
     private void SetHexType()
     {
-        hexPrefab = _hexGrid.basicHex;
+        hexPrefab = hexGrid.basicHex;
     }
 }
     
