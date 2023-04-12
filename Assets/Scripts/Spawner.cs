@@ -6,13 +6,26 @@ using UnityEngine.UI;
 public class Spawner : MonoBehaviour
 {
     public GameObject unit;
-    void Start()
+
+    // Won't work?]
+    
+    // void Update()
+    // {
+    //     if(Input.GetKeyDown(KeyCode.C))
+    //     {
+    //         Instantiate(unit, transform.position, transform.rotation);
+    //         Debug.Log("unit spawned");
+    //     }
+    // }
+
+    void Start() 
     {
-        Instantiate(unit, transform.position, transform.rotation);
+        spawnUnit();
     }
+    
 
     void spawnUnit()
     {
-       //Instantiate(unit, transform.position, transform.rotation);
+       Instantiate(unit, transform.position, transform.rotation);
     }
-}
+}  
