@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85bff6eaf7bf61b43a0a0e33474f70e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hexGrid: {fileID: 250597338}
+  hexGrid: {fileID: 250597338}
   hexPrefab: {fileID: 0}
 --- !u!1 &386094263
 GameObject:
@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0, g: 0.16084719, b: 1, a: 1}
     m_PressedColor: {r: 1, g: 0, b: 0, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
