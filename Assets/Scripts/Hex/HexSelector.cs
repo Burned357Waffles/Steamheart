@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary> ************************************************************
 /// This is meant to be called by a button to change the type of the Hex
@@ -6,8 +8,12 @@
 /// </summary> ************************************************************
 public class HexSelector : MonoBehaviour
 {
+    [SerializeField] private GameObject NONE;
     [SerializeField] private HexGrid _hexGrid;
     [SerializeField] private HexPlacer _hexPlacer;
+    [SerializeField] private GameObject _basicButton;
+    [SerializeField] private GameObject _forestButton;
+    [SerializeField] private GameObject _mountainButton;
     
     /// <summary> ***********************************************
     /// This function is called on button click and will allow
@@ -15,8 +21,9 @@ public class HexSelector : MonoBehaviour
     /// </summary> **********************************************
     public void SetHexTypeBasicButton() 
     {
-        Debug.Log("BASIC");
         _hexPlacer.hexPrefab = _hexGrid.basicHex;
+        _forestButton.GetComponent<Button>().interactable = false;
+        _mountainButton.GetComponent<Button>().interactable = false;
     }
     /// <summary> ***********************************************
     /// This function is called on button click and will allow
@@ -24,8 +31,9 @@ public class HexSelector : MonoBehaviour
     /// </summary> **********************************************
     public void SetHexTypeForestButton() 
     {
-        Debug.Log("FOREST");
         _hexPlacer.hexPrefab = _hexGrid.forestHex;
+        _basicButton.GetComponent<Button>().interactable = false;
+        _mountainButton.GetComponent<Button>().interactable = false;
     }
     
     /// <summary> ***********************************************
@@ -34,7 +42,17 @@ public class HexSelector : MonoBehaviour
     /// </summary> **********************************************
     public void SetHexTypeMountainButton() 
     {
-        Debug.Log("MOUNTAIN");
         _hexPlacer.hexPrefab = _hexGrid.mountainHex;
+        _basicButton.GetComponent<Button>().interactable = false;
+        _forestButton.GetComponent<Button>().interactable = false;
+    }
+    
+    public void ResetPlacementCount()
+    {
+        _hexPlacer.placementCount = 0;
+        _hexPlacer.hexPrefab = NONE;
+        _basicButton.GetComponent<Button>().interactable = true;
+        _forestButton.GetComponent<Button>().interactable = true;
+        _mountainButton.GetComponent<Button>().interactable = true;
     }
 }

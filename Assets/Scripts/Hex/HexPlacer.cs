@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,10 +12,9 @@ public class HexPlacer : MonoBehaviour
 {
     [SerializeField] private HexGrid hexGrid;
     [SerializeField] public GameObject hexPrefab; // this will be changed depending on button selected
-
-    // TODO: this will be set in the future to true or false depending if in tile placer mode
-    private bool _selectionActive = true;
     
+    public int placementCount = 0;
+
     private void Update()
     {
         DetectClick();
@@ -25,14 +25,14 @@ public class HexPlacer : MonoBehaviour
     /// </summary> **********************************************
     private void DetectClick()
     {
-        if (_selectionActive == false) return;
         if (!Input.GetMouseButtonDown(1)) return;
         RaycastHit hit;
-        Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
-
-        if (!Physics.Raycast(ray, out hit)) return;
         
-        SetHexType();
+        Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
+        if (!Physics.Raycast(ray, out hit)) return;
+        if (hexPrefab == null) return; // if button is not chosen
+        if(!PlacementCount()) return;
+        
         int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
         if (hexIndex != -1) ConvertHex(hexIndex);
     }
@@ -124,13 +124,28 @@ public class HexPlacer : MonoBehaviour
     }
 
     /// <summary> ***********************************************
-    /// This function will set the hex type based on the player's
-    /// selection.
+    /// This function checks if the placement count has reached
+    /// the max value for each hex type. If it has not reached
+    /// max, then increment and return true to indicate that new
+    /// hex can be placed. If has reached max count, then return
+    /// false indicating that a new hex may not be placed.
     /// </summary> **********************************************
-    /// TODO: the current implementation should be replaced by the buttons when the buttons work
-    private void SetHexType()
+    private bool PlacementCount()
     {
-        hexPrefab = hexGrid.basicHex;
+        if (hexPrefab == hexGrid.basicHex && placementCount < 2)
+        {
+            placementCount++;
+            return true;
+        }
+        else if (hexPrefab == hexGrid.forestHex || hexPrefab == hexGrid.mountainHex)
+            if (placementCount < 1)
+            {
+                placementCount++;
+                return true;
+            }
+        return false;
     }
+
+
 }
     
