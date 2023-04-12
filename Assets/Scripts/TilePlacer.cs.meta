@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/LoadingManager.cs.meta
-guid: 77e8aa5c5f13d3d459f1ed068ef44fd9
-========
-guid: 8886883c9db1d2e429a1b3d6e1b50dc2
->>>>>>>> hex-grid:Assets/Scripts/Hex.cs.meta
+guid: 85bff6eaf7bf61b43a0a0e33474f70e0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
