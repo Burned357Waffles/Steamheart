@@ -13,6 +13,7 @@ public class Hex
     public readonly int S;
     
     private HexType _hexType;
+    private bool _isOwned;
     
     static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
 
@@ -21,6 +22,7 @@ public class Hex
         this.Q = q;
         this.R = r;
         this.S = -(q + r);
+        _isOwned = false;
     }
     
     /// <summary> ***********************************************
@@ -67,7 +69,7 @@ public class Hex
     /// This function returns what type this hex is
     /// </summary> **********************************************
     public HexType GetHexType() { return  _hexType; }
-    
+
     /// <summary> ***********************************************
     /// This enum stores the different types of hexes
     /// </summary> **********************************************

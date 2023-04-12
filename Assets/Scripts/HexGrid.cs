@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -11,15 +12,17 @@ using Random = UnityEngine.Random;
 /// </summary> *****************************************************
 public class HexGrid : MonoBehaviour
 {
-    [SerializeField] private GameObject hexPrefab; // to be set as one of the below types
-    [SerializeField] private GameObject airHex;
-    [SerializeField] private GameObject basicHex;
-    [SerializeField] private GameObject forestHex;
-    [SerializeField] private GameObject mountainHex;
+    [SerializeField] public GameObject hexPrefab; // to be set as one of the below types
+    [SerializeField] public GameObject airHex;
+    [SerializeField] public GameObject basicHex;
+    [SerializeField] public GameObject forestHex;
+    [SerializeField] public GameObject mountainHex;
 
     public int mapRadius;
     public int centerIslandRadius;
     private List<Hex> _hexList = new List<Hex>();
+    // TODO: this will probably be changed once we implement multiplayer
+    private List<Hex> _ownedHexes = new List<Hex>(); 
     private readonly Vector3[] _directionVectors =
     {
         new Vector3(1, 0, -1),
@@ -29,10 +32,11 @@ public class HexGrid : MonoBehaviour
         new Vector3(-1, 1, 0),
         new Vector3(0, 1, -1)
     };
+
     private void Start()
     {
         GenerateGrid();
-     }
+    }
 
     /// <summary> ***********************************************
     /// This function creates the center tile at (0, 0, 0)
@@ -146,9 +150,6 @@ public class HexGrid : MonoBehaviour
             else if (neighbor.GetHexType() == Hex.HexType.Mountain) typeCount[3]++;
         }
 
-        Debug.Log(" " + typeCount[0] + ", " + typeCount[1] + ", " + typeCount[2] + ", " + typeCount[3]);
-        // calculate probability here
-        
         int randomOffset = Random.Range(0, 1000); // random offset so generation is different each run
         float noise = Mathf.PerlinNoise(randomOffset + hex.Q/(float)mapRadius, 
                                         randomOffset + hex.R/(float)mapRadius);
@@ -164,8 +165,6 @@ public class HexGrid : MonoBehaviour
             else hexPrefab = airHex;   
         }
         else hexPrefab = basicHex;
-        
-        Debug.Log(hexPrefab.name);
     }
 
     /// <summary> ***********************************************
@@ -184,4 +183,6 @@ public class HexGrid : MonoBehaviour
 
         return null;
     }
+    
+    public List<Hex> GetHexList() { return _hexList; }
 }
