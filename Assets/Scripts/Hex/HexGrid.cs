@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -81,7 +82,7 @@ public class HexGrid : MonoBehaviour
     /// This function returns the result of adding the two
     /// passed Vectors
     /// </summary> ***********************************************
-    private Vector3 AddCoordinates(Vector3 hexCoordinates, Vector3 addCoordinates)
+    public Vector3 AddCoordinates(Vector3 hexCoordinates, Vector3 addCoordinates)
     {
         return hexCoordinates + addCoordinates;
     }
@@ -90,7 +91,7 @@ public class HexGrid : MonoBehaviour
     /// This function returns the result of multiplying the
     /// passed Vector by a scalar value.
     /// </summary> **********************************************
-    private Vector3 CoordinateScale(Vector3 coordinates, int factor)
+    public Vector3 CoordinateScale(Vector3 coordinates, int factor)
     {
         return coordinates * factor;
     }
@@ -99,7 +100,7 @@ public class HexGrid : MonoBehaviour
     /// This functions the neighbor of a tile in the direction
     /// given using the array of direction vectors.
     /// </summary> **********************************************
-    private Vector3 HexNeighbor(Vector3 coordinates, int direction)
+    public Vector3 HexNeighbor(Vector3 coordinates, int direction)
     { 
         return AddCoordinates(coordinates, _directionVectors[direction]);
     }
@@ -174,17 +175,14 @@ public class HexGrid : MonoBehaviour
     /// </summary> **********************************************
     public Hex GetHexAt(Vector3 coordinates)
     {
-        foreach (Hex hex in _hexList)
-        {
-            if (hex.Q == (int)coordinates.x &&
-                hex.R == (int)coordinates.y &&
-                hex.S == (int)coordinates.z)
-                return hex;
-        }
-
-        return null;
+        return _hexList.FirstOrDefault(hex => hex.Q == (int)coordinates.x 
+                                              && hex.R == (int)coordinates.y 
+                                              && hex.S == (int)coordinates.z);
     }
     
     public List<Hex> GetHexList() { return _hexList; }
     public List<GameObject> GetGameObjectList() { return _gameObjects; }
+
+    public Vector3[] GetDirectionVector(){ return _directionVectors; }
+
 }

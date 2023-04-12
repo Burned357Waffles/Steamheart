@@ -11,7 +11,7 @@ public class Hex
     public readonly int S;
     
     private HexType _hexType;
-    private bool _isOwned;
+    private bool _isLand;
     
     static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
 
@@ -20,7 +20,6 @@ public class Hex
         this.Q = q;
         this.R = r;
         this.S = -(q + r);
-        _isOwned = false;
     }
     
     /// <summary> ***********************************************
@@ -29,8 +28,8 @@ public class Hex
     /// </summary> **********************************************
     public Vector3 Position()
     {
-        float radius = 1f;
-        float height = radius * 2;
+        const float radius = 1f;
+        const float height = radius * 2;
         float width = WIDTH_MULTIPLIER * height;
 
         float vertical = height * 0.75f;
@@ -61,12 +60,19 @@ public class Hex
             "mountain_tile" => HexType.Mountain,
             _ => throw new Exception($"Hex of type {_hexType} not supported")
         };
+        if (_hexType == HexType.Air) _isLand = false;
+        else _isLand = true;
     }
     
     /// <summary> ***********************************************
     /// This function returns what type this hex is
     /// </summary> **********************************************
     public HexType GetHexType() { return  _hexType; }
+    
+    /// <summary> ***********************************************
+    /// This function returns if the land is land or air.
+    /// </summary> **********************************************
+    public bool isLand() { return _isLand; }
 
     /// <summary> ***********************************************
     /// This enum stores the different types of hexes
