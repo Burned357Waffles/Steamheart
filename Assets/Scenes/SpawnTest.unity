@@ -227,6 +227,7 @@ MonoBehaviour:
   forestHex: {fileID: 2381303314478614838, guid: d142008f7a6bda842bd715d4abca1adb, type: 3}
   mountainHex: {fileID: 4246958186261016714, guid: 6d3f5f99bd82ef84ebde30243dfc393a, type: 3}
   mapRadius: 32
+  centerIslandRadius: 0
 --- !u!4 &250597339
 Transform:
   m_ObjectHideFlags: 0
@@ -280,7 +281,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682988083}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
