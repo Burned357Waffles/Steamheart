@@ -7,21 +7,21 @@ public class Spawner : MonoBehaviour
 {
     public GameObject unit;
 
-    // Won't work?]
+    // Won't work?
     
-    // void Update()
-    // {
-    //     if(Input.GetKeyDown(KeyCode.C))
-    //     {
-    //         Instantiate(unit, transform.position, transform.rotation);
-    //         Debug.Log("unit spawned");
-    //     }
-    // }
-
-    void Start() 
+    void Update()
     {
-        spawnUnit();
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            spawnUnit();
+            Debug.Log("unit spawned");
+        }
     }
+
+    // void Start() 
+    // {
+    //     spawnUnit();
+    // }
     
 
     void spawnUnit()
