@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-/// <summary> ******************************************************
-/// This will detect if a grid position is clicked and will convert
-/// an air tile to a land tile. Currently, it is constantly
-/// listening for click on Update(), but it will eventually only
-/// start listening when tile selection is active.
-/// </summary> *****************************************************
+/// <summary> ************************************************************
+/// This will detect if a grid position is clicked and will convert an air
+/// tile to a land tile. Currently, it is constantly listening for click
+/// on Update(), but it will eventually only start listening when tile
+/// selection is active.
+/// </summary> ***********************************************************
 public class HexPlacer : MonoBehaviour
 {
     [SerializeField] private HexGrid hexGrid;
@@ -38,8 +38,8 @@ public class HexPlacer : MonoBehaviour
     }
 
     /// <summary> ***********************************************
-    /// This function takes in a Vector3 of world coordinates and
-    /// returns the Hex at that position.
+    /// This function takes in a Vector3 of world coordinates
+    /// and returns the Hex at that position.
     /// </summary> **********************************************
     private int GetHexIndexAtWorldPos(Vector3 coordinates)
     {
@@ -102,8 +102,8 @@ public class HexPlacer : MonoBehaviour
     /// TODO: check for ownership 
     private bool CheckForNeighbors(Hex selectedHex)
     {
-        Vector3 hexCoordinates = hexGrid.AddCoordinates(selectedHex.GetVectorCoordinates(),
-            hexGrid.CoordinateScale(hexGrid.GetDirectionVector()[4], 1));
+        Vector3 hexCoordinates = HexGrid.AddCoordinates(selectedHex.GetVectorCoordinates(),
+            HexGrid.CoordinateScale(hexGrid.GetDirectionVector()[4], 1));
         int landCount = 0;
         for (int i = 0; i < 6; i++)
         {

@@ -3,13 +3,13 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-/// <summary> ******************************************************
-/// This file will generate the map by creating a center hex,
-/// then creating each one in a spiraling pattern outwards.
-/// The variable mapRadius can be changed within Unity to change
-/// the size of the map. Later on this can be used to generate
-/// different map sizes in match creation via user selection. 
-/// </summary> *****************************************************
+/// <summary> ************************************************************
+/// This file will generate the map by creating a center hex, then
+/// creating each one in a spiraling pattern outwards. The variable
+/// mapRadius can be changed within Unity to change the size of the map.
+/// Later on this can be used to generate different map sizes in match
+/// creation via user selection. 
+/// </summary> ***********************************************************
 public class HexGrid : MonoBehaviour
 {
     [SerializeField] public GameObject hexPrefab; // to be set as one of the below types
@@ -20,11 +20,9 @@ public class HexGrid : MonoBehaviour
 
     public int mapRadius;
     public int centerIslandRadius;
-    private List<Hex> _hexList = new List<Hex>();
-    private List<GameObject> _gameObjects = new List<GameObject>();
-    
-    // TODO: this will probably be changed once we implement multiplayer
-    private List<Hex> _ownedHexes = new List<Hex>(); 
+    private readonly List<Hex> _hexList = new List<Hex>();
+    private readonly List<GameObject> _gameObjects = new List<GameObject>();
+
     private readonly Vector3[] _directionVectors =
     {
         new Vector3(1, 0, -1),
@@ -35,6 +33,48 @@ public class HexGrid : MonoBehaviour
         new Vector3(0, 1, -1)
     };
 
+    // PUBLIC FUNCTIONS
+    /// <summary> ***********************************************
+    /// This function returns the result of adding the two
+    /// passed Vectors
+    /// </summary> ***********************************************
+    public static Vector3 AddCoordinates(Vector3 hexCoordinates, Vector3 addCoordinates)
+    {
+        return hexCoordinates + addCoordinates;
+    }
+    
+    /// <summary> ***********************************************
+    /// This function returns the result of multiplying the
+    /// passed Vector by a scalar value.
+    /// </summary> **********************************************
+    public static Vector3 CoordinateScale(Vector3 coordinates, int factor)
+    {
+        return coordinates * factor;
+    }
+    
+    /// <summary> ***********************************************
+    /// This functions the neighbor of a tile in the direction
+    /// given using the array of direction vectors.
+    /// </summary> **********************************************
+    public Vector3 HexNeighbor(Vector3 coordinates, int direction)
+    { 
+        return AddCoordinates(coordinates, _directionVectors[direction]);
+    }
+    
+    /// <summary> ***********************************************
+    /// These are getter methods. Not much to say about these.
+    /// </summary> **********************************************
+    public List<Hex> GetHexList() { return _hexList; }
+    public List<GameObject> GetGameObjectList() { return _gameObjects; }
+    public Vector3[] GetDirectionVector(){ return _directionVectors; }
+    
+    
+    
+    
+    // PRIVATE FUNCTIONS
+    /// <summary> ***********************************************
+    /// Runs once on startup. This is from MonoBehavior
+    /// </summary> **********************************************
     private void Start()
     {
         GenerateGrid();
@@ -76,33 +116,6 @@ public class HexGrid : MonoBehaviour
                 hexCoordinates = HexNeighbor(hexCoordinates, i);
             }
         }
-    }
-    
-    /// <summary> ***********************************************
-    /// This function returns the result of adding the two
-    /// passed Vectors
-    /// </summary> ***********************************************
-    public Vector3 AddCoordinates(Vector3 hexCoordinates, Vector3 addCoordinates)
-    {
-        return hexCoordinates + addCoordinates;
-    }
-    
-    /// <summary> ***********************************************
-    /// This function returns the result of multiplying the
-    /// passed Vector by a scalar value.
-    /// </summary> **********************************************
-    public Vector3 CoordinateScale(Vector3 coordinates, int factor)
-    {
-        return coordinates * factor;
-    }
-    
-    /// <summary> ***********************************************
-    /// This functions the neighbor of a tile in the direction
-    /// given using the array of direction vectors.
-    /// </summary> **********************************************
-    public Vector3 HexNeighbor(Vector3 coordinates, int direction)
-    { 
-        return AddCoordinates(coordinates, _directionVectors[direction]);
     }
 
     /// <summary> ***********************************************
@@ -168,23 +181,15 @@ public class HexGrid : MonoBehaviour
         }
         else hexPrefab = basicHex;
     }
-
+    
     /// <summary> ***********************************************
     /// This function takes in a Vector3 and returns the hex at
     /// those coordinates. Returns null if hex doesn't exist.
     /// </summary> **********************************************
-    public Hex GetHexAt(Vector3 coordinates)
+    private Hex GetHexAt(Vector3 coordinates)
     {
         return _hexList.FirstOrDefault(hex => hex.Q == (int)coordinates.x 
                                               && hex.R == (int)coordinates.y 
                                               && hex.S == (int)coordinates.z);
     }
-    
-    /// <summary> ***********************************************
-    /// These are getter methods. Not much to say about these.
-    /// </summary> **********************************************
-    public List<Hex> GetHexList() { return _hexList; }
-    public List<GameObject> GetGameObjectList() { return _gameObjects; }
-    public Vector3[] GetDirectionVector(){ return _directionVectors; }
-
 }

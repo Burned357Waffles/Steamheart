@@ -1,6 +1,11 @@
 using System;
 using UnityEngine;
 
+/// <summary> ************************************************************
+/// The data class for each Hex. This holds the grid coordinates of this
+/// hex, can convert grid coordinates into world coordinates, and holds
+/// the hex type that this tile is.
+/// </summary> ***********************************************************
 public class Hex
 {
     // go to https://www.redblobgames.com/grids/hexagons/ to see how grid system works

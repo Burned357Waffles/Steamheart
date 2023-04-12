@@ -1,4 +1,9 @@
 ﻿using UnityEngine;
+
+/// <summary> ************************************************************
+/// This is meant to be called by a button to change the type of the Hex
+/// to be placed by HexPlacer.
+/// </summary> ************************************************************
 public class HexSelector : MonoBehaviour
 {
     [SerializeField] private HexGrid _hexGrid;
