@@ -20,13 +20,16 @@ public class TilePlacer : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            
-            if (Physics.Raycast(ray, out hit))
+            if (Camera.main != null)
             {
-                int hexIndex = GetHexIndexAt(hit.transform.position);
-                ConvertHex(hexIndex);
-                Debug.Log("Hex at: " + _hexGrid.GetHexList()[hexIndex].Q + ", " + _hexGrid.GetHexList()[hexIndex].R);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            
+                if (Physics.Raycast(ray, out hit))
+                {
+                    int hexIndex = GetHexIndexAt(hit.transform.position);
+                    ConvertHex(hexIndex);
+                    Debug.Log("Hex at: " + _hexGrid.GetHexList()[hexIndex].Q + ", " + _hexGrid.GetHexList()[hexIndex].R);
+                }
             }
         }
     }
@@ -55,13 +58,13 @@ public class TilePlacer : MonoBehaviour
         {
             Destroy(_hexGrid.GetGameObjectList()[hexIndex]);
             
-            GameObject newHex = Instantiate(_hexGrid.basicHex,
+            GameObject newHex = Instantiate(_hexGrid.mountainHex,
                 _hexGrid.GetHexList()[hexIndex].Position(),
                 Quaternion.identity,
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
             _hexGrid.GetGameObjectList()[hexIndex] = newHex;
-            _hexGrid.GetHexList()[hexIndex].SetHexType("basic_tile");
+            _hexGrid.GetHexList()[hexIndex].SetHexType("mountain_tile");
         }
     }
 }
