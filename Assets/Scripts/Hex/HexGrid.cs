@@ -20,6 +20,12 @@ public class HexGrid : MonoBehaviour
 
     public int mapRadius;
     public int centerIslandRadius;
+    
+    /*
+    TODO: these should probably be combined into a dictionary. However, I am not sure how I should 
+    TODO: do that because the Hex and GameObject are created and stored at different times.
+    */
+    private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
     private readonly List<Hex> _hexList = new List<Hex>();
     private readonly List<GameObject> _gameObjects = new List<GameObject>();
 

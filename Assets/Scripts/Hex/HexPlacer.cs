@@ -13,7 +13,7 @@ public class HexPlacer : MonoBehaviour
     private HexGrid _hexGrid;
     [SerializeField] public GameObject hexPrefab; // this will be changed depending on button selected
     
-    public int placementCount = 0;
+    public int placementCount;
 
     private void Start()
     {
@@ -31,10 +31,9 @@ public class HexPlacer : MonoBehaviour
     private void DetectClick()
     {
         if (!Input.GetMouseButtonDown(1)) return;
-        RaycastHit hit;
         
         Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
-        if (!Physics.Raycast(ray, out hit)) return;
+        if (!Physics.Raycast(ray, out RaycastHit hit)) return;
         if (hexPrefab == null) return; // if button is not chosen
 
         int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
