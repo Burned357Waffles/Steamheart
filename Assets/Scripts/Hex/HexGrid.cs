@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MapObjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,9 +18,18 @@ public class HexGrid : MonoBehaviour
     [SerializeField] public GameObject basicHex;
     [SerializeField] public GameObject forestHex;
     [SerializeField] public GameObject mountainHex;
+    
+    [SerializeField] public GameObject ownedHexPrefab; // to be set as one of the below types
+    [SerializeField] public GameObject ownedBasicHex;
+    [SerializeField] public GameObject ownedForestHex;
+    [SerializeField] public GameObject ownedMountainHex;
+
+    [SerializeField] public GameObject cityPrefab;
 
     public int mapRadius;
     public int centerIslandRadius;
+    public int playerCount;
+    public int capitolDistance;
     
     /*
     TODO: these should probably be combined into a dictionary. However, I am not sure how I should 
@@ -28,8 +38,9 @@ public class HexGrid : MonoBehaviour
     private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
     private readonly List<Hex> _hexList = new List<Hex>();
     private readonly List<GameObject> _gameObjects = new List<GameObject>();
+    private readonly List<City> _cityList = new List<City>();
 
-    private readonly Vector3[] _directionVectors =
+    private static readonly Vector3[] DirectionVectors =
     {
         new Vector3(1, 0, -1),
         new Vector3(1, -1, 0),
@@ -62,9 +73,9 @@ public class HexGrid : MonoBehaviour
     /// This functions the neighbor of a tile in the direction
     /// given using the array of direction vectors.
     /// </summary> **********************************************
-    public Vector3 HexNeighbor(Vector3 coordinates, int direction)
+    public static Vector3 HexNeighbor(Vector3 coordinates, int direction)
     { 
-        return AddCoordinates(coordinates, _directionVectors[direction]);
+        return AddCoordinates(coordinates, DirectionVectors[direction]);
     }
     
     /// <summary> ***********************************************
@@ -72,7 +83,7 @@ public class HexGrid : MonoBehaviour
     /// </summary> **********************************************
     public List<Hex> GetHexList() { return _hexList; }
     public List<GameObject> GetGameObjectList() { return _gameObjects; }
-    public Vector3[] GetDirectionVector(){ return _directionVectors; }
+    public Vector3[] GetDirectionVector(){ return DirectionVectors; }
     
     
     
@@ -84,6 +95,7 @@ public class HexGrid : MonoBehaviour
     private void Start()
     {
         GenerateGrid();
+        CreateCapitols();
     }
 
     /// <summary> ***********************************************
@@ -100,7 +112,7 @@ public class HexGrid : MonoBehaviour
         // call ring from center outward. while i < 4, generate only land for center island
         for (int i = 1; i < mapRadius; i++)
         {
-            HexRing(center.GetVectorCoordinates(), i);
+            HexRing(center.GetVectorCoordinates(), i, _hexList);
         }
         InstantiateHexes();
     }
@@ -110,15 +122,15 @@ public class HexGrid : MonoBehaviour
     /// the center tile. It starts at corner number 4 and works
     /// its way counter-clockwise.
     /// </summary> **********************************************
-    private void HexRing(Vector3 center, int radius)
+    public static void HexRing(Vector3 center, int radius, List<Hex> listToAddTo)
     {
         Vector3 hexCoordinates = AddCoordinates(center,
-            CoordinateScale(_directionVectors[4], radius));
+            CoordinateScale(DirectionVectors[4], radius));
         for (int i = 0; i < 6; i++)
         {
             for(int j = 0; j < radius; j++)
             {
-                _hexList.Add(new Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
+                listToAddTo.Add(new Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
                 hexCoordinates = HexNeighbor(hexCoordinates, i);
             }
         }
@@ -197,5 +209,82 @@ public class HexGrid : MonoBehaviour
         return _hexList.FirstOrDefault(hex => hex.Q == (int)coordinates.x 
                                               && hex.R == (int)coordinates.y 
                                               && hex.S == (int)coordinates.z);
+    }
+
+
+    private void CreateCapitols()
+    {
+        for (int i = 0; i < playerCount; i++)
+        {
+            Hex hexToPut = GetHexAt(CoordinateScale(DirectionVectors[i], capitolDistance));
+            CreateCityAt(hexToPut, i, true);
+        }
+    }
+    
+    /// <summary> ***********************************************
+    /// This function will be called by a button to create a city
+    /// </summary> **********************************************
+    private void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
+    {
+        City city = new City(cityCenter, ownerID, isCapitol);
+
+        for (int i = 0; i < _hexList.Count(); i++)
+        {
+            if (_hexList[i].GetVectorCoordinates() == cityCenter.GetVectorCoordinates())
+            {
+                Debug.Log("Found Center");
+                Destroy(_gameObjects[i]);
+                
+                GameObject cityObject = Instantiate(cityPrefab,
+                    cityCenter.Position(),
+                    Quaternion.identity,
+                    this.transform);
+                //cityObject.transform.parent = _gameObjects[0].transform;
+
+                _gameObjects[i] = cityObject;
+                _cityList.Add(city);
+                ChangeCityHexPrefabs(city);
+                return;
+            }
+        }
+    }
+
+    /// <summary> ***********************************************
+    /// This changes all of the tiles to owned type. This will
+    /// likely be changed
+    /// </summary> **********************************************
+    private void ChangeCityHexPrefabs(City city)
+    {
+        List<Hex> cityHexesList = city.GetCityHexes();
+        int listOffset = 0;
+        for (int i = 0; i < _hexList.Count(); i++)
+        {
+            if (_hexList[i].GetVectorCoordinates() == cityHexesList[0].GetVectorCoordinates())
+            {
+                Debug.Log("Found offset");
+                listOffset = i;
+                break;
+            }
+        }
+        
+        for (int i = 1; i < cityHexesList.Count(); i++)
+        {
+            Debug.Log(cityHexesList[i].GetVectorCoordinates().ToString());
+            Debug.Log(cityHexesList[i].GetHexType());
+            if (cityHexesList[i].GetHexType() == Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
+            else if (cityHexesList[i].GetHexType() == Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
+            else if (cityHexesList[i].GetHexType() == Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
+            else continue;
+            
+            Debug.Log(ownedHexPrefab.name);
+            Destroy(_gameObjects[i]);
+            
+            GameObject newHex = Instantiate(ownedHexPrefab,
+                cityHexesList[i].Position(),
+                Quaternion.identity,
+                this.transform);
+            newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+            _gameObjects[i] = newHex;
+        }
     }
 }

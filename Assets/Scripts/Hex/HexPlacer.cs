@@ -118,7 +118,7 @@ public class HexPlacer : MonoBehaviour
                     break;
                 }
                 
-                hexCoordinates = _hexGrid.HexNeighbor(hexCoordinates, i);
+                hexCoordinates = HexGrid.HexNeighbor(hexCoordinates, i);
             }
         }
         

@@ -3,8 +3,9 @@ using UnityEngine;
 
 /// <summary> ************************************************************
 /// The data class for each Hex. This holds the grid coordinates of this
-/// hex, can convert grid coordinates into world coordinates, and holds
-/// the hex type that this tile is.
+/// hex, can convert grid coordinates into world coordinates, holds
+/// the hex type that this tile is, and the owner ID. If ownerID = 0, it
+/// is unowned.
 /// </summary> ***********************************************************
 public class Hex
 {
@@ -17,6 +18,7 @@ public class Hex
     
     private HexType _hexType;
     private bool _isLand;
+    private int _ownerID;
     
     static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
 
@@ -25,6 +27,7 @@ public class Hex
         this.Q = q;
         this.R = r;
         this.S = -(q + r);
+        _ownerID = 0;
     }
     
     /// <summary> ***********************************************
@@ -67,7 +70,12 @@ public class Hex
         };
         _isLand = _hexType != HexType.Air;
     }
-    
+
+    /// <summary> ***********************************************
+    /// This function sets who owns this hex
+    /// </summary> **********************************************
+    public void SetOwnerID(int ownerID) { _ownerID = ownerID; }
+
     /// <summary> ***********************************************
     /// This function returns what type this hex is
     /// </summary> **********************************************

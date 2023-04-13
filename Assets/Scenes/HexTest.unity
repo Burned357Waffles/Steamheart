@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -231,8 +231,15 @@ MonoBehaviour:
   basicHex: {fileID: 1403481857482767476, guid: 3eba1bc0434034a418950aa16d1c05e5, type: 3}
   forestHex: {fileID: 2381303314478614838, guid: d142008f7a6bda842bd715d4abca1adb, type: 3}
   mountainHex: {fileID: 4246958186261016714, guid: 6d3f5f99bd82ef84ebde30243dfc393a, type: 3}
+  ownedHexPrefab: {fileID: 0}
+  ownedBasicHex: {fileID: 6464097055016101987, guid: 4e1d9306ae30bb2488efb11a42f8ae0f, type: 3}
+  ownedForestHex: {fileID: 8295349956468922480, guid: 9387ee9005169cb4a915047e286ecd2c, type: 3}
+  ownedMountainHex: {fileID: 7178512327020780823, guid: 620b75b0407119d4bbaf33898eef1fde, type: 3}
+  cityPrefab: {fileID: 8582613802384748761, guid: a45315f1ff9c57d4ca117f4c1ef6731a, type: 3}
   mapRadius: 32
   centerIslandRadius: 3
+  playerCount: 1
+  capitolDistance: 0
 --- !u!4 &250597339
 Transform:
   m_ObjectHideFlags: 0
@@ -260,7 +267,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85bff6eaf7bf61b43a0a0e33474f70e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hexGrid: {fileID: 250597338}
   hexPrefab: {fileID: 0}
   placementCount: 0
 --- !u!1 &386094263
