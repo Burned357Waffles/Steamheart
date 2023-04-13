@@ -158,7 +158,7 @@ public class HexGrid : MonoBehaviour
         {
             Hex neighbor = GetHexAt(HexNeighbor(hex.GetVectorCoordinates(), i));
 
-            if (neighbor == null) ; // do nothing
+            if (neighbor == null) {} // do nothing
             else if (neighbor.GetHexType() == Hex.HexType.Air) typeCount[0]++;
             else if (neighbor.GetHexType() == Hex.HexType.Basic) typeCount[1]++;
             else if (neighbor.GetHexType() == Hex.HexType.Forest) typeCount[2]++;

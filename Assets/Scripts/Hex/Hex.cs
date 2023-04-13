@@ -65,8 +65,7 @@ public class Hex
             "mountain_tile" => HexType.Mountain,
             _ => throw new Exception($"Hex of type {_hexType} not supported")
         };
-        if (_hexType == HexType.Air) _isLand = false;
-        else _isLand = true;
+        _isLand = _hexType != HexType.Air;
     }
     
     /// <summary> ***********************************************
@@ -77,7 +76,7 @@ public class Hex
     /// <summary> ***********************************************
     /// This function returns if the land is land or air.
     /// </summary> **********************************************
-    public bool isLand() { return _isLand; }
+    public bool IsLand() { return _isLand; }
 
     /// <summary> ***********************************************
     /// This enum stores the different types of hexes

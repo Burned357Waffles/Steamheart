@@ -1,6 +1,6 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 /// <summary> ************************************************************
 /// This will detect if a grid position is clicked and will convert an air
@@ -10,10 +10,15 @@ using UnityEngine.Serialization;
 /// </summary> ***********************************************************
 public class HexPlacer : MonoBehaviour
 {
-    [SerializeField] private HexGrid hexGrid;
+    private HexGrid _hexGrid;
     [SerializeField] public GameObject hexPrefab; // this will be changed depending on button selected
     
     public int placementCount = 0;
+
+    private void Start()
+    {
+        _hexGrid = GameObject.FindObjectOfType<HexGrid>();
+    }
 
     private void Update()
     {
@@ -31,9 +36,9 @@ public class HexPlacer : MonoBehaviour
         Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out hit)) return;
         if (hexPrefab == null) return; // if button is not chosen
-        if(!PlacementCount()) return;
-        
+
         int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+        if(!PlacementCount(hexIndex)) return;
         if (hexIndex != -1) ConvertHex(hexIndex);
     }
 
@@ -44,9 +49,9 @@ public class HexPlacer : MonoBehaviour
     private int GetHexIndexAtWorldPos(Vector3 coordinates)
     {
         int hexIndex = -1;
-        for (int i = 0; i < hexGrid.GetHexList().Count; i++)
+        for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
         {
-            if (hexGrid.GetHexList()[i].Position() != coordinates) continue;
+            if (_hexGrid.GetHexList()[i].Position() != coordinates) continue;
             hexIndex = i;
             break;
         }
@@ -60,9 +65,9 @@ public class HexPlacer : MonoBehaviour
     private int GetHexIndexAtGridPos(Vector3 coordinates)
     {
         int hexIndex = -1;
-        for (int i = 0; i < hexGrid.GetHexList().Count; i++)
+        for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
         {
-            if (hexGrid.GetHexList()[i].GetVectorCoordinates() == coordinates)
+            if (_hexGrid.GetHexList()[i].GetVectorCoordinates() == coordinates)
             {
                 hexIndex = i;
                 break;
@@ -78,10 +83,8 @@ public class HexPlacer : MonoBehaviour
     /// </summary> **********************************************
     private void ConvertHex(int hexIndex)
     {
-        Hex selectedHex = hexGrid.GetHexList()[hexIndex];
-        GameObject hexObject = hexGrid.GetGameObjectList()[hexIndex];
-        if (selectedHex.GetHexType() != Hex.HexType.Air) return;
-        if (!CheckForNeighbors(selectedHex)) return;
+        Hex selectedHex = _hexGrid.GetHexList()[hexIndex];
+        GameObject hexObject = _hexGrid.GetGameObjectList()[hexIndex];
         
         Destroy(hexObject);
 
@@ -90,7 +93,7 @@ public class HexPlacer : MonoBehaviour
             Quaternion.identity,
             this.transform);
         newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
-        hexObject = newHex;
+        _hexGrid.GetGameObjectList()[hexIndex] = newHex;
         selectedHex.SetHexType(hexPrefab.name);
     }
 
@@ -103,20 +106,20 @@ public class HexPlacer : MonoBehaviour
     private bool CheckForNeighbors(Hex selectedHex)
     {
         Vector3 hexCoordinates = HexGrid.AddCoordinates(selectedHex.GetVectorCoordinates(),
-            HexGrid.CoordinateScale(hexGrid.GetDirectionVector()[4], 1));
+            HexGrid.CoordinateScale(_hexGrid.GetDirectionVector()[4], 1));
         int landCount = 0;
         for (int i = 0; i < 6; i++)
         {
             for(int j = 0; j < 1; j++)
             {
                 int hexIndex = GetHexIndexAtGridPos(hexCoordinates);
-                if (hexGrid.GetHexList()[hexIndex].isLand())
+                if (_hexGrid.GetHexList()[hexIndex].IsLand())
                 {
                     landCount++;
                     break;
                 }
                 
-                hexCoordinates = hexGrid.HexNeighbor(hexCoordinates, i);
+                hexCoordinates = _hexGrid.HexNeighbor(hexCoordinates, i);
             }
         }
         
@@ -130,14 +133,17 @@ public class HexPlacer : MonoBehaviour
     /// hex can be placed. If has reached max count, then return
     /// false indicating that a new hex may not be placed.
     /// </summary> **********************************************
-    private bool PlacementCount()
+    private bool PlacementCount(int hexIndex)
     {
-        if (hexPrefab == hexGrid.basicHex && placementCount < 2)
+        if (_hexGrid.GetHexList()[hexIndex].GetHexType() != Hex.HexType.Air) return false;
+        if (!CheckForNeighbors(_hexGrid.GetHexList()[hexIndex])) return false;
+        
+        if (hexPrefab == _hexGrid.basicHex && placementCount < 2)
         {
             placementCount++;
             return true;
         }
-        else if (hexPrefab == hexGrid.forestHex || hexPrefab == hexGrid.mountainHex)
+        else if (hexPrefab == _hexGrid.forestHex || hexPrefab == _hexGrid.mountainHex)
             if (placementCount < 1)
             {
                 placementCount++;
