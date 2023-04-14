@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/LoadingManager.cs.meta
+guid: d0230c5fc0f49084ca44f6335241c5e1
+========
+guid: 8886883c9db1d2e429a1b3d6e1b50dc2
+>>>>>>>> hex-grid:Assets/Scripts/Hex.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/FMOD Banks/Desktop/Main.bank.meta
+guid: 0cc86208e1332874f95e118fb75a1175
+========
 guid: 6b719ade8eefb6e40abc4535a67a4a31
+>>>>>>>> hex-grid:Assets/Scenes/HexTest.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

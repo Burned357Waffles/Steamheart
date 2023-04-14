@@ -661,6 +661,7 @@ GameObject:
   - component: {fileID: 210582882942582265}
   - component: {fileID: 3838192307490714204}
   - component: {fileID: 1344052739772909206}
+  - component: {fileID: 76046190606748644}
   m_Layer: 0
   m_Name: forest_tile_1_owned_foliage
   m_TagString: Untagged
@@ -734,6 +735,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &76046190606748644
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695793672916150083}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4575734979276873811, guid: fe0ef28db60008b4e87ee7c0a1be7b44, type: 3}
 --- !u!1 &711805620465172769
 GameObject:
   m_ObjectHideFlags: 0
@@ -6025,7 +6048,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2301117360798415762}
-  - component: {fileID: 8757988451067696836}
   m_Layer: 0
   m_Name: forest_tile_owned
   m_TagString: Untagged
@@ -6047,30 +6069,8 @@ Transform:
   m_Children:
   - {fileID: 210582882942582265}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &8757988451067696836
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8295349956468922480}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4575734979276873811, guid: fe0ef28db60008b4e87ee7c0a1be7b44, type: 3}
 --- !u!1 &8577546697220866145
 GameObject:
   m_ObjectHideFlags: 0
