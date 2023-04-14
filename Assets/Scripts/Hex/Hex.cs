@@ -17,6 +17,8 @@ public class Hex
     
     private HexType _hexType;
     private bool _isLand;
+
+    private bool _isBlocked;
     
     static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
 
@@ -66,6 +68,13 @@ public class Hex
             _ => throw new Exception($"Hex of type {_hexType} not supported")
         };
         _isLand = _hexType != HexType.Air;
+        if(_hexType == HexType.Air)
+        {
+            _isBlocked = true;
+        }else
+        {
+            _isBlocked = false;
+        }
     }
     
     /// <summary> ***********************************************
@@ -78,6 +87,8 @@ public class Hex
     /// </summary> **********************************************
     public bool IsLand() { return _isLand; }
 
+    public bool IsBlocked() {return _isBlocked;}
+
     /// <summary> ***********************************************
     /// This enum stores the different types of hexes
     /// </summary> **********************************************
@@ -88,4 +99,5 @@ public class Hex
         Forest, 
         Mountain 
     }
+
 }

@@ -17,6 +17,7 @@ public class HexGrid : MonoBehaviour
     [SerializeField] public GameObject basicHex;
     [SerializeField] public GameObject forestHex;
     [SerializeField] public GameObject mountainHex;
+ 
 
     public int mapRadius;
     public int centerIslandRadius;
@@ -60,6 +61,8 @@ public class HexGrid : MonoBehaviour
     { 
         return AddCoordinates(coordinates, _directionVectors[direction]);
     }
+
+
     
     /// <summary> ***********************************************
     /// These are getter methods. Not much to say about these.
@@ -186,7 +189,7 @@ public class HexGrid : MonoBehaviour
     /// This function takes in a Vector3 and returns the hex at
     /// those coordinates. Returns null if hex doesn't exist.
     /// </summary> **********************************************
-    private Hex GetHexAt(Vector3 coordinates)
+    public Hex GetHexAt(Vector3 coordinates)
     {
         return _hexList.FirstOrDefault(hex => hex.Q == (int)coordinates.x 
                                               && hex.R == (int)coordinates.y 
