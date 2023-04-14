@@ -11,24 +11,26 @@ namespace MapObjects
     /// </summary> ***********************************************************
     public class City
     {
-        private int _ownerID;
+        private readonly int _ownerID;
         private bool _isCapitol;
         private int _health;
         private int _damage;
-        private int _cityRadius;
-        private HexGrid _hexGrid;
-        
-        private List<Hex> _controlledHexes = new List<Hex>();
+        private readonly int _cityRadius;
+        private readonly HexGrid _hexGrid;
+
+        private readonly Dictionary<Hex, int> _controlledHexDictionary = new Dictionary<Hex, int>();
+        private readonly List<Hex> _controlledHexes = new List<Hex>();
+        private List<int> _controlledIndexes = new List<int>();
 
         public City(Hex cityCenterHex, int ownerID, bool isCapitol)
         {
-            _cityRadius = 3;
+            _cityRadius = 4;
             _ownerID = ownerID;
             _isCapitol = isCapitol;
             _health = 100; // we can play with values
             _damage = 10; // we can play with values
             _controlledHexes.Add(cityCenterHex);
-            _hexGrid = GameObject.FindObjectOfType<HexGrid>();
+            _hexGrid = Object.FindObjectOfType<HexGrid>();
             CreateCity();
         }
         
@@ -41,7 +43,7 @@ namespace MapObjects
             Hex center = _controlledHexes[0];
             for (int i = 1; i < _cityRadius; i++)
             {
-                HexGrid.HexRing(center.GetVectorCoordinates(), i, _controlledHexes);
+                _hexGrid.HexRing(center.GetVectorCoordinates(), i, _controlledHexDictionary);
             }
             SetOwnership();
         }
@@ -52,12 +54,19 @@ namespace MapObjects
         /// </summary> **********************************************
         private void SetOwnership()
         {
+            /*
             for (int i = 0; i < _controlledHexes.Count; i++)
             {
                 _controlledHexes[i].SetOwnerID(_ownerID);
             }
+            */
+            foreach (var key in _controlledHexDictionary.Keys)
+            {
+                key.SetOwnerID(_ownerID);
+            }
         }
 
         public List<Hex> GetCityHexes(){ return _controlledHexes; }
+        public Dictionary<Hex, int> GetCityDictionary() { return _controlledHexDictionary; }
     }
 }

@@ -122,7 +122,7 @@ public class HexGrid : MonoBehaviour
     /// the center tile. It starts at corner number 4 and works
     /// its way counter-clockwise.
     /// </summary> **********************************************
-    public static void HexRing(Vector3 center, int radius, List<Hex> listToAddTo)
+    public static void HexRing(Vector3 center, int radius, List<Hex> hexListToAddTo)
     {
         Vector3 hexCoordinates = AddCoordinates(center,
             CoordinateScale(DirectionVectors[4], radius));
@@ -130,7 +130,24 @@ public class HexGrid : MonoBehaviour
         {
             for(int j = 0; j < radius; j++)
             {
-                listToAddTo.Add(new Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
+                hexListToAddTo.Add(new Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
+                hexCoordinates = HexNeighbor(hexCoordinates, i);
+            }
+        }
+    }
+    
+    public void HexRing(Vector3 center, int radius, Dictionary<Hex, int> hexDict)
+    {
+        Vector3 hexCoordinates = AddCoordinates(center,
+            CoordinateScale(DirectionVectors[4], radius));
+        for (int i = 0; i < 6; i++)
+        {
+            for(int j = 0; j < radius; j++)
+            {
+                Hex hex = _hexList.FirstOrDefault(hex => hex.Q == (int)hexCoordinates.x
+                                                        && hex.R == (int)hexCoordinates.y
+                                                        && hex.S == (int)hexCoordinates.z);
+                if (hex != null) hexDict.Add(hex, _hexList.IndexOf(hex));
                 hexCoordinates = HexNeighbor(hexCoordinates, i);
             }
         }
@@ -158,6 +175,7 @@ public class HexGrid : MonoBehaviour
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
             _gameObjects.Add(newHex);
+            _hexDictionary.Add(hex, newHex);
             hexCount++;
         }
     }
@@ -210,13 +228,13 @@ public class HexGrid : MonoBehaviour
                                               && hex.R == (int)coordinates.y 
                                               && hex.S == (int)coordinates.z);
     }
-
-
+    
+    
     private void CreateCapitols()
     {
         for (int i = 0; i < playerCount; i++)
         {
-            Hex hexToPut = GetHexAt(CoordinateScale(DirectionVectors[i], capitolDistance));
+            Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
             CreateCityAt(hexToPut, i, true);
         }
     }
@@ -255,11 +273,49 @@ public class HexGrid : MonoBehaviour
     /// </summary> **********************************************
     private void ChangeCityHexPrefabs(City city)
     {
-        List<Hex> cityHexesList = city.GetCityHexes();
+        foreach (KeyValuePair<Hex, int> entry in city.GetCityDictionary())
+        {
+            Debug.Log("City" + entry.Key.Position());
+            Debug.Log("OBJECT: " + _gameObjects[entry.Value].transform.position);
+            if (entry.Key.GetHexType() == Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
+            else if (entry.Key.GetHexType() == Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
+            else if (entry.Key.GetHexType() == Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
+            else continue;
+            
+            Destroy(_gameObjects[entry.Value]);
+            GameObject newHex = Instantiate(ownedHexPrefab,
+                entry.Key.Position(),
+                Quaternion.identity,
+                this.transform);
+            newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+            _gameObjects[entry.Value] = newHex;
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+     * 
         int listOffset = 0;
         for (int i = 0; i < _hexList.Count(); i++)
         {
-            if (_hexList[i].GetVectorCoordinates() == cityHexesList[0].GetVectorCoordinates())
+            if (_hexList[i].GetVectorCoordinates() == city.GetCityHexes()[0].GetVectorCoordinates())
             {
                 Debug.Log("Found offset");
                 listOffset = i;
@@ -267,24 +323,26 @@ public class HexGrid : MonoBehaviour
             }
         }
         
-        for (int i = 1; i < cityHexesList.Count(); i++)
+        for (int i = 1; i < city.GetCityHexes().Count; i++)
         {
-            Debug.Log(cityHexesList[i].GetVectorCoordinates().ToString());
-            Debug.Log(cityHexesList[i].GetHexType());
-            if (cityHexesList[i].GetHexType() == Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
-            else if (cityHexesList[i].GetHexType() == Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
-            else if (cityHexesList[i].GetHexType() == Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
+            if (_hexList[i + listOffset].GetHexType() == Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
+            else if (_hexList[i + listOffset].GetHexType() == Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
+            else if (_hexList[i + listOffset].GetHexType() == Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
             else continue;
             
-            Debug.Log(ownedHexPrefab.name);
-            Destroy(_gameObjects[i]);
+            ownedHexPrefab = ownedBasicHex;
+            Debug.Log("HEX: " + _hexList[i + listOffset].Position().ToString());
+            Debug.Log("OBJECT: " + _gameObjects[i + listOffset].transform.position.x + ", " + _gameObjects[i + listOffset].transform.position.y + ", " + _gameObjects[i + listOffset].transform.position.z);
+            Destroy(_gameObjects[i + listOffset]);
             
             GameObject newHex = Instantiate(ownedHexPrefab,
-                cityHexesList[i].Position(),
+                _hexList[i + listOffset].Position(),
                 Quaternion.identity,
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
-            _gameObjects[i] = newHex;
+            _gameObjects[i + listOffset] = newHex;
+            Debug.Log("NEW OBJECT: " + _gameObjects[i + listOffset].transform.position.x + ", " + _gameObjects[i + listOffset].transform.position.y + ", " + _gameObjects[i + listOffset].transform.position.z);
+
         }
-    }
+     */
 }
