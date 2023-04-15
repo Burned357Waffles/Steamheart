@@ -137,12 +137,12 @@ public class HexPlacer : MonoBehaviour
         if (_hexGrid.GetHexList()[hexIndex].GetHexType() != Hex.HexType.Air) return false;
         if (!CheckForNeighbors(_hexGrid.GetHexList()[hexIndex])) return false;
         
-        if (hexPrefab == _hexGrid.basicHex && placementCount < 2)
+        if (hexPrefab == _hexGrid.ownedBasicHex && placementCount < 2)
         {
             placementCount++;
             return true;
         }
-        else if (hexPrefab == _hexGrid.forestHex || hexPrefab == _hexGrid.mountainHex)
+        else if (hexPrefab == _hexGrid.ownedForestHex || hexPrefab == _hexGrid.ownedMountainHex)
             if (placementCount < 1)
             {
                 placementCount++;

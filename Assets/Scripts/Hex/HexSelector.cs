@@ -26,7 +26,7 @@ public class HexSelector : MonoBehaviour
     /// </summary> **********************************************
     public void SetHexTypeBasicButton() 
     {
-        _hexPlacer.hexPrefab = _hexGrid.basicHex;
+        _hexPlacer.hexPrefab = _hexGrid.ownedBasicHex;
         forestButton.GetComponent<Button>().interactable = false;
         mountainButton.GetComponent<Button>().interactable = false;
     }
@@ -34,9 +34,9 @@ public class HexSelector : MonoBehaviour
     /// This function is called on button click and will allow
     /// the player to select to place forest hex type
     /// </summary> **********************************************
-    public void SetHexTypeForestButton() 
+    public void SetHexTypeForestButton()
     {
-        _hexPlacer.hexPrefab = _hexGrid.forestHex;
+        _hexPlacer.hexPrefab = _hexGrid.ownedForestHex;
         basicButton.GetComponent<Button>().interactable = false;
         mountainButton.GetComponent<Button>().interactable = false;
     }
@@ -47,7 +47,7 @@ public class HexSelector : MonoBehaviour
     /// </summary> **********************************************
     public void SetHexTypeMountainButton() 
     {
-        _hexPlacer.hexPrefab = _hexGrid.mountainHex;
+        _hexPlacer.hexPrefab = _hexGrid.ownedMountainHex;
         basicButton.GetComponent<Button>().interactable = false;
         forestButton.GetComponent<Button>().interactable = false;
     }

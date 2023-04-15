@@ -185,11 +185,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8527135030149635125, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: wordBorderZ
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8527135030149635125, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: worldBorderX
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -228,18 +228,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexPrefab: {fileID: 0}
   airHex: {fileID: 1110042821952968574, guid: e738d57f7a38daa4baf146da649ab9b7, type: 3}
-  basicHex: {fileID: 1403481857482767476, guid: 3eba1bc0434034a418950aa16d1c05e5, type: 3}
-  forestHex: {fileID: 2381303314478614838, guid: d142008f7a6bda842bd715d4abca1adb, type: 3}
-  mountainHex: {fileID: 4246958186261016714, guid: 6d3f5f99bd82ef84ebde30243dfc393a, type: 3}
+  basicHex: {fileID: 1403481857482767476, guid: 992c804573686b54d920b08ef0c30009, type: 3}
+  forestHex: {fileID: 2381303314478614838, guid: b396fe054939d6c4c9fe290256adccd1, type: 3}
+  mountainHex: {fileID: 4246958186261016714, guid: 73c8b15dd8bbf844d9c19325e6ec8192, type: 3}
   ownedHexPrefab: {fileID: 0}
-  ownedBasicHex: {fileID: 6464097055016101987, guid: 4e1d9306ae30bb2488efb11a42f8ae0f, type: 3}
-  ownedForestHex: {fileID: 8295349956468922480, guid: 9387ee9005169cb4a915047e286ecd2c, type: 3}
-  ownedMountainHex: {fileID: 7178512327020780823, guid: 620b75b0407119d4bbaf33898eef1fde, type: 3}
-  cityPrefab: {fileID: 8582613802384748761, guid: a45315f1ff9c57d4ca117f4c1ef6731a, type: 3}
-  mapRadius: 32
+  ownedBasicHex: {fileID: 6464097055016101987, guid: 8a957bc949677714abdb3e2ff04f97ab, type: 3}
+  ownedForestHex: {fileID: 8295349956468922480, guid: 8c775c9821c3bb843a17c8e431fe3b0e, type: 3}
+  ownedMountainHex: {fileID: 7178512327020780823, guid: 5b596f4cdfd302646914080166682dec, type: 3}
+  cityPrefab: {fileID: 8582613802384748761, guid: 7ad6273c25a2e6f4c8184850730195e7, type: 3}
+  mapRadius: 64
   centerIslandRadius: 3
   playerCount: 6
-  capitolDistance: 20
+  capitolDistance: 40
 --- !u!4 &250597339
 Transform:
   m_ObjectHideFlags: 0
@@ -1522,6 +1522,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 913488845079191756, guid: db165254b7b780144aaf48df10a5e919, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 60.000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 913488845079191756, guid: db165254b7b780144aaf48df10a5e919, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 60.000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 913488845079191756, guid: db165254b7b780144aaf48df10a5e919, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 60.000004
+      objectReference: {fileID: 0}
     - target: {fileID: 1776525960680727611, guid: db165254b7b780144aaf48df10a5e919, type: 3}
       propertyPath: m_Name
       value: Water

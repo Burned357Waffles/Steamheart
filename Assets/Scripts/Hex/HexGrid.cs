@@ -213,8 +213,8 @@ public class HexGrid : MonoBehaviour
         else if (hasAir)
         {
             if (typeCount[1] + typeCount[2] + typeCount[3] > 2) hexPrefab = basicHex;
-            else if (typeCount[2] > 2) hexPrefab = forestHex;
-            else if (typeCount[3] > 2) hexPrefab = mountainHex;
+            else if (typeCount[2] > 1) hexPrefab = forestHex;
+            else if (typeCount[3] > 1) hexPrefab = mountainHex;
             else hexPrefab = airHex;   
         }
         else hexPrefab = basicHex;
@@ -252,7 +252,6 @@ public class HexGrid : MonoBehaviour
         {
             if (_hexList[i].GetVectorCoordinates() == cityCenter.GetVectorCoordinates())
             {
-                Debug.Log("Found Center");
                 Destroy(_gameObjects[i]);
                 
                 GameObject cityObject = Instantiate(cityPrefab,
@@ -277,8 +276,6 @@ public class HexGrid : MonoBehaviour
     {
         foreach (KeyValuePair<Hex, int> entry in city.GetCityDictionary())
         {
-            Debug.Log("City" + entry.Key.Position());
-            Debug.Log("OBJECT: " + _gameObjects[entry.Value].transform.position);
             if (entry.Key.GetHexType() == Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
             else if (entry.Key.GetHexType() == Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
             else if (entry.Key.GetHexType() == Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
@@ -293,58 +290,4 @@ public class HexGrid : MonoBehaviour
             _gameObjects[entry.Value] = newHex;
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /*
-     * 
-        int listOffset = 0;
-        for (int i = 0; i < _hexList.Count(); i++)
-        {
-            if (_hexList[i].GetVectorCoordinates() == city.GetCityHexes()[0].GetVectorCoordinates())
-            {
-                Debug.Log("Found offset");
-                listOffset = i;
-                break;
-            }
-        }
-        
-        for (int i = 1; i < city.GetCityHexes().Count; i++)
-        {
-            if (_hexList[i + listOffset].GetHexType() == Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
-            else if (_hexList[i + listOffset].GetHexType() == Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
-            else if (_hexList[i + listOffset].GetHexType() == Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
-            else continue;
-            
-            ownedHexPrefab = ownedBasicHex;
-            Debug.Log("HEX: " + _hexList[i + listOffset].Position().ToString());
-            Debug.Log("OBJECT: " + _gameObjects[i + listOffset].transform.position.x + ", " + _gameObjects[i + listOffset].transform.position.y + ", " + _gameObjects[i + listOffset].transform.position.z);
-            Destroy(_gameObjects[i + listOffset]);
-            
-            GameObject newHex = Instantiate(ownedHexPrefab,
-                _hexList[i + listOffset].Position(),
-                Quaternion.identity,
-                this.transform);
-            newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
-            _gameObjects[i + listOffset] = newHex;
-            Debug.Log("NEW OBJECT: " + _gameObjects[i + listOffset].transform.position.x + ", " + _gameObjects[i + listOffset].transform.position.y + ", " + _gameObjects[i + listOffset].transform.position.z);
-
-        }
-     */
 }

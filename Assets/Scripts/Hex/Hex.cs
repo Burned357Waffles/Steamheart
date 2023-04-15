@@ -17,10 +17,9 @@ public class Hex
     public readonly int S;
     
     private HexType _hexType;
-    private bool _isLand;
-
-    private bool _isBlocked;
     private int _ownerID;
+    private bool _isLand;
+    private bool _isBlocked;
     static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
 
     public Hex(int q, int r)
@@ -64,9 +63,12 @@ public class Hex
         _hexType = type switch
         {
             "air_tile" => HexType.Air,
-            "basic_tile" => HexType.Basic,
-            "forest_tile" => HexType.Forest,
-            "mountain_tile" => HexType.Mountain,
+            "basic_tile_2" => HexType.Basic,
+            "forest_tile_2" => HexType.Forest,
+            "mountain_tile_2" => HexType.Mountain,
+            "basic_tile_owned_2" => HexType.Basic,
+            "forest_tile_owned_2" => HexType.Forest,
+            "mountain_tile_owned_2" => HexType.Mountain,
             _ => throw new Exception($"Hex of type {_hexType} not supported")
         };
         _isLand = _hexType != HexType.Air;
