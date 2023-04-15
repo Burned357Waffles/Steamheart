@@ -53,7 +53,7 @@ public class HexGrid : MonoBehaviour
     // PUBLIC FUNCTIONS
     /// <summary> ***********************************************
     /// This function returns the result of adding the two
-    /// passed Vectors
+    /// passed Vectors.
     /// </summary> ***********************************************
     public static Vector3 AddCoordinates(Vector3 hexCoordinates, Vector3 addCoordinates)
     {
@@ -78,6 +78,11 @@ public class HexGrid : MonoBehaviour
         return AddCoordinates(coordinates, DirectionVectors[direction]);
     }
 
+    /// <summary> ***********************************************
+    /// This function is used to add a randomized height to the
+    /// hexes. It returns the new Vector3 with the changed
+    /// y-value.
+    /// </summary> **********************************************
     public static Vector3 AddHeight(Vector3 hex)
     {
         float randomOffset = Random.Range(0, 8);
@@ -98,7 +103,7 @@ public class HexGrid : MonoBehaviour
     
     // PRIVATE FUNCTIONS
     /// <summary> ***********************************************
-    /// Runs once on startup. This is from MonoBehavior
+    /// Runs once on startup. This is from MonoBehavior.
     /// </summary> **********************************************
     private void Start()
     {
@@ -110,7 +115,7 @@ public class HexGrid : MonoBehaviour
     /// This function creates the center tile at (0, 0, 0)
     /// then calls HexRing consecutively from the center outward.
     /// After all hexes are created and stored in _hexList,
-    /// InstantiateHexes() is called
+    /// InstantiateHexes() is called.
     /// </summary> **********************************************
     private void GenerateGrid()
     {
@@ -128,7 +133,8 @@ public class HexGrid : MonoBehaviour
     /// <summary> ***********************************************
     /// This function generates a ring of hexes in a radius from
     /// the center tile. It starts at corner number 4 and works
-    /// its way counter-clockwise.
+    /// its way counter-clockwise. It adds each new hex to the
+    /// list that the user passed in.
     /// </summary> **********************************************
     public static void HexRing(Vector3 center, int radius, List<Hex> hexListToAddTo)
     {
@@ -144,6 +150,10 @@ public class HexGrid : MonoBehaviour
         }
     }
     
+    /// <summary> ***********************************************
+    /// This does the same as the above, but adds to Dictionary
+    /// instead.
+    /// </summary> **********************************************
     public void HexRing(Vector3 center, int radius, Dictionary<Hex, int> hexDict)
     {
         Vector3 hexCoordinates = AddCoordinates(center,
@@ -176,7 +186,7 @@ public class HexGrid : MonoBehaviour
             // get the tile type
             GetHexType(hex, hexCount > centerIslandRadius * 12 + 1); 
             hex.SetHexType(hexPrefab.gameObject.name);
-            hex.Position();
+            hex.SetPosition();
             hex.WorldPosition = AddHeight(hex.WorldPosition);
             
             GameObject newHex = Instantiate(hexPrefab,
@@ -239,7 +249,10 @@ public class HexGrid : MonoBehaviour
                                               && hex.S == (int)coordinates.z);
     }
     
-    
+    /// <summary> ***********************************************
+    /// This function creates all the player capitols at the
+    /// start of the match.
+    /// </summary> ***********************************************
     private void CreateCapitols()
     {
         for (int i = 0; i < playerCount; i++)
@@ -250,7 +263,7 @@ public class HexGrid : MonoBehaviour
     }
     
     /// <summary> ***********************************************
-    /// This function will be called by a button to create a city
+    /// This function will create a city.
     /// </summary> **********************************************
     private void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
     {
@@ -263,7 +276,7 @@ public class HexGrid : MonoBehaviour
                 Destroy(_gameObjects[i]);
                 
                 GameObject cityObject = Instantiate(cityPrefab,
-                    cityCenter.Position(),
+                    cityCenter.WorldPosition,
                     Quaternion.identity,
                     this.transform);
                 //cityObject.transform.parent = _gameObjects[0].transform;
@@ -278,7 +291,7 @@ public class HexGrid : MonoBehaviour
 
     /// <summary> ***********************************************
     /// This changes all of the tiles to owned type. This will
-    /// likely be changed
+    /// likely be changed.
     /// </summary> **********************************************
     private void ChangeCityHexPrefabs(City city)
     {
@@ -290,7 +303,7 @@ public class HexGrid : MonoBehaviour
             else continue;
             
             Destroy(_gameObjects[entry.Value]);
-            entry.Key.Position();
+            entry.Key.SetPosition();
             entry.Key.WorldPosition = AddHeight(entry.Key.WorldPosition);
             GameObject newHex = Instantiate(ownedHexPrefab,
                 entry.Key.WorldPosition,

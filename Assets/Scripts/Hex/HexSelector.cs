@@ -22,7 +22,7 @@ public class HexSelector : MonoBehaviour
 
     /// <summary> ***********************************************
     /// This function is called on button click and will allow
-    /// the player to select to place basic hex type
+    /// the player to select to place basic hex type.
     /// </summary> **********************************************
     public void SetHexTypeBasicButton() 
     {
@@ -32,7 +32,7 @@ public class HexSelector : MonoBehaviour
     }
     /// <summary> ***********************************************
     /// This function is called on button click and will allow
-    /// the player to select to place forest hex type
+    /// the player to select to place forest hex type.
     /// </summary> **********************************************
     public void SetHexTypeForestButton()
     {
@@ -43,7 +43,7 @@ public class HexSelector : MonoBehaviour
     
     /// <summary> ***********************************************
     /// This function is called on button click and will allow
-    /// the player to select to place mountain hex type
+    /// the player to select to place mountain hex type.
     /// </summary> **********************************************
     public void SetHexTypeMountainButton() 
     {

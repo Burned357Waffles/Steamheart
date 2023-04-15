@@ -50,7 +50,7 @@ namespace MapObjects
         
         /// <summary> ***********************************************
         /// This function loops through all the hexes in the list and
-        /// sets their owner
+        /// sets their owner.
         /// </summary> **********************************************
         private void SetOwnership()
         {
@@ -66,6 +66,9 @@ namespace MapObjects
             }
         }
 
+        /// <summary> ***********************************************
+        /// Getter methods
+        /// </summary> **********************************************
         public List<Hex> GetCityHexes(){ return _controlledHexes; }
         public Dictionary<Hex, int> GetCityDictionary() { return _controlledHexDictionary; }
     }

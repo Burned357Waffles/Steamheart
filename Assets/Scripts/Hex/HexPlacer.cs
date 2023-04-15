@@ -26,7 +26,7 @@ public class HexPlacer : MonoBehaviour
     }
 
     /// <summary> ***********************************************
-    /// This function will detect if a Hex is clicked
+    /// This function will detect if a Hex is clicked.
     /// </summary> **********************************************
     private void DetectClick()
     {
@@ -78,7 +78,7 @@ public class HexPlacer : MonoBehaviour
     /// <summary> ***********************************************
     /// This function takes the list index of a Hex and if the
     /// Hex at that position is an air tile, it will be replaced
-    /// with the selected Hex type
+    /// with the selected Hex type.
     /// </summary> **********************************************
     private void ConvertHex(int hexIndex)
     {

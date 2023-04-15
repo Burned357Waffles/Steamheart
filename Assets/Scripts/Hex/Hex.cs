@@ -33,9 +33,9 @@ public class Hex
     
     /// <summary> ***********************************************
     /// This function returns the world position for the hex so
-    /// that they properly tile. The resulting vector is returned
+    /// that they properly tile and assigns it to WorldPosition.
     /// </summary> **********************************************
-    public Vector3 Position()
+    public void SetPosition()
     {
         const float radius = 1f;
         const float height = radius * 2;
@@ -45,12 +45,11 @@ public class Hex
         float horizontal = width;
         
         WorldPosition = new Vector3(horizontal * (this.Q + this.R / 2f), 0, vertical * this.R);
-        return WorldPosition;
     }
     
     /// <summary> ***********************************************
     /// This function returns the coordinates of this hex in
-    /// a Vector3
+    /// a Vector3.
     /// </summary> **********************************************
     public Vector3 GetVectorCoordinates()
     {
@@ -58,7 +57,9 @@ public class Hex
     }
 
     /// <summary> ***********************************************
-    /// This function saves what type this hex is
+    /// This function saves what type this hex is and sets if it
+    /// is a land type or not. It also sets the isBlocked
+    /// property to determine if it is traversable.
     /// </summary> **********************************************
     public void SetHexType(string type)
     {
@@ -74,15 +75,13 @@ public class Hex
             _ => throw new Exception($"Hex of type {_hexType} not supported")
         };
         _isLand = _hexType != HexType.Air;
-        if(_hexType == HexType.Air)
-        {
-            _isBlocked = true;
-        }else
-        {
-            _isBlocked = false;
-        }
+        _isBlocked = _hexType == HexType.Air;
     }
 
+    /// <summary> ***********************************************
+    /// This function sets the HexType to a building and ensures
+    /// that it is marked as a land hex.
+    /// </summary> **********************************************
     public void MakeHexBuildingType()
     {
         _hexType = HexType.Building;
@@ -90,12 +89,12 @@ public class Hex
     }
 
     /// <summary> ***********************************************
-    /// This function sets who owns this hex
+    /// This function sets who owns this hex.
     /// </summary> **********************************************
     public void SetOwnerID(int ownerID) { _ownerID = ownerID; }
 
     /// <summary> ***********************************************
-    /// This function returns what type this hex is
+    /// This function returns what type this hex is.
     /// </summary> **********************************************
     public HexType GetHexType() { return  _hexType; }
     
@@ -107,7 +106,7 @@ public class Hex
     public bool IsBlocked() {return _isBlocked;}
 
     /// <summary> ***********************************************
-    /// This enum stores the different types of hexes
+    /// This enum stores the different types of hexes.
     /// </summary> **********************************************
     public enum HexType
     {
