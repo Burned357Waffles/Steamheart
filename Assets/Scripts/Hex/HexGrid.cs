@@ -78,7 +78,13 @@ public class HexGrid : MonoBehaviour
         return AddCoordinates(coordinates, DirectionVectors[direction]);
     }
 
+    public static Vector3 AddHeight(Vector3 hex)
+    {
+        float randomOffset = Random.Range(0, 8);
+        hex.y += randomOffset/100;
 
+        return hex;
+    }
     
     /// <summary> ***********************************************
     /// These are getter methods. Not much to say about these.
@@ -170,9 +176,11 @@ public class HexGrid : MonoBehaviour
             // get the tile type
             GetHexType(hex, hexCount > centerIslandRadius * 12 + 1); 
             hex.SetHexType(hexPrefab.gameObject.name);
+            hex.Position();
+            hex.WorldPosition = AddHeight(hex.WorldPosition);
             
             GameObject newHex = Instantiate(hexPrefab,
-                hex.Position(),
+                    hex.WorldPosition,
                 Quaternion.identity,
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
@@ -259,7 +267,7 @@ public class HexGrid : MonoBehaviour
                     Quaternion.identity,
                     this.transform);
                 //cityObject.transform.parent = _gameObjects[0].transform;
-
+                _hexList[i].MakeHexBuildingType();
                 _gameObjects[i] = cityObject;
                 _cityList.Add(city);
                 ChangeCityHexPrefabs(city);
@@ -282,8 +290,10 @@ public class HexGrid : MonoBehaviour
             else continue;
             
             Destroy(_gameObjects[entry.Value]);
+            entry.Key.Position();
+            entry.Key.WorldPosition = AddHeight(entry.Key.WorldPosition);
             GameObject newHex = Instantiate(ownedHexPrefab,
-                entry.Key.Position(),
+                entry.Key.WorldPosition,
                 Quaternion.identity,
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);

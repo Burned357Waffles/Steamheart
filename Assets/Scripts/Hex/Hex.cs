@@ -15,6 +15,7 @@ public class Hex
     public readonly int Q;
     public readonly int R;
     public readonly int S;
+    public Vector3 WorldPosition;
     
     private HexType _hexType;
     private int _ownerID;
@@ -40,10 +41,11 @@ public class Hex
         const float height = radius * 2;
         float width = WIDTH_MULTIPLIER * height;
 
-        float vertical = height * 0.75f;
+        const float vertical = height * 0.75f;
         float horizontal = width;
-
-        return new Vector3(horizontal * (this.Q + this.R / 2f), 0, vertical * this.R);
+        
+        WorldPosition = new Vector3(horizontal * (this.Q + this.R / 2f), 0, vertical * this.R);
+        return WorldPosition;
     }
     
     /// <summary> ***********************************************
@@ -81,6 +83,12 @@ public class Hex
         }
     }
 
+    public void MakeHexBuildingType()
+    {
+        _hexType = HexType.Building;
+        _isLand = true;
+    }
+
     /// <summary> ***********************************************
     /// This function sets who owns this hex
     /// </summary> **********************************************
@@ -106,7 +114,8 @@ public class Hex
         Air, // only accessible to airships and cannot be considered within city border
         Basic, // the rest are accessible to all and can be considered within city border
         Forest, 
-        Mountain 
+        Mountain,
+        Building
     }
 
 }

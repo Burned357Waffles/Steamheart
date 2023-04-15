@@ -35,7 +35,7 @@ public class HexPlacer : MonoBehaviour
         Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out RaycastHit hit)) return;
         if (hexPrefab == null) return; // if button is not chosen
-
+        
         int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
         if(!PlacementCount(hexIndex)) return;
         if (hexIndex != -1) ConvertHex(hexIndex);
@@ -50,7 +50,7 @@ public class HexPlacer : MonoBehaviour
         int hexIndex = -1;
         for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
         {
-            if (_hexGrid.GetHexList()[i].Position() != coordinates) continue;
+            if (_hexGrid.GetHexList()[i].WorldPosition != coordinates) continue;
             hexIndex = i;
             break;
         }
@@ -88,7 +88,7 @@ public class HexPlacer : MonoBehaviour
         Destroy(hexObject);
 
         GameObject newHex = Instantiate(hexPrefab,
-            selectedHex.Position(),
+            selectedHex.WorldPosition,
             Quaternion.identity,
             this.transform);
         newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
@@ -121,7 +121,6 @@ public class HexPlacer : MonoBehaviour
                 hexCoordinates = HexGrid.HexNeighbor(hexCoordinates, i);
             }
         }
-        
         return landCount > 0;
     }
 
@@ -142,13 +141,11 @@ public class HexPlacer : MonoBehaviour
             placementCount++;
             return true;
         }
-        else if (hexPrefab == _hexGrid.ownedForestHex || hexPrefab == _hexGrid.ownedMountainHex)
-            if (placementCount < 1)
-            {
-                placementCount++;
-                return true;
-            }
-        return false;
+
+        if (hexPrefab != _hexGrid.ownedForestHex && hexPrefab != _hexGrid.ownedMountainHex) return false;
+        if (placementCount >= 1) return false;
+        placementCount++;
+        return true;
     }
 
 
