@@ -5,7 +5,7 @@ using UnityEngine;
 public class HexMovement : MonoBehaviour
 {
     private readonly HexGrid _hexGrid = Object.FindObjectOfType<HexGrid>();   
-    public HashSet<Vector3> hex_reachable(Vector3 start,int movement)
+    public HashSet<Vector3> hex_reachable(Vector3 start, int movement)
     {
         HashSet<Vector3> visited = new HashSet<Vector3>();
         visited.Add(start);
@@ -20,7 +20,7 @@ public class HexMovement : MonoBehaviour
             {
                 for (int j = 0; j < 6; j++)
                 {
-                    Vector3 neighbor = _hexGrid.HexNeighbor(_hexGrid.GetHexAt(hex).GetVectorCoordinates(), j);
+                    Vector3 neighbor = HexGrid.HexNeighbor(_hexGrid.GetHexAt(hex).GetVectorCoordinates(), j);
                     if (!visited.Contains(neighbor) && _hexGrid.GetHexAt(hex).IsBlocked())
                     {
                         visited.Add(neighbor);
@@ -32,6 +32,7 @@ public class HexMovement : MonoBehaviour
         }
         return visited;
     }
+    // use Position in Hex.cs for actual position
 
     
 

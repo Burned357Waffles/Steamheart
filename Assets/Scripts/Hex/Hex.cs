@@ -20,7 +20,7 @@ public class Hex
     private bool _isLand;
 
     private bool _isBlocked;
-    
+    private int _ownerID;
     static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
 
     public Hex(int q, int r)
