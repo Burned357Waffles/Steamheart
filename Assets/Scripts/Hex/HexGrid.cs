@@ -77,6 +77,27 @@ public class HexGrid : MonoBehaviour
     { 
         return AddCoordinates(coordinates, DirectionVectors[direction]);
     }
+    
+    /// <summary> ***********************************************
+    /// This does the same as the above, but adds to Dictionary
+    /// instead.
+    /// </summary> **********************************************
+    public void HexRing(Vector3 center, int radius, Dictionary<Hex, int> hexDict)
+    {
+        Vector3 hexCoordinates = AddCoordinates(center,
+            CoordinateScale(DirectionVectors[4], radius));
+        for (int i = 0; i < 6; i++)
+        {
+            for(int j = 0; j < radius; j++)
+            {
+                Hex hex = _hexList.FirstOrDefault(hex => hex.Q == (int)hexCoordinates.x
+                                                         && hex.R == (int)hexCoordinates.y
+                                                         && hex.S == (int)hexCoordinates.z);
+                if (hex != null) hexDict.Add(hex, _hexList.IndexOf(hex));
+                hexCoordinates = HexNeighbor(hexCoordinates, i);
+            }
+        }
+    }
 
     /// <summary> ***********************************************
     /// This function is used to add a randomized height to the
@@ -136,7 +157,7 @@ public class HexGrid : MonoBehaviour
     /// its way counter-clockwise. It adds each new hex to the
     /// list that the user passed in.
     /// </summary> **********************************************
-    public static void HexRing(Vector3 center, int radius, List<Hex> hexListToAddTo)
+    private static void HexRing(Vector3 center, int radius, List<Hex> hexListToAddTo)
     {
         Vector3 hexCoordinates = AddCoordinates(center,
             CoordinateScale(DirectionVectors[4], radius));
@@ -145,27 +166,6 @@ public class HexGrid : MonoBehaviour
             for(int j = 0; j < radius; j++)
             {
                 hexListToAddTo.Add(new Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
-                hexCoordinates = HexNeighbor(hexCoordinates, i);
-            }
-        }
-    }
-    
-    /// <summary> ***********************************************
-    /// This does the same as the above, but adds to Dictionary
-    /// instead.
-    /// </summary> **********************************************
-    public void HexRing(Vector3 center, int radius, Dictionary<Hex, int> hexDict)
-    {
-        Vector3 hexCoordinates = AddCoordinates(center,
-            CoordinateScale(DirectionVectors[4], radius));
-        for (int i = 0; i < 6; i++)
-        {
-            for(int j = 0; j < radius; j++)
-            {
-                Hex hex = _hexList.FirstOrDefault(hex => hex.Q == (int)hexCoordinates.x
-                                                        && hex.R == (int)hexCoordinates.y
-                                                        && hex.S == (int)hexCoordinates.z);
-                if (hex != null) hexDict.Add(hex, _hexList.IndexOf(hex));
                 hexCoordinates = HexNeighbor(hexCoordinates, i);
             }
         }
@@ -258,7 +258,7 @@ public class HexGrid : MonoBehaviour
         for (int i = 0; i < playerCount; i++)
         {
             Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
-            CreateCityAt(hexToPut, i, true);
+            CreateCityAt(hexToPut, i + 1, true);
         }
     }
     

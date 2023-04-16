@@ -10,14 +10,23 @@ using Random = UnityEngine.Random;
 /// </summary> ***********************************************************
 public class HexPlacer : MonoBehaviour
 {
-    private HexGrid _hexGrid;
     [SerializeField] public GameObject hexPrefab; // this will be changed depending on button selected
     
     public int placementCount;
 
+    public int _playerID;
+    private HexGrid _hexGrid;
+
+    public void SetPlayer(int id)
+    {
+        _playerID = id;
+    }
+    
+
     private void Start()
     {
         _hexGrid = GameObject.FindObjectOfType<HexGrid>();
+        _playerID = 1;
     }
 
     private void Update()
@@ -37,6 +46,11 @@ public class HexPlacer : MonoBehaviour
         if (hexPrefab == null) return; // if button is not chosen
         
         int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+        if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID))
+        {
+            Debug.Log("NOT VALID");
+            return;
+        }
         if(!PlacementCount(hexIndex)) return;
         if (hexIndex != -1) ConvertHex(hexIndex);
     }
@@ -101,7 +115,6 @@ public class HexPlacer : MonoBehaviour
     /// adjacent land hex and returns true if there is false if
     /// not.
     /// </summary> **********************************************
-    /// TODO: check for ownership 
     private bool CheckForNeighbors(Hex selectedHex)
     {
         Vector3 hexCoordinates = HexGrid.AddCoordinates(selectedHex.GetVectorCoordinates(),
@@ -147,7 +160,5 @@ public class HexPlacer : MonoBehaviour
         placementCount++;
         return true;
     }
-
-
 }
     

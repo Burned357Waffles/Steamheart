@@ -88,6 +88,11 @@ public class Hex
         _isLand = true;
     }
 
+    public bool IsValidLocation(int id)
+    {
+        return _ownerID == id || _ownerID == 0;
+    }
+
     /// <summary> ***********************************************
     /// This function sets who owns this hex.
     /// </summary> **********************************************

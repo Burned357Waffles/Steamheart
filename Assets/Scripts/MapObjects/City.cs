@@ -20,7 +20,6 @@ namespace MapObjects
 
         private readonly Dictionary<Hex, int> _controlledHexDictionary = new Dictionary<Hex, int>();
         private readonly List<Hex> _controlledHexes = new List<Hex>();
-        private List<int> _controlledIndexes = new List<int>();
 
         public City(Hex cityCenterHex, int ownerID, bool isCapitol)
         {

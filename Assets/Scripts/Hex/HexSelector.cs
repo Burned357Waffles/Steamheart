@@ -14,6 +14,8 @@ public class HexSelector : MonoBehaviour
 
     private HexGrid _hexGrid;
     private HexPlacer _hexPlacer;
+    private int _currentPlayer;
+    
     private void Start()
     {
         _hexGrid = GameObject.FindObjectOfType<HexGrid>();
@@ -52,6 +54,11 @@ public class HexSelector : MonoBehaviour
         forestButton.GetComponent<Button>().interactable = false;
     }
     
+    /// <summary> ***********************************************
+    /// This function is called on the End Turn button. It resets
+    /// the buttons, placement count, and hex prefab type. It also
+    /// advances the turn to the next player
+    /// </summary> ***********************************************
     public void ResetPlacementCount()
     {
         _hexPlacer.placementCount = 0;
@@ -59,5 +66,8 @@ public class HexSelector : MonoBehaviour
         basicButton.GetComponent<Button>().interactable = true;
         forestButton.GetComponent<Button>().interactable = true;
         mountainButton.GetComponent<Button>().interactable = true;
+        
+        if (_currentPlayer++ >= _hexGrid.playerCount) _currentPlayer = 1;
+        _hexPlacer.SetPlayer(_currentPlayer);
     }
 }
