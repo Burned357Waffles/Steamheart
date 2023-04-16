@@ -226,8 +226,15 @@ MonoBehaviour:
   basicHex: {fileID: 1403481857482767476, guid: 3eba1bc0434034a418950aa16d1c05e5, type: 3}
   forestHex: {fileID: 2381303314478614838, guid: d142008f7a6bda842bd715d4abca1adb, type: 3}
   mountainHex: {fileID: 4246958186261016714, guid: 6d3f5f99bd82ef84ebde30243dfc393a, type: 3}
+  ownedHexPrefab: {fileID: 0}
+  ownedBasicHex: {fileID: 0}
+  ownedForestHex: {fileID: 0}
+  ownedMountainHex: {fileID: 0}
+  cityPrefab: {fileID: 0}
   mapRadius: 32
   centerIslandRadius: 0
+  playerCount: 0
+  capitolDistance: 0
 --- !u!4 &250597339
 Transform:
   m_ObjectHideFlags: 0
