@@ -21,7 +21,7 @@ public class Spawner : MonoBehaviour
         if (!Input.GetMouseButtonDown(0)) return;   
         Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-        if(!hit.transform.CompareTag($"Unit")) return;
+        if(!hit.transform.CompareTag("Unit")) return;
         
         
     }
