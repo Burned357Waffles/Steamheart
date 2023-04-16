@@ -75,7 +75,7 @@ public class Hex
             _ => throw new Exception($"Hex of type {_hexType} not supported")
         };
         _isLand = _hexType != HexType.Air;
-        _isBlocked = _hexType == HexType.Air;
+        _isBlocked = _hexType is HexType.Air or HexType.Mountain;
     }
 
     /// <summary> ***********************************************
