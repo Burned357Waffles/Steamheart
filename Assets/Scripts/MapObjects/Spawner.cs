@@ -18,7 +18,7 @@ public class Spawner : MonoBehaviour
         }
         
         // check if a unit is clicked
-        if (!Input.GetMouseButtonDown(1)) return;
+        if (!Input.GetMouseButtonDown(0)) return;   
         Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out RaycastHit hit)) return;
         if(!hit.transform.CompareTag($"Unit")) return;
