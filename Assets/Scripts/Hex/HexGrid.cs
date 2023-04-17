@@ -31,14 +31,10 @@ public class HexGrid : MonoBehaviour
     public int playerCount;
     public int capitolDistance;
     
-    /*
-    TODO: these should probably be combined into a dictionary. However, I am not sure how I should 
-    TODO: do that because the Hex and GameObject are created and stored at different times.
-    */
-    private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
+    public readonly Dictionary<Hex.Hex, GameObject> _hexDictionary = new Dictionary<Hex.Hex, GameObject>();
     private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
-    private readonly Dictionary<Hex, Unit> _unitDictionary = new Dictionary<Hex, Unit>();
-    private readonly List<Hex> _hexList = new List<Hex>();
+    private readonly Dictionary<Hex.Hex, Unit> _unitDictionary = new Dictionary<Hex.Hex, Unit>();
+    private readonly List<Hex.Hex> _hexList = new List<Hex.Hex>();
     private readonly List<GameObject> _gameObjects = new List<GameObject>();
     private readonly List<City> _cityList = new List<City>();
 
@@ -84,7 +80,7 @@ public class HexGrid : MonoBehaviour
     /// This does the same as the above, but adds to Dictionary
     /// instead.
     /// </summary> **********************************************
-    public void HexRing(Vector3 center, int radius, Dictionary<Hex, int> hexDict)
+    public void HexRing(Vector3 center, int radius, Dictionary<Hex.Hex, int> hexDict)
     {
         Vector3 hexCoordinates = AddCoordinates(center,
             CoordinateScale(DirectionVectors[4], radius));
@@ -92,9 +88,9 @@ public class HexGrid : MonoBehaviour
         {
             for(int j = 0; j < radius; j++)
             {
-                Hex hex = _hexList.FirstOrDefault(hex => hex.Q == (int)hexCoordinates.x
-                                                         && hex.R == (int)hexCoordinates.y
-                                                         && hex.S == (int)hexCoordinates.z);
+                Hex.Hex hex = _hexList.FirstOrDefault(hex => hex.Q == (int)hexCoordinates.x
+                                                             && hex.R == (int)hexCoordinates.y
+                                                             && hex.S == (int)hexCoordinates.z);
                 if (hex != null) hexDict.Add(hex, _hexList.IndexOf(hex));
                 hexCoordinates = HexNeighbor(hexCoordinates, i);
             }
@@ -102,24 +98,11 @@ public class HexGrid : MonoBehaviour
     }
 
     /// <summary> ***********************************************
-    /// This function is used to add a randomized height to the
-    /// hexes. It returns the new Vector3 with the changed
-    /// y-value.
-    /// </summary> **********************************************
-    public static Vector3 AddHeight(Vector3 hex)
-    {
-        float randomOffset = Random.Range(0, 8);
-        hex.y += randomOffset/100;
-
-        return hex;
-    }
-    
-    /// <summary> ***********************************************
     /// These are getter methods. Not much to say about these.
     /// </summary> **********************************************
-    public List<Hex> GetHexList() { return _hexList; }
+    public List<Hex.Hex> GetHexList() { return _hexList; }
     public List<GameObject> GetGameObjectList() { return _gameObjects; }
-    public Dictionary<Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
+    public Dictionary<Hex.Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
     public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
     public Vector3[] GetDirectionVector(){ return DirectionVectors; }
     
@@ -145,7 +128,7 @@ public class HexGrid : MonoBehaviour
     private void GenerateGrid()
     {
         // store the center of the map
-        Hex center = new Hex(0, 0);
+        Hex.Hex center = new Hex.Hex(0, 0);
         _hexList.Add(center);
         // call ring from center outward. while i < 4, generate only land for center island
         for (int i = 1; i < mapRadius; i++)
@@ -161,7 +144,7 @@ public class HexGrid : MonoBehaviour
     /// its way counter-clockwise. It adds each new hex to the
     /// list that the user passed in.
     /// </summary> **********************************************
-    private static void HexRing(Vector3 center, int radius, List<Hex> hexListToAddTo)
+    private static void HexRing(Vector3 center, int radius, List<Hex.Hex> hexListToAddTo)
     {
         Vector3 hexCoordinates = AddCoordinates(center,
             CoordinateScale(DirectionVectors[4], radius));
@@ -169,7 +152,7 @@ public class HexGrid : MonoBehaviour
         {
             for(int j = 0; j < radius; j++)
             {
-                hexListToAddTo.Add(new Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
+                hexListToAddTo.Add(new Hex.Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
                 hexCoordinates = HexNeighbor(hexCoordinates, i);
             }
         }
@@ -209,20 +192,20 @@ public class HexGrid : MonoBehaviour
     /// It takes in coordinates and a boolean to signify if
     /// air hexes will be generated.
     /// </summary> **********************************************
-    private void GetHexType(Hex hex, bool hasAir)
+    private void GetHexType(Hex.Hex hex, bool hasAir)
     {
         // air, basic, forest, mountain
         int[] typeCount = new int[4];
         // get all neighbors
         for (int i = 0; i < 6; i++)
         {
-            Hex neighbor = GetHexAt(HexNeighbor(hex.GetVectorCoordinates(), i));
+            Hex.Hex neighbor = GetHexAt(HexNeighbor(hex.GetVectorCoordinates(), i));
 
             if (neighbor == null) {} // do nothing
-            else if (neighbor.GetHexType() == Hex.HexType.Air) typeCount[0]++;
-            else if (neighbor.GetHexType() == Hex.HexType.Basic) typeCount[1]++;
-            else if (neighbor.GetHexType() == Hex.HexType.Forest) typeCount[2]++;
-            else if (neighbor.GetHexType() == Hex.HexType.Mountain) typeCount[3]++;
+            else if (neighbor.GetHexType() == Hex.Hex.HexType.Air) typeCount[0]++;
+            else if (neighbor.GetHexType() == Hex.Hex.HexType.Basic) typeCount[1]++;
+            else if (neighbor.GetHexType() == Hex.Hex.HexType.Forest) typeCount[2]++;
+            else if (neighbor.GetHexType() == Hex.Hex.HexType.Mountain) typeCount[3]++;
         }
 
         int randomOffset = Random.Range(0, 1000); // random offset so generation is different each run
@@ -246,11 +229,24 @@ public class HexGrid : MonoBehaviour
     /// This function takes in a Vector3 and returns the hex at
     /// those coordinates. Returns null if hex doesn't exist.
     /// </summary> **********************************************
-    public Hex GetHexAt(Vector3 coordinates)
+    public Hex.Hex GetHexAt(Vector3 coordinates)
     {
         return _hexList.FirstOrDefault(hex => hex.Q == (int)coordinates.x 
                                               && hex.R == (int)coordinates.y 
                                               && hex.S == (int)coordinates.z);
+    }
+    
+    /// <summary> ***********************************************
+    /// This function is used to add a randomized height to the
+    /// hexes. It returns the new Vector3 with the changed
+    /// y-value.
+    /// </summary> **********************************************
+    private static Vector3 AddHeight(Vector3 hex)
+    {
+        float randomOffset = Random.Range(0, 8);
+        hex.y += randomOffset/100;
+
+        return hex;
     }
     
     /// <summary> ***********************************************
@@ -261,7 +257,7 @@ public class HexGrid : MonoBehaviour
     {
         for (int i = 0; i < playerCount; i++)
         {
-            Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
+            Hex.Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
             CreateCityAt(hexToPut, i + 1, true);
         }
     }
@@ -269,7 +265,7 @@ public class HexGrid : MonoBehaviour
     /// <summary> ***********************************************
     /// This function will create a city.
     /// </summary> **********************************************
-    private void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
+    private void CreateCityAt(Hex.Hex cityCenter, int ownerID, bool isCapitol)
     {
         City city = new City(cityCenter, ownerID, isCapitol);
 
@@ -299,11 +295,11 @@ public class HexGrid : MonoBehaviour
     /// </summary> **********************************************
     private void ChangeCityHexPrefabs(City city)
     {
-        foreach (KeyValuePair<Hex, int> entry in city.GetCityDictionary())
+        foreach (KeyValuePair<Hex.Hex, int> entry in city.GetCityDictionary())
         {
-            if (entry.Key.GetHexType() == Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
-            else if (entry.Key.GetHexType() == Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
-            else if (entry.Key.GetHexType() == Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
+            if (entry.Key.GetHexType() == Hex.Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
+            else if (entry.Key.GetHexType() == Hex.Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
+            else if (entry.Key.GetHexType() == Hex.Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
             else continue;
             
             Destroy(_gameObjects[entry.Value]);
