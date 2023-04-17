@@ -18,10 +18,10 @@ namespace MapObjects
         private readonly int _cityRadius;
         private readonly HexGrid _hexGrid;
 
-        private readonly Dictionary<Hex, int> _controlledHexDictionary = new Dictionary<Hex, int>();
-        private readonly List<Hex> _controlledHexes = new List<Hex>();
+        private readonly Dictionary<Hex.Hex, int> _controlledHexDictionary = new Dictionary<Hex.Hex, int>();
+        private readonly List<Hex.Hex> _controlledHexes = new List<Hex.Hex>();
 
-        public City(Hex cityCenterHex, int ownerID, bool isCapitol)
+        public City(Hex.Hex cityCenterHex, int ownerID, bool isCapitol)
         {
             _cityRadius = 4;
             _ownerID = ownerID;
@@ -39,7 +39,7 @@ namespace MapObjects
         private void CreateCity()
         {
             // call ring from center outward. while i < 4, generate only land for center island
-            Hex center = _controlledHexes[0];
+            Hex.Hex center = _controlledHexes[0];
             for (int i = 1; i < _cityRadius; i++)
             {
                 _hexGrid.HexRing(center.GetVectorCoordinates(), i, _controlledHexDictionary);
@@ -68,7 +68,7 @@ namespace MapObjects
         /// <summary> ***********************************************
         /// Getter methods
         /// </summary> **********************************************
-        public List<Hex> GetCityHexes(){ return _controlledHexes; }
-        public Dictionary<Hex, int> GetCityDictionary() { return _controlledHexDictionary; }
+        public List<Hex.Hex> GetCityHexes(){ return _controlledHexes; }
+        public Dictionary<Hex.Hex, int> GetCityDictionary() { return _controlledHexDictionary; }
     }
 }
