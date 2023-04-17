@@ -36,6 +36,8 @@ public class HexGrid : MonoBehaviour
     TODO: do that because the Hex and GameObject are created and stored at different times.
     */
     private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
+    private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
+    private readonly Dictionary<Hex, Unit> _unitDictionary = new Dictionary<Hex, Unit>();
     private readonly List<Hex> _hexList = new List<Hex>();
     private readonly List<GameObject> _gameObjects = new List<GameObject>();
     private readonly List<City> _cityList = new List<City>();
@@ -117,6 +119,8 @@ public class HexGrid : MonoBehaviour
     /// </summary> **********************************************
     public List<Hex> GetHexList() { return _hexList; }
     public List<GameObject> GetGameObjectList() { return _gameObjects; }
+    public Dictionary<Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
+    public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
     public Vector3[] GetDirectionVector(){ return DirectionVectors; }
     
     
