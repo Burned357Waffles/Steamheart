@@ -6,8 +6,8 @@ using Unit = MapObjects.Unit;
 public class HexMovement : MonoBehaviour
 {
     private HexGrid _hexGrid;
-    public int _currentHexIndex;
-    public int _goalHexIndex;
+    private int _currentHexIndex;
+    private int _goalHexIndex;
     private Hex _currentHex;
     private Hex _goalHex;
     private Unit _selectedUnit;
@@ -112,6 +112,8 @@ public class HexMovement : MonoBehaviour
     private void Start()
     {
         _hexGrid = Object.FindObjectOfType<HexGrid>();
+        _currentHexIndex = -1;
+        _goalHexIndex = -1;
     }
 
     private void Update()
@@ -126,21 +128,22 @@ public class HexMovement : MonoBehaviour
             _currentHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
             return;
         }
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && _currentHexIndex != -1)
         {
             Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
-            Debug.Log("Here");
             _goalHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
             
             if (!SelectedTileIsNeighbor(_currentHexIndex, _goalHexIndex)) return;
             
             _selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
             _selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
-        
-        
+
             MoveUnit();
+
+            _currentHexIndex = -1;
+            _goalHexIndex = -1;
         }
     }
 
@@ -167,11 +170,9 @@ public class HexMovement : MonoBehaviour
     /// </summary> **********************************************
     private int GetHexIndexAtWorldPos(Vector3 coordinates)
     {
-        Debug.Log(coordinates);
         int hexIndex = -1;
         for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
         {
-            Debug.Log(_hexGrid.GetHexList()[i].WorldPosition);
             if (_hexGrid.GetHexList()[i].WorldPosition.x == coordinates.x &&
                 _hexGrid.GetHexList()[i].WorldPosition.z == coordinates.z)
             {

@@ -14,7 +14,7 @@ public class HexPlacer : MonoBehaviour
     
     public int placementCount;
 
-    public int _playerID;
+    private int _playerID;
     private HexGrid _hexGrid;
 
     public void SetPlayer(int id)
@@ -39,7 +39,7 @@ public class HexPlacer : MonoBehaviour
     /// </summary> **********************************************
     private void DetectClick()
     {
-        if (Input.GetMouseButtonDown(2))
+        if (Input.GetMouseButtonDown(1))
         {
             if (hexPrefab == null) return; // if button is not chosen
             Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);

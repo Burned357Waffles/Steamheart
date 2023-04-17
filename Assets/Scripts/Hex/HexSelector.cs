@@ -18,6 +18,7 @@ public class HexSelector : MonoBehaviour
     
     private void Start()
     {
+        _currentPlayer = 1;
         _hexGrid = GameObject.FindObjectOfType<HexGrid>();
         _hexPlacer = GameObject.FindObjectOfType<HexPlacer>();
     }
@@ -67,7 +68,11 @@ public class HexSelector : MonoBehaviour
         forestButton.GetComponent<Button>().interactable = true;
         mountainButton.GetComponent<Button>().interactable = true;
         
-        if (_currentPlayer++ >= _hexGrid.playerCount) _currentPlayer = 1;
+        Debug.Log(_currentPlayer);
+        _currentPlayer++;
+        Debug.Log(_currentPlayer);
+        if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
         _hexPlacer.SetPlayer(_currentPlayer);
+        Debug.Log(_currentPlayer);
     }
 }
