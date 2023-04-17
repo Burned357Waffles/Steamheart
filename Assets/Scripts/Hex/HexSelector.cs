@@ -70,12 +70,10 @@ namespace Hex
             forestButton.GetComponent<Button>().interactable = true;
             mountainButton.GetComponent<Button>().interactable = true;
         
-            Debug.Log(_currentPlayer);
+           
             _currentPlayer++;
-            Debug.Log(_currentPlayer);
             if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
             _hexPlacer.SetPlayer(_currentPlayer);
-            Debug.Log(_currentPlayer);
         }
     }
 }

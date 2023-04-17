@@ -7,23 +7,27 @@ namespace MapObjects
     {
         [SerializeField] public GameObject unit;
         private HexGrid _hexGrid;
+        private HexMovement _hexMovement;
+        private int _currentPlayer;
 
         private void Start()
         {
             _hexGrid = Object.FindObjectOfType<HexGrid>();
+            _hexMovement = Object.FindObjectOfType<HexMovement>();
+            _currentPlayer = 1;
         }
 
         private void Update()
         {
             if(Input.GetKeyDown(KeyCode.Space)) // this will be replaced soon
             {
-                SpawnUnit(0, 0, 1);
+                SpawnUnit(0, 0, _currentPlayer);
             }
         }
         
         /// <summary> ***********************************************
         /// This function will spawn a unit given coordinates and
-        /// ownerID of the current player
+        /// ownerID of the current player.
         /// </summary> ***********************************************
         private void SpawnUnit(int q, int r, int ownerID)
         {
@@ -38,6 +42,17 @@ namespace MapObjects
         
             _hexGrid.GetUnitDictionary().Add(hex, newUnit);
             _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject); 
+        }
+
+        /// <summary> ***********************************************
+        /// This function is called by a the end turn button and
+        /// cycles the unit controller to the next player.
+        /// </summary> **********************************************
+        public void SetPlayer()
+        {
+            _currentPlayer++;
+            if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
+            _hexMovement.SetPlayer(_currentPlayer);
         }
     }
 }  

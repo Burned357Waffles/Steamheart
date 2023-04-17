@@ -14,6 +14,8 @@ namespace MapObjects
         private Unit _selectedUnit;
         private GameObject _selectedUnitObject;
 
+        private int _playerID;
+
         /* Heuristic was needed for A* algorithm
      https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
     */
@@ -115,6 +117,7 @@ namespace MapObjects
             _hexGrid = Object.FindObjectOfType<HexGrid>();
             _currentHexIndex = -1;
             _goalHexIndex = -1;
+            _playerID = 1;
         }
 
         private void Update()
@@ -132,6 +135,7 @@ namespace MapObjects
                 if(!hit.transform.CompareTag("Unit")) return;
 
                 _currentHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+                    
                 return;
             }
             if (Input.GetMouseButtonDown(1) && _currentHexIndex != -1)
@@ -142,7 +146,19 @@ namespace MapObjects
                 _goalHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
             
                 if (!SelectedTileIsNeighbor(_currentHexIndex, _goalHexIndex)) return;
-            
+
+                if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
+                {
+                    Debug.Log("owner: " + _hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID());
+                    Debug.Log("player: " + _playerID);
+                    if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID)
+                    {
+                        _currentHexIndex = -1;
+                        _goalHexIndex = -1;
+                        return;
+                    }
+                }
+                
                 _selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
                 _selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 
@@ -203,6 +219,11 @@ namespace MapObjects
         
             _hexGrid.GetUnitDictionary().Remove(_currentHex);
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
+        }
+
+        public void SetPlayer(int currentPlayer)
+        {
+            _playerID = currentPlayer;
         }
     }
 }

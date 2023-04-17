@@ -18,5 +18,7 @@ namespace MapObjects
             S = S = -(q + r);
             _ownerID = ownerID;
         }
+
+        public int GetOwnerID() { return _ownerID; }
     }
 }
