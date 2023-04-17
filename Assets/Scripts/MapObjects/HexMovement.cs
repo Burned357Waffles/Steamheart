@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -7,8 +6,8 @@ namespace MapObjects
     public class HexMovement : MonoBehaviour
     {
         private HexGrid _hexGrid;
-        public int _currentHexIndex;
-        public int _goalHexIndex;
+        private int _currentHexIndex;
+        private int _goalHexIndex;
         private Hex.Hex _currentHex;
         private Hex.Hex _goalHex;
         private Unit _selectedUnit;
@@ -19,6 +18,7 @@ namespace MapObjects
         /* Heuristic was needed for A* algorithm
      https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
     */
+        /*
         private float Heuristic(Vector3 a, Vector3 b)
         {
             return Mathf.Abs(a.x - b.x ) + Mathf.Abs(a.y - b.y);
@@ -51,12 +51,12 @@ namespace MapObjects
             }
             return visited; 
         }
-
+    */
         /********
     This is the beginning of an A* search according to https://www.redblobgames.com/pathfinding/a-star/introduction.html#breadth-first-search
     may have made hex_reachable redundant, but we'll see
     Queue needs to be replaced by PriorityQueue, but not sure how to do that, this should work but not efficiently
-    */
+    
         public List<Hex.Hex> pathFind(Vector3 start, Vector3 goal)
         {
             Utils.PriorityQueue<Vector3, int> frontier = new Utils.PriorityQueue<Vector3, int>(); 
@@ -109,12 +109,13 @@ namespace MapObjects
             return path;
 
         }
+        */
 
         // use WorldPosition in Hex to get actual positon
 
         private void Start()
         {
-            _hexGrid = Object.FindObjectOfType<HexGrid>();
+            _hexGrid = FindObjectOfType<HexGrid>();
             _currentHexIndex = -1;
             _goalHexIndex = -1;
             _playerID = 1;
@@ -125,6 +126,10 @@ namespace MapObjects
             DetectClick();
         }
 
+        /// <summary> ***********************************************
+        /// This function handles user input and calls the necessary
+        /// functions.
+        /// </summary> **********************************************
         private void DetectClick()
         {
             // check if a unit is clicked
@@ -138,6 +143,7 @@ namespace MapObjects
                     
                 return;
             }
+            // check if a tile is clicked
             if (Input.GetMouseButtonDown(1) && _currentHexIndex != -1)
             {
                 Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
@@ -149,8 +155,6 @@ namespace MapObjects
 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
-                    Debug.Log("owner: " + _hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID());
-                    Debug.Log("player: " + _playerID);
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID)
                     {
                         _currentHexIndex = -1;
@@ -169,7 +173,15 @@ namespace MapObjects
                 _goalHexIndex = -1;
             }
         }
-
+        
+        /// <summary> ***********************************************
+        /// This function sets the current and goal Hex, then checks
+        /// if the goal hex is a neighbor of current hex. If it is,
+        /// then it will check if the goal hex is a blocked hex.
+        /// If the hex is not blocked and goal hex is a neighbor
+        /// return true, if hex is neighbor but is blocked or is not
+        /// a neighbor, then return false.
+        /// </summary> **********************************************
         private bool SelectedTileIsNeighbor(int currentHexIndex, int goalHexIndex)
         {
             _currentHex = _hexGrid.GetHexList()[currentHexIndex];
@@ -206,9 +218,13 @@ namespace MapObjects
             return hexIndex;
         }
 
+        /// <summary> ***********************************************
+        /// This function updates the Units' coordinates and updates
+        /// the dictionary that holds the relation between the Hex
+        /// and the Unit.
+        /// </summary> **********************************************
         private void MoveUnit()
         {
-            // unit q, r, s = goal q, r, s
             _selectedUnit.Q = _goalHex.Q;
             _selectedUnit.R = _goalHex.R;
             _selectedUnit.S = _goalHex.S;
@@ -221,6 +237,10 @@ namespace MapObjects
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
         }
 
+        /// <summary> ***********************************************
+        /// This function sets the playerID based on whose turn it
+        /// currently is. 
+        /// </summary> **********************************************
         public void SetPlayer(int currentPlayer)
         {
             _playerID = currentPlayer;

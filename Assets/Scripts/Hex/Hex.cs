@@ -13,7 +13,7 @@ namespace Hex
     {
         // go to https://www.redblobgames.com/grids/hexagons/ to see how grid system works
         // Q + R + S = 0
-        // S = -(Q + R)
+        
         public readonly int Q;
         public readonly int R;
         public readonly int S;
@@ -24,13 +24,12 @@ namespace Hex
         private bool _isLand;
         private bool _isBlocked;
         static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
-        private int cost;
 
         public Hex(int q, int r)
         {
-            this.Q = q;
-            this.R = r;
-            this.S = -(q + r);
+            Q = q;
+            R = r;
+            S = -(q + r);
             _ownerID = 0;
         }
     
@@ -79,8 +78,6 @@ namespace Hex
             };
             _isLand = _hexType != HexType.Air;
             _isBlocked = _hexType is HexType.Air or HexType.Mountain;
-
-        
         }
 
         /// <summary> ***********************************************

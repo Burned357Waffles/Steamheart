@@ -31,11 +31,7 @@ public class HexGrid : MonoBehaviour
     public int playerCount;
     public int capitolDistance;
     
-    /*
-    TODO: these should probably be combined into a dictionary. However, I am not sure how I should 
-    TODO: do that because the Hex and GameObject are created and stored at different times.
-    */
-    private readonly Dictionary<Hex.Hex, GameObject> _hexDictionary = new Dictionary<Hex.Hex, GameObject>();
+    public readonly Dictionary<Hex.Hex, GameObject> _hexDictionary = new Dictionary<Hex.Hex, GameObject>();
     private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
     private readonly Dictionary<Hex.Hex, Unit> _unitDictionary = new Dictionary<Hex.Hex, Unit>();
     private readonly List<Hex.Hex> _hexList = new List<Hex.Hex>();
@@ -101,19 +97,6 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    /// <summary> ***********************************************
-    /// This function is used to add a randomized height to the
-    /// hexes. It returns the new Vector3 with the changed
-    /// y-value.
-    /// </summary> **********************************************
-    public static Vector3 AddHeight(Vector3 hex)
-    {
-        float randomOffset = Random.Range(0, 8);
-        hex.y += randomOffset/100;
-
-        return hex;
-    }
-    
     /// <summary> ***********************************************
     /// These are getter methods. Not much to say about these.
     /// </summary> **********************************************
@@ -251,6 +234,19 @@ public class HexGrid : MonoBehaviour
         return _hexList.FirstOrDefault(hex => hex.Q == (int)coordinates.x 
                                               && hex.R == (int)coordinates.y 
                                               && hex.S == (int)coordinates.z);
+    }
+    
+    /// <summary> ***********************************************
+    /// This function is used to add a randomized height to the
+    /// hexes. It returns the new Vector3 with the changed
+    /// y-value.
+    /// </summary> **********************************************
+    private static Vector3 AddHeight(Vector3 hex)
+    {
+        float randomOffset = Random.Range(0, 8);
+        hex.y += randomOffset/100;
+
+        return hex;
     }
     
     /// <summary> ***********************************************

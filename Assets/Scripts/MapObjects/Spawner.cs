@@ -12,8 +12,8 @@ namespace MapObjects
 
         private void Start()
         {
-            _hexGrid = Object.FindObjectOfType<HexGrid>();
-            _hexMovement = Object.FindObjectOfType<HexMovement>();
+            _hexGrid = FindObjectOfType<HexGrid>();
+            _hexMovement = FindObjectOfType<HexMovement>();
             _currentPlayer = 1;
         }
 

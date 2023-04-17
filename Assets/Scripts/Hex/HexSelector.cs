@@ -21,8 +21,8 @@ namespace Hex
         private void Start()
         {
             _currentPlayer = 1;
-            _hexGrid = GameObject.FindObjectOfType<HexGrid>();
-            _hexPlacer = GameObject.FindObjectOfType<HexPlacer>();
+            _hexGrid = FindObjectOfType<HexGrid>();
+            _hexPlacer = FindObjectOfType<HexPlacer>();
         }
 
         /// <summary> ***********************************************
