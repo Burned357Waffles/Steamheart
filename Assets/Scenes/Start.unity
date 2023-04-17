@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45122653, g: 0.5009503, b: 0.57357436, a: 1}
+  m_IndirectSpecularColor: {r: 0.45122665, g: 0.50095063, b: 0.573575, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1450,9 +1450,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   landPrefabs:
-  - {fileID: 1403481857482767476, guid: 3eba1bc0434034a418950aa16d1c05e5, type: 3}
-  - {fileID: 2381303314478614838, guid: d142008f7a6bda842bd715d4abca1adb, type: 3}
-  - {fileID: 4246958186261016714, guid: 6d3f5f99bd82ef84ebde30243dfc393a, type: 3}
+  - {fileID: 6464097055016101987, guid: 8a957bc949677714abdb3e2ff04f97ab, type: 3}
+  - {fileID: 8295349956468922480, guid: 8c775c9821c3bb843a17c8e431fe3b0e, type: 3}
+  - {fileID: 7178512327020780823, guid: 5b596f4cdfd302646914080166682dec, type: 3}
 --- !u!1 &1938646271
 GameObject:
   m_ObjectHideFlags: 0
