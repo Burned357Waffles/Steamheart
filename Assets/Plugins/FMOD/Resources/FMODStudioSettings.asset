@@ -286,7 +286,7 @@ MonoBehaviour:
   sourceProjectPath: ../Steamheart - FMOD/Steamheart.fspro
   sourceBankPath: Assets/FMOD Banks
   sourceBankPathUnformatted: 
-  BankRefreshCooldown: 5
+  BankRefreshCooldown: 1
   ShowBankRefreshWindow: 1
   AutomaticEventLoading: 1
   BankLoadType: 0
