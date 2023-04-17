@@ -67,7 +67,8 @@ namespace UI.Menu
 
         private void Quit()
         {
-            Debug.Log("not implemented yet!");
+            Application.Quit();
+            Debug.Log("Application quit only works in build!");
         }
     }
 }
