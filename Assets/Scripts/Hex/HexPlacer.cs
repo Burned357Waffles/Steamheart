@@ -14,7 +14,7 @@ public class HexPlacer : MonoBehaviour
     
     public int placementCount;
 
-    public int _playerID;
+    private int _playerID;
     private HexGrid _hexGrid;
 
     public void SetPlayer(int id)
