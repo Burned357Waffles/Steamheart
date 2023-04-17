@@ -6,8 +6,8 @@ using Unit = MapObjects.Unit;
 public class HexMovement : MonoBehaviour
 {
     private HexGrid _hexGrid;
-    private int _currentHexIndex;
-    private int _goalHexIndex;
+    public int _currentHexIndex;
+    public int _goalHexIndex;
     private Hex _currentHex;
     private Hex _goalHex;
     private Unit _selectedUnit;
@@ -193,5 +193,8 @@ public class HexMovement : MonoBehaviour
         Vector3 goalVector = _goalHex.WorldPosition; 
         Vector3 vectorToChange = new Vector3(goalVector.x, 1, goalVector.z);
         _selectedUnitObject.transform.position = vectorToChange;
+        
+        _hexGrid.GetUnitDictionary().Remove(_currentHex);
+        _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
     }
 }
