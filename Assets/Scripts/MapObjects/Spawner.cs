@@ -28,8 +28,12 @@ public class Spawner : MonoBehaviour
     private void SpawnUnit()
     {
         Unit newUnit = new Unit(0, 0);
-        GameObject newUnitObject = Instantiate(unit, new Vector3(0, 1, 0), transform.rotation);
         Hex hex = _hexGrid.GetHexAt(new Vector3(0, 0, 0));
+        Vector3 vectorToPlaceAt = new Vector3(hex.GetVectorCoordinates().x,
+                                          hex.GetVectorCoordinates().y + 1.3f,
+                                            hex.GetVectorCoordinates().z);
+        GameObject newUnitObject = Instantiate(unit, vectorToPlaceAt, transform.rotation);
+        
         _hexGrid.GetUnitDictionary().Add(hex, newUnit);
         _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject); 
     }

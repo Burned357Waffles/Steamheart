@@ -191,7 +191,7 @@ public class HexMovement : MonoBehaviour
         _selectedUnit.S = _goalHex.S;
 
         Vector3 goalVector = _goalHex.WorldPosition; 
-        Vector3 vectorToChange = new Vector3(goalVector.x, 1, goalVector.z);
+        Vector3 vectorToChange = new Vector3(goalVector.x, _goalHex.WorldPosition.y + 1.3f, goalVector.z);
         _selectedUnitObject.transform.position = vectorToChange;
         
         _hexGrid.GetUnitDictionary().Remove(_currentHex);
