@@ -14,10 +14,10 @@ public class HexMovement : MonoBehaviour
         return Mathf.Abs(a.x - b.x ) + Mathf.Abs(a.y - b.y);
     }
 
-    public HashSet<Vector3> hex_reachable(Vector3 start, int movement)
+    public Queue<Vector3> hex_reachable(Vector3 start, int movement)
     {
-        HashSet<Vector3> visited = new HashSet<Vector3>();
-        visited.Add(start);
+        Queue<Vector3> visited = new Queue<Vector3>();
+        visited.Enqueue(start);
 
         List<List<Vector3>> fringes = new List<List<Vector3>>();
         fringes.Add(new List<Vector3> { start });
@@ -32,7 +32,7 @@ public class HexMovement : MonoBehaviour
                     Vector3 neighbor = HexGrid.HexNeighbor(_hexGrid.GetHexAt(hex).GetVectorCoordinates(), j);
                     if (!visited.Contains(neighbor) && _hexGrid.GetHexAt(hex).IsBlocked())
                     {  
-                        visited.Add(neighbor);
+                        visited.Enqueue(neighbor);
                         fringes[i].Add(neighbor);
                     }
                 }
@@ -49,14 +49,14 @@ public class HexMovement : MonoBehaviour
     */
     public List<Hex> pathFind(Vector3 start, Vector3 goal)
     {
-       Queue<Vector3> frontier = new Queue<Vector3>(); 
-       frontier.Enqueue(start);
+       Utils.PriorityQueue<Vector3, int> frontier = new Utils.PriorityQueue<Vector3, int>(); 
+       frontier.Enqueue(start, 0);
 
-       Dictionary<Vector3, float> came_from = new Dictionary<Vector3, float>();
-       Dictionary<Vector3, Vector3> cost = new Dictionary<Vector3, Vector3>();
+       Dictionary<Vector3, Vector3> came_from = new Dictionary<Vector3, Vector3>();
+       Dictionary<Vector3, int> cost = new Dictionary<Vector3, int>();
 
-       came_from[start] = 0;
-       cost[start] = start;
+       came_from[start] = start;
+       cost[start] = 0;
 
        List<Hex> path = new List<Hex>();
 
@@ -69,6 +69,31 @@ public class HexMovement : MonoBehaviour
                 break;
             }
             // There should be a foreach, but couldn't figure it out.
+            List<Vector3> neighborList = new List<Vector3>(); 
+            for (int j = 0; j < 6; j++)
+            {
+                Vector3 neighbor = HexGrid.HexNeighbor(_hexGrid.GetHexAt(current).GetVectorCoordinates(), j);
+                neighborList.Add(neighbor);     
+            }
+            foreach(Vector3 next in neighborList )
+            {
+                int blockCost = 0;
+                int newCost = 0;
+                int priority = 0;
+                if(!_hexGrid.GetHexAt(next).IsBlocked())
+                {
+                    blockCost = 1;
+                }
+                newCost = cost[current] + blockCost;
+                if(!cost.ContainsKey(next) || newCost < cost[next])
+                {
+                    cost[next] = newCost;
+                    priority = (int)(newCost + Heuristic(goal, next));
+                    frontier.Enqueue(next, priority);
+                    came_from[next] = current;
+                }
+
+            }
             
        }
        return path;

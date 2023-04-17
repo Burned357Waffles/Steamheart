@@ -22,6 +22,7 @@ public class Hex
     private bool _isLand;
     private bool _isBlocked;
     static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
+    private int cost;
 
     public Hex(int q, int r)
     {
@@ -76,6 +77,8 @@ public class Hex
         };
         _isLand = _hexType != HexType.Air;
         _isBlocked = _hexType is HexType.Air or HexType.Mountain;
+
+        
     }
 
     /// <summary> ***********************************************
