@@ -39,20 +39,17 @@ public class HexPlacer : MonoBehaviour
     /// </summary> **********************************************
     private void DetectClick()
     {
-        if (!Input.GetMouseButtonDown(1)) return;
-        
-        Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
-        if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-        if (hexPrefab == null) return; // if button is not chosen
-        
-        int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
-        if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID))
+        if (Input.GetMouseButtonDown(2))
         {
-            Debug.Log("NOT VALID");
-            return;
+            if (hexPrefab == null) return; // if button is not chosen
+            Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
+            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+
+            int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+            if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID)) return;
+            if (!PlacementCount(hexIndex)) return;
+            if (hexIndex != -1) ConvertHex(hexIndex);
         }
-        if(!PlacementCount(hexIndex)) return;
-        if (hexIndex != -1) ConvertHex(hexIndex);
     }
 
     /// <summary> ***********************************************
