@@ -44,16 +44,17 @@ namespace Hex
         /// </summary> **********************************************
         private void DetectClick()
         {
-            if (!Input.GetMouseButtonDown(1)) return;
-            
-            if (_isHexPrefabNull) return; // if button is not chosen
-            Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (_isHexPrefabNull) return; // if button is not chosen
+                Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
+                if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
-            int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
-            if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID)) return;
-            if (!PlacementCount(hexIndex)) return;
-            if (hexIndex != -1) ConvertHex(hexIndex);
+                int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+                if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID)) return;
+                if (!PlacementCount(hexIndex)) return;
+                if (hexIndex != -1) ConvertHex(hexIndex);
+            }
         }
 
         /// <summary> ***********************************************

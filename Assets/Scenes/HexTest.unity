@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85bff6eaf7bf61b43a0a0e33474f70e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hexPrefab: {fileID: 0}
+  hexPrefab: {fileID: 250597337}
   placementCount: 0
 --- !u!4 &384700255
 Transform:
