@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Start.unity
     guid: ed9fd62e78b921e47a17d306fcd23d1a
+  - enabled: 1
+    path: Assets/Scenes/HexTest.unity
+    guid: 0cc86208e1332874f95e118fb75a1175
   m_configObjects: {}
