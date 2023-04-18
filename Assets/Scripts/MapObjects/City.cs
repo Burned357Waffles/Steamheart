@@ -53,12 +53,6 @@ namespace MapObjects
         /// </summary> **********************************************
         private void SetOwnership()
         {
-            /*
-            for (int i = 0; i < _controlledHexes.Count; i++)
-            {
-                _controlledHexes[i].SetOwnerID(_ownerID);
-            }
-            */
             foreach (var key in _controlledHexDictionary.Keys)
             {
                 key.SetOwnerID(_ownerID);

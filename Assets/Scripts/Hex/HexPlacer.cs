@@ -17,6 +17,8 @@ namespace Hex
 
         private int _playerID;
         private HexGrid _hexGrid;
+        private Camera _camera;
+        private bool _isHexPrefabNull;
 
         public void SetPlayer(int id)
         {
@@ -26,6 +28,8 @@ namespace Hex
 
         private void Start()
         {
+            _isHexPrefabNull = hexPrefab == null;
+            _camera = Camera.main;
             _hexGrid = GameObject.FindObjectOfType<HexGrid>();
             _playerID = 1;
         }
@@ -40,17 +44,16 @@ namespace Hex
         /// </summary> **********************************************
         private void DetectClick()
         {
-            if (Input.GetMouseButtonDown(1))
-            {
-                if (hexPrefab == null) return; // if button is not chosen
-                Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
-                if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+            if (!Input.GetMouseButtonDown(1)) return;
+            
+            if (_isHexPrefabNull) return; // if button is not chosen
+            Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
+            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
-                int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
-                if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID)) return;
-                if (!PlacementCount(hexIndex)) return;
-                if (hexIndex != -1) ConvertHex(hexIndex);
-            }
+            int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+            if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID)) return;
+            if (!PlacementCount(hexIndex)) return;
+            if (hexIndex != -1) ConvertHex(hexIndex);
         }
 
         /// <summary> ***********************************************
@@ -94,7 +97,7 @@ namespace Hex
         /// </summary> **********************************************
         private void ConvertHex(int hexIndex)
         {
-            global::Hex.Hex selectedHex = _hexGrid.GetHexList()[hexIndex];
+            Hex selectedHex = _hexGrid.GetHexList()[hexIndex];
             GameObject hexObject = _hexGrid.GetGameObjectList()[hexIndex];
         
             Destroy(hexObject);
@@ -113,7 +116,7 @@ namespace Hex
         /// adjacent land hex and returns true if there is false if
         /// not.
         /// </summary> **********************************************
-        private bool CheckForNeighbors(global::Hex.Hex selectedHex)
+        private bool CheckForNeighbors(Hex selectedHex)
         {
             Vector3 hexCoordinates = HexGrid.AddCoordinates(selectedHex.GetVectorCoordinates(),
                 HexGrid.CoordinateScale(_hexGrid.GetDirectionVector()[4], 1));
@@ -144,7 +147,7 @@ namespace Hex
         /// </summary> **********************************************
         private bool PlacementCount(int hexIndex)
         {
-            if (_hexGrid.GetHexList()[hexIndex].GetHexType() != global::Hex.Hex.HexType.Air) return false;
+            if (_hexGrid.GetHexList()[hexIndex].GetHexType() != Hex.HexType.Air) return false;
             if (!CheckForNeighbors(_hexGrid.GetHexList()[hexIndex])) return false;
         
             if (hexPrefab == _hexGrid.ownedBasicHex && placementCount < 2)

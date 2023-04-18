@@ -14,7 +14,8 @@ namespace MapObjects
         private GameObject _selectedUnitObject;
 
         private int _playerID;
-
+        private Camera _camera;
+        
         /* Heuristic was needed for A* algorithm
      https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
     */
@@ -115,6 +116,7 @@ namespace MapObjects
 
         private void Start()
         {
+            _camera = Camera.main;
             _hexGrid = FindObjectOfType<HexGrid>();
             _currentHexIndex = -1;
             _goalHexIndex = -1;
@@ -135,7 +137,7 @@ namespace MapObjects
             // check if a unit is clicked
             if (Input.GetMouseButtonDown(0))
             {
-                Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
+                Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 if(!hit.transform.CompareTag("Unit")) return;
 
@@ -146,7 +148,7 @@ namespace MapObjects
             // check if a tile is clicked
             if (Input.GetMouseButtonDown(1) && _currentHexIndex != -1)
             {
-                Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
+                Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
                 _goalHexIndex = GetHexIndexAtWorldPos(hit.transform.position);

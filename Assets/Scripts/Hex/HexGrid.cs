@@ -271,21 +271,20 @@ public class HexGrid : MonoBehaviour
 
         for (int i = 0; i < _hexList.Count(); i++)
         {
-            if (_hexList[i].GetVectorCoordinates() == cityCenter.GetVectorCoordinates())
-            {
-                Destroy(_gameObjects[i]);
+            if (_hexList[i].GetVectorCoordinates() != cityCenter.GetVectorCoordinates()) continue;
+            
+            Destroy(_gameObjects[i]);
                 
-                GameObject cityObject = Instantiate(cityPrefab,
-                    cityCenter.WorldPosition,
-                    Quaternion.identity,
-                    this.transform);
-                //cityObject.transform.parent = _gameObjects[0].transform;
-                _hexList[i].MakeHexBuildingType();
-                _gameObjects[i] = cityObject;
-                _cityList.Add(city);
-                ChangeCityHexPrefabs(city);
-                return;
-            }
+            GameObject cityObject = Instantiate(cityPrefab,
+                cityCenter.WorldPosition,
+                Quaternion.identity,
+                this.transform);
+                
+            _hexList[i].MakeHexBuildingType();
+            _gameObjects[i] = cityObject;
+            _cityList.Add(city);
+            ChangeCityHexPrefabs(city);
+            return;
         }
     }
 
