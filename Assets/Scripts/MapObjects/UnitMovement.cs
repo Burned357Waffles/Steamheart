@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace MapObjects
@@ -167,19 +168,11 @@ namespace MapObjects
                 bool doDeplete = false;
                 if (hit.transform.CompareTag("Unit"))
                 {
-                    if (_hexGrid.GetUnitDictionary()[_currentHex] == _hexGrid.GetUnitDictionary()[_goalHex])
-                    {
-                        Debug.Log("same");
-                        return;
-                    }
-                    if (!IsTargetInRange(_hexGrid.GetUnitDictionary()[_currentHex].AttackRadius))
-                    {
-                        Debug.Log("nope");
-                        return;
-                    }
+                    if (_hexGrid.GetUnitDictionary()[_currentHex] == _hexGrid.GetUnitDictionary()[_goalHex]) return;
+                    if (!IsTargetInRange(_hexGrid.GetUnitDictionary()[_currentHex].AttackRadius)) return;
                     
                     doDeplete = true;
-                    if (DoCombat())
+                    if (DoCombat()) // still alive
                     {
                         Debug.Log(_hexGrid.GetUnitDictionary()[_goalHex].Health);
                         _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
@@ -187,7 +180,14 @@ namespace MapObjects
                         _goalHexIndex = -1;
                         return;
                     }
-                    Debug.Log(_hexGrid.GetUnitDictionary()[_goalHex].Health);
+
+                    if (_hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Melee)
+                    {
+                        _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
+                        _currentHexIndex = -1;
+                        _goalHexIndex = -1;
+                        return;
+                    }
                 }
 
                 if (!SelectedTileIsNeighbor()) return;
@@ -239,27 +239,12 @@ namespace MapObjects
             return false;
         }
         
-        private bool IsTargetInRange(int radius)
+        private bool IsTargetInRange(int range)
         {
-            Debug.Log("goal: " + _goalHex.GetVectorCoordinates());
-            
-            Vector3 hexCoordinates = HexGrid.AddCoordinates(_currentHex.GetVectorCoordinates(),
-                HexGrid.CoordinateScale(_hexGrid.GetDirectionVector()[4], radius));
-            for (int k = 1; k < radius; k++)
-            {
-                for (int i = 0; i < 6; i++)
-                {
-                    for (int j = 0; j < k; j++)
-                    {
-                        Debug.Log(hexCoordinates);
-                        if (hexCoordinates == _goalHex.GetVectorCoordinates())
-                            return true;
-                        hexCoordinates = HexGrid.HexNeighbor(hexCoordinates, i);
-                    }
-                }
-            }
+            Vector3 resultVector = _currentHex.GetVectorCoordinates() - _goalHex.GetVectorCoordinates();
+            int distance = (int)(Math.Abs(resultVector.x) + Math.Abs(resultVector.y) + Math.Abs(resultVector.z)) / 2;
 
-            return false;
+            return distance <= range;
         }
 
         /// <summary> ***********************************************
@@ -317,9 +302,7 @@ namespace MapObjects
                 return true;
 
             if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID) return true;
-            
-            if (!SelectedTileIsNeighbor()) return true;
-            
+
             bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
                 _hexGrid.GetUnitDictionary()[_goalHex]);
             if (!dead) return true;
