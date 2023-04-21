@@ -1,8 +1,15 @@
 using System;
+using Hex;
 using UnityEngine;
 
 namespace MapObjects
 {
+    /// <summary> ************************************************************
+    /// This class handles the movement of units. It checks if the player
+    /// selects a unit, then if they want to move it or attack with it. A
+    /// player is only allowed to move their own units.
+    /// </summary> ***********************************************************
+    /// TODO: maybe transfer some of the combat related functions to the combat file
     public class HexMovement : MonoBehaviour
     {
         private HexGrid _hexGrid;
@@ -159,7 +166,6 @@ namespace MapObjects
 
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetCurrentMovementPoints() <= 0)
                 {
-                    Debug.Log("no more movement points");
                     _currentHexIndex = -1;
                     _goalHexIndex = -1;
                     return;
@@ -172,9 +178,9 @@ namespace MapObjects
                     if (!IsTargetInRange(_hexGrid.GetUnitDictionary()[_currentHex].AttackRadius)) return;
                     
                     doDeplete = true;
-                    if (DoCombat()) // still alive
+                    // if target is still alive
+                    if (DoCombat()) 
                     {
-                        Debug.Log(_hexGrid.GetUnitDictionary()[_goalHex].Health);
                         _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
                         _currentHexIndex = -1;
                         _goalHexIndex = -1;
@@ -239,6 +245,10 @@ namespace MapObjects
             return false;
         }
         
+        /// <summary> ***********************************************
+        /// This function compares the distance from attacker to
+        /// the target. Returns true if target is in range.
+        /// </summary> **********************************************
         private bool IsTargetInRange(int range)
         {
             Vector3 resultVector = _currentHex.GetVectorCoordinates() - _goalHex.GetVectorCoordinates();
@@ -314,6 +324,10 @@ namespace MapObjects
             return false;
         }
 
+        /// <summary> ***********************************************
+        /// This function sets all unit movement points back to their
+        /// base values.
+        /// </summary> **********************************************
         public void ResetUnitMovementPoints()
         {
             foreach (Unit unit in _hexGrid.GetUnitDictionary().Values)

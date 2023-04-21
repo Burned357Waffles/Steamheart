@@ -4,9 +4,15 @@ using System.IO;
 
 namespace MapObjects
 {
+    /// <summary> ************************************************************
+    /// This class reads the unit data from file and puts it into a
+    /// dictionary where the key is the unit type and the value is an array of
+    /// the damage, health, movement points, and attack radius. It will also
+    /// hold the cost of the unit in the future.
+    /// </summary> ***********************************************************
     public static class UnitTypesData
     {
-        public static Dictionary<Unit.UnitType, int[]> UnitTypeDataDictionary = new Dictionary<Unit.UnitType, int[]>();
+        private static readonly Dictionary<Unit.UnitType, int[]> UnitTypeDataDictionary = new Dictionary<Unit.UnitType, int[]>();
 
         public static int[] GetStats(Unit.UnitType type)
         {

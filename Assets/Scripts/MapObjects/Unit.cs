@@ -2,6 +2,11 @@
 
 namespace MapObjects
 {
+    /// <summary> ************************************************************
+    /// This class is the data class for the unit. It will hold the data for
+    /// the unit including the health, damage, attack radius, unit type,
+    /// base movement points, current movement points, and owner ID.
+    /// </summary> ***********************************************************
     public class Unit
     {
         public int Q;

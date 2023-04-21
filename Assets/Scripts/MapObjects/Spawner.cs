@@ -1,9 +1,13 @@
+using Hex;
 using TMPro;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace MapObjects
 {
+    /// <summary> ************************************************************
+    /// This class handles getting user input and spawning a unit at a
+    /// chosen location. It also keeps track of which player owns the unit.
+    /// </summary> ***********************************************************
     public class Spawner : MonoBehaviour
     {
         [SerializeField] public GameObject unit;
@@ -38,7 +42,9 @@ namespace MapObjects
             
             Hex.Hex hex = _hexGrid.GetHexAt(new Vector3(0, 0, 0));
             if (_hexGrid.GetUnitDictionary().ContainsKey(hex)) return;
-            Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Ranged);
+            
+            Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Ranged);  // TODO: change to player select
+
             Vector3 vectorToPlaceAt = new Vector3(hex.GetVectorCoordinates().x,
                 hex.GetVectorCoordinates().y + 1.3f,
                 hex.GetVectorCoordinates().z);

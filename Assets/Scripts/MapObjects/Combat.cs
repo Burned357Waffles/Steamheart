@@ -1,13 +1,14 @@
-﻿using UnityEngine;
-
-namespace MapObjects
+﻿namespace MapObjects
 {
+    /// <summary> ************************************************************
+    /// This class handles the health reduction of the defender by the
+    /// attacker.
+    /// </summary> ***********************************************************
     public static class Combat
     {
         private static Unit _attacker;
         private static Unit _defender;
         
-        // TODO: check ownership and move unit to defender's pos after defeating it
         public static bool InitiateCombat(Unit attacker, Unit defender)
         {
             _attacker = attacker;
