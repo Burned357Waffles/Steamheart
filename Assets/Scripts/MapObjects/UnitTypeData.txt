@@ -1,0 +1,4 @@
+﻿Melee 5 10 2 1
+Ranged 5 5 2 2
+Airship 2 15 3 2
+Settler 0 5 2 0

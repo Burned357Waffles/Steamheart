@@ -1,5 +1,4 @@
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace MapObjects
 {
@@ -112,7 +111,7 @@ namespace MapObjects
         }
         */
 
-        // use WorldPosition in Hex to get actual positon
+        // use WorldPosition in Hex to get actual position
 
         private void Start()
         {
@@ -142,7 +141,7 @@ namespace MapObjects
                 if(!hit.transform.CompareTag("Unit")) return;
 
                 _currentHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
-                    
+
                 return;
             }
             // check if a tile is clicked
@@ -152,29 +151,49 @@ namespace MapObjects
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
                 _goalHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+                if (_currentHexIndex < 0 || _goalHexIndex < 0) return;
+                
                 _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
                 _goalHex = _hexGrid.GetHexList()[_goalHexIndex];
 
-                
-                if (hit.transform.CompareTag("Unit"))
+                if (_hexGrid.GetUnitDictionary()[_currentHex].GetCurrentMovementPoints() <= 0)
                 {
-                    if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex) && 
-                        _hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
-                    {
-                        bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
-                                                         _hexGrid.GetUnitDictionary()[_goalHex]);
-                        if (dead)
-                        {
-                            Destroy(_hexGrid.GetUnitObjectDictionary()[_hexGrid.GetUnitDictionary()[_goalHex]]);
-                            _hexGrid.GetUnitObjectDictionary().Remove(_hexGrid.GetUnitDictionary()[_goalHex]);
-                            _hexGrid.GetUnitDictionary().Remove(_goalHex);
-                        }
-                    }
-
+                    Debug.Log("no more movement points");
+                    _currentHexIndex = -1;
+                    _goalHexIndex = -1;
                     return;
                 }
-            
+
+                bool doDeplete = false;
+                if (hit.transform.CompareTag("Unit"))
+                {
+                    if (_hexGrid.GetUnitDictionary()[_currentHex] == _hexGrid.GetUnitDictionary()[_goalHex])
+                    {
+                        Debug.Log("same");
+                        return;
+                    }
+                    if (!IsTargetInRange(_hexGrid.GetUnitDictionary()[_currentHex].AttackRadius))
+                    {
+                        Debug.Log("nope");
+                        return;
+                    }
+                    
+                    doDeplete = true;
+                    if (DoCombat())
+                    {
+                        Debug.Log(_hexGrid.GetUnitDictionary()[_goalHex].Health);
+                        _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
+                        _currentHexIndex = -1;
+                        _goalHexIndex = -1;
+                        return;
+                    }
+                    Debug.Log(_hexGrid.GetUnitDictionary()[_goalHex].Health);
+                }
+
                 if (!SelectedTileIsNeighbor()) return;
+                if (_goalHex.IsBlocked() && 
+                    _hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Airship)
+                    return;
 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
@@ -191,7 +210,8 @@ namespace MapObjects
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
                 MoveUnit();
-
+                
+                if (doDeplete) _selectedUnit.DepleteMovementPoints();
                 _currentHexIndex = -1;
                 _goalHexIndex = -1;
             }
@@ -212,7 +232,30 @@ namespace MapObjects
                 Vector3 neighbor = HexGrid.HexNeighbor(_currentHex.GetVectorCoordinates(), j);
                 if (neighbor == _goalHex.GetVectorCoordinates())
                 {
-                    return !_goalHex.IsBlocked();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        private bool IsTargetInRange(int radius)
+        {
+            Debug.Log("goal: " + _goalHex.GetVectorCoordinates());
+            
+            Vector3 hexCoordinates = HexGrid.AddCoordinates(_currentHex.GetVectorCoordinates(),
+                HexGrid.CoordinateScale(_hexGrid.GetDirectionVector()[4], radius));
+            for (int k = 1; k < radius; k++)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    for (int j = 0; j < k; j++)
+                    {
+                        Debug.Log(hexCoordinates);
+                        if (hexCoordinates == _goalHex.GetVectorCoordinates())
+                            return true;
+                        hexCoordinates = HexGrid.HexNeighbor(hexCoordinates, i);
+                    }
                 }
             }
 
@@ -255,6 +298,7 @@ namespace MapObjects
         
             _hexGrid.GetUnitDictionary().Remove(_currentHex);
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
+            _selectedUnit.UseMovementPoints();
         }
 
         /// <summary> ***********************************************
@@ -264,6 +308,35 @@ namespace MapObjects
         public void SetPlayer(int currentPlayer)
         {
             _playerID = currentPlayer;
+        }
+
+        private bool DoCombat()
+        {
+            if (!_hexGrid.GetUnitDictionary().ContainsKey(_currentHex) ||
+                !_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
+                return true;
+
+            if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID) return true;
+            
+            if (!SelectedTileIsNeighbor()) return true;
+            
+            bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
+                _hexGrid.GetUnitDictionary()[_goalHex]);
+            if (!dead) return true;
+
+            Destroy(_hexGrid.GetUnitObjectDictionary()[_hexGrid.GetUnitDictionary()[_goalHex]]);
+            _hexGrid.GetUnitObjectDictionary().Remove(_hexGrid.GetUnitDictionary()[_goalHex]);
+            _hexGrid.GetUnitDictionary().Remove(_goalHex);
+            
+            return false;
+        }
+
+        public void ResetUnitMovementPoints()
+        {
+            foreach (Unit unit in _hexGrid.GetUnitDictionary().Values)
+            {
+                unit.ResetMovementPoints();
+            }
         }
     }
 }

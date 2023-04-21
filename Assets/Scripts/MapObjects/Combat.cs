@@ -12,7 +12,7 @@ namespace MapObjects
         {
             _attacker = attacker;
             _defender = defender;
-            return Fight();
+            return _attacker.GetOwnerID() != _defender.GetOwnerID() && Fight();
         }
 
         /// <summary> ***********************************************
@@ -22,7 +22,7 @@ namespace MapObjects
         /// </summary> **********************************************
         private static bool Fight()
         {
-            if (_attacker.Damage <= _defender.Health) return true;
+            if (_attacker.Damage >= _defender.Health) return true;
 
             _defender.Health -= _attacker.Damage;
             return false;
