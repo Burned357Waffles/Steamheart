@@ -152,8 +152,29 @@ namespace MapObjects
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
                 _goalHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+                _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
+                _goalHex = _hexGrid.GetHexList()[_goalHexIndex];
+
+                
+                if (hit.transform.CompareTag("Unit"))
+                {
+                    if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex) && 
+                        _hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
+                    {
+                        bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
+                                                         _hexGrid.GetUnitDictionary()[_goalHex]);
+                        if (dead)
+                        {
+                            Destroy(_hexGrid.GetUnitObjectDictionary()[_hexGrid.GetUnitDictionary()[_goalHex]]);
+                            _hexGrid.GetUnitObjectDictionary().Remove(_hexGrid.GetUnitDictionary()[_goalHex]);
+                            _hexGrid.GetUnitDictionary().Remove(_goalHex);
+                        }
+                    }
+
+                    return;
+                }
             
-                if (!SelectedTileIsNeighbor(_currentHexIndex, _goalHexIndex)) return;
+                if (!SelectedTileIsNeighbor()) return;
 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
@@ -184,11 +205,8 @@ namespace MapObjects
         /// return true, if hex is neighbor but is blocked or is not
         /// a neighbor, then return false.
         /// </summary> **********************************************
-        private bool SelectedTileIsNeighbor(int currentHexIndex, int goalHexIndex)
+        private bool SelectedTileIsNeighbor()
         {
-            _currentHex = _hexGrid.GetHexList()[currentHexIndex];
-            _goalHex = _hexGrid.GetHexList()[goalHexIndex];
-        
             for (int j = 0; j < 6; j++)
             {
                 Vector3 neighbor = HexGrid.HexNeighbor(_currentHex.GetVectorCoordinates(), j);

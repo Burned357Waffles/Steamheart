@@ -34,7 +34,7 @@ namespace MapObjects
             
             Hex.Hex hex = _hexGrid.GetHexAt(new Vector3(0, 0, 0));
             if (_hexGrid.GetUnitDictionary().ContainsKey(hex)) return;
-            Unit newUnit = new Unit(q, r, ownerID);
+            Unit newUnit = new Unit(q, r, ownerID, 10, 10);
             Vector3 vectorToPlaceAt = new Vector3(hex.GetVectorCoordinates().x,
                 hex.GetVectorCoordinates().y + 1.3f,
                 hex.GetVectorCoordinates().z);

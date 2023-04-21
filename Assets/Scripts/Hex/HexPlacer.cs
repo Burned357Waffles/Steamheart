@@ -51,9 +51,11 @@ namespace Hex
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
                 int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+                if (hexIndex < 0) return;
+                
                 if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID)) return;
                 if (!PlacementCount(hexIndex)) return;
-                if (hexIndex != -1) ConvertHex(hexIndex);
+                ConvertHex(hexIndex);
             }
         }
 
