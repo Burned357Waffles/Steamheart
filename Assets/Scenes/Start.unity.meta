@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/Start.unity.meta
+guid: ed9fd62e78b921e47a17d306fcd23d1a
+DefaultImporter:
+========
+guid: 7d16008831e9a064688ec4c586062af1
+PrefabImporter:
+>>>>>>>> hex-grid:Assets/Prefabs/Tiles/Tile prefabs/air_tile.prefab.meta
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
