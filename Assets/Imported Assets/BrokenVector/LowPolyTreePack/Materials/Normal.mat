@@ -70,6 +70,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaCutoff: 0.5
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -86,7 +87,7 @@ Material:
     - _MBMaxHeight: 10
     - _MBPhase: 1
     - _MBWindDir: 30
-    - _MBWindDirOffset: 63
+    - _MBWindDirOffset: 20
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
