@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Hex;
 using UnityEngine;
 
 namespace MapObjects
 {
     /// <summary> ************************************************************
     /// This class is the data class for the city. It will hold the data for
-    /// the city including the indexes oft the hexes within the borders from
+    /// the city including the indexes of the hexes within the borders from
     /// the HexGrid Lists, the health, damage, owner ID, and resources
     /// provided.
     /// </summary> ***********************************************************
@@ -13,8 +14,8 @@ namespace MapObjects
     {
         private readonly int _ownerID;
         private bool _isCapitol;
-        private int _health;
-        private int _damage;
+        public int Health;
+        public int Damage;
         private readonly int _cityRadius;
         private readonly HexGrid _hexGrid;
 
@@ -26,8 +27,8 @@ namespace MapObjects
             _cityRadius = 4;
             _ownerID = ownerID;
             _isCapitol = isCapitol;
-            _health = 100; // we can play with values
-            _damage = 10; // we can play with values
+            Health = 100; // we can play with values
+            Damage = 10; // we can play with values
             _controlledHexes.Add(cityCenterHex);
             _hexGrid = Object.FindObjectOfType<HexGrid>();
             CreateCity();
@@ -53,12 +54,6 @@ namespace MapObjects
         /// </summary> **********************************************
         private void SetOwnership()
         {
-            /*
-            for (int i = 0; i < _controlledHexes.Count; i++)
-            {
-                _controlledHexes[i].SetOwnerID(_ownerID);
-            }
-            */
             foreach (var key in _controlledHexDictionary.Keys)
             {
                 key.SetOwnerID(_ownerID);

@@ -1,8 +1,15 @@
+using System;
+using Hex;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace MapObjects
 {
+    /// <summary> ************************************************************
+    /// This class handles the movement of units. It checks if the player
+    /// selects a unit, then if they want to move it or attack with it. A
+    /// player is only allowed to move their own units.
+    /// </summary> ***********************************************************
+    /// TODO: maybe transfer some of the combat related functions to the combat file
     public class HexMovement : MonoBehaviour
     {
         private HexGrid _hexGrid;
@@ -14,7 +21,8 @@ namespace MapObjects
         private GameObject _selectedUnitObject;
 
         private int _playerID;
-
+        private Camera _camera;
+        
         /* Heuristic was needed for A* algorithm
      https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
     */
@@ -111,10 +119,11 @@ namespace MapObjects
         }
         */
 
-        // use WorldPosition in Hex to get actual positon
+        // use WorldPosition in Hex to get actual position
 
         private void Start()
         {
+            _camera = Camera.main;
             _hexGrid = FindObjectOfType<HexGrid>();
             _currentHexIndex = -1;
             _goalHexIndex = -1;
@@ -135,23 +144,62 @@ namespace MapObjects
             // check if a unit is clicked
             if (Input.GetMouseButtonDown(0))
             {
-                Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
+                Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 if(!hit.transform.CompareTag("Unit")) return;
 
                 _currentHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
-                    
+
                 return;
             }
             // check if a tile is clicked
             if (Input.GetMouseButtonDown(1) && _currentHexIndex != -1)
             {
-                Ray ray = Camera.main!.ScreenPointToRay(Input.mousePosition);
+                Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
                 _goalHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
-            
-                if (!SelectedTileIsNeighbor(_currentHexIndex, _goalHexIndex)) return;
+                if (_currentHexIndex < 0 || _goalHexIndex < 0) return;
+                
+                _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
+                _goalHex = _hexGrid.GetHexList()[_goalHexIndex];
+
+                if (_hexGrid.GetUnitDictionary()[_currentHex].GetCurrentMovementPoints() <= 0)
+                {
+                    _currentHexIndex = -1;
+                    _goalHexIndex = -1;
+                    return;
+                }
+
+                bool doDeplete = false;
+                if (hit.transform.CompareTag("Unit"))
+                {
+                    if (_hexGrid.GetUnitDictionary()[_currentHex] == _hexGrid.GetUnitDictionary()[_goalHex]) return;
+                    if (!IsTargetInRange(_hexGrid.GetUnitDictionary()[_currentHex].AttackRadius)) return;
+                    
+                    doDeplete = true;
+                    // if target is still alive
+                    if (DoCombat()) 
+                    {
+                        _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
+                        _currentHexIndex = -1;
+                        _goalHexIndex = -1;
+                        return;
+                    }
+
+                    if (_hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Melee)
+                    {
+                        _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
+                        _currentHexIndex = -1;
+                        _goalHexIndex = -1;
+                        return;
+                    }
+                }
+
+                if (!SelectedTileIsNeighbor()) return;
+                if (_goalHex.IsBlocked() && 
+                    _hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Airship)
+                    return;
 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
@@ -168,7 +216,8 @@ namespace MapObjects
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
                 MoveUnit();
-
+                
+                if (doDeplete) _selectedUnit.DepleteMovementPoints();
                 _currentHexIndex = -1;
                 _goalHexIndex = -1;
             }
@@ -182,21 +231,30 @@ namespace MapObjects
         /// return true, if hex is neighbor but is blocked or is not
         /// a neighbor, then return false.
         /// </summary> **********************************************
-        private bool SelectedTileIsNeighbor(int currentHexIndex, int goalHexIndex)
+        private bool SelectedTileIsNeighbor()
         {
-            _currentHex = _hexGrid.GetHexList()[currentHexIndex];
-            _goalHex = _hexGrid.GetHexList()[goalHexIndex];
-        
             for (int j = 0; j < 6; j++)
             {
                 Vector3 neighbor = HexGrid.HexNeighbor(_currentHex.GetVectorCoordinates(), j);
                 if (neighbor == _goalHex.GetVectorCoordinates())
                 {
-                    return !_goalHex.IsBlocked();
+                    return true;
                 }
             }
 
             return false;
+        }
+        
+        /// <summary> ***********************************************
+        /// This function compares the distance from attacker to
+        /// the target. Returns true if target is in range.
+        /// </summary> **********************************************
+        private bool IsTargetInRange(int range)
+        {
+            Vector3 resultVector = _currentHex.GetVectorCoordinates() - _goalHex.GetVectorCoordinates();
+            int distance = (int)(Math.Abs(resultVector.x) + Math.Abs(resultVector.y) + Math.Abs(resultVector.z)) / 2;
+
+            return distance <= range;
         }
 
         /// <summary> ***********************************************
@@ -235,6 +293,7 @@ namespace MapObjects
         
             _hexGrid.GetUnitDictionary().Remove(_currentHex);
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
+            _selectedUnit.UseMovementPoints();
         }
 
         /// <summary> ***********************************************
@@ -244,6 +303,37 @@ namespace MapObjects
         public void SetPlayer(int currentPlayer)
         {
             _playerID = currentPlayer;
+        }
+
+        private bool DoCombat()
+        {
+            if (!_hexGrid.GetUnitDictionary().ContainsKey(_currentHex) ||
+                !_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
+                return true;
+
+            if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID) return true;
+
+            bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
+                _hexGrid.GetUnitDictionary()[_goalHex]);
+            if (!dead) return true;
+
+            Destroy(_hexGrid.GetUnitObjectDictionary()[_hexGrid.GetUnitDictionary()[_goalHex]]);
+            _hexGrid.GetUnitObjectDictionary().Remove(_hexGrid.GetUnitDictionary()[_goalHex]);
+            _hexGrid.GetUnitDictionary().Remove(_goalHex);
+            
+            return false;
+        }
+
+        /// <summary> ***********************************************
+        /// This function sets all unit movement points back to their
+        /// base values.
+        /// </summary> **********************************************
+        public void ResetUnitMovementPoints()
+        {
+            foreach (Unit unit in _hexGrid.GetUnitDictionary().Values)
+            {
+                unit.ResetMovementPoints();
+            }
         }
     }
 }
