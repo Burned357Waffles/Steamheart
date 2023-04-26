@@ -152,6 +152,8 @@ namespace MapObjects
 
                 return;
             }
+
+
             // check if a tile is clicked
             if (Input.GetMouseButtonDown(1) && _currentHexIndex != -1)
             {

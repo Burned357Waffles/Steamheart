@@ -20,6 +20,9 @@ namespace MapObjects
         private List<City> _cityList;
         private City _city;
 
+        private Camera _camera;
+        private int _currentHexIndex;
+
         private void Start()
         {
             UnitTypesData.InitUnitTypeDict();
@@ -35,6 +38,11 @@ namespace MapObjects
             if(Input.GetKeyDown(KeyCode.C)) // this will be replaced soon
             {
                 SpawnUnit(0, 0, _currentPlayer);
+            }
+
+            if(Input.GetMouseButtonDown(0))
+            {
+                detectClick();
             }
         }
         
@@ -94,6 +102,37 @@ namespace MapObjects
             _hexMovement.SetPlayer(_currentPlayer);
 
             playerIndicator.text = _currentPlayer.ToString();
+        }
+
+        public void detectClick()
+        {
+           
+                // /*TODO: if owner of hex is current player 
+                // If there is multiple cities check for whcih one is clicked
+                //  copy variables from UnitMovement.cs to get rid of errors
+                // */
+                Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
+                if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+                if(!hit.transform.CompareTag("City")) return; // change tag to "city" or similar
+
+                _currentHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+
+                return;
+        }
+        // copied from UnitMovement.cs
+        private int GetHexIndexAtWorldPos(Vector3 coordinates)
+        {
+            int hexIndex = -1;
+            for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
+            {
+                if (_hexGrid.GetHexList()[i].WorldPosition.x == coordinates.x &&
+                    _hexGrid.GetHexList()[i].WorldPosition.z == coordinates.z)
+                {
+                    hexIndex = i;
+                    break;
+                }
+            }
+            return hexIndex;
         }
 
     }
