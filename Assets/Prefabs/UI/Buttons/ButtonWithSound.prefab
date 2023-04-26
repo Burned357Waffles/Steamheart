@@ -144,7 +144,7 @@ MonoBehaviour:
       Data2: 1250791542
       Data3: 950750129
       Data4: -1517537153
-    Path: event:/UI/UI Hover
+    Path: event:/SFX/UI Hover
   Event: 
   PlayEvent: 0
   StopEvent: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
       Data2: 1157772712
       Data3: 1313119630
       Data4: -1754666789
-    Path: event:/UI/UI Click
+    Path: event:/SFX/UI Click
   Event: 
   PlayEvent: 0
   StopEvent: 0
