@@ -33,10 +33,10 @@ namespace Hex
         public int playerCount;
         public int capitolDistance;
     
-        public readonly Dictionary<global::Hex.Hex, GameObject> _hexDictionary = new Dictionary<global::Hex.Hex, GameObject>();
+        public readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
         private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
-        private readonly Dictionary<global::Hex.Hex, Unit> _unitDictionary = new Dictionary<global::Hex.Hex, Unit>();
-        private readonly List<global::Hex.Hex> _hexList = new List<global::Hex.Hex>();
+        private readonly Dictionary<Hex, Unit> _unitDictionary = new Dictionary<Hex, Unit>();
+        private readonly List<Hex> _hexList = new List<Hex>();
         private readonly List<GameObject> _gameObjects = new List<GameObject>();
         private readonly List<City> _cityList = new List<City>();
 
@@ -82,7 +82,7 @@ namespace Hex
         /// This does the same as the above, but adds to Dictionary
         /// instead.
         /// </summary> **********************************************
-        public void HexRing(Vector3 center, int radius, Dictionary<global::Hex.Hex, int> hexDict)
+        public void HexRing(Vector3 center, int radius, Dictionary<Hex, int> hexDict)
         {
             Vector3 hexCoordinates = AddCoordinates(center,
                 CoordinateScale(DirectionVectors[4], radius));
@@ -90,7 +90,7 @@ namespace Hex
             {
                 for(int j = 0; j < radius; j++)
                 {
-                    global::Hex.Hex hex = _hexList.FirstOrDefault(hex => hex.Q == (int)hexCoordinates.x
+                    Hex hex = _hexList.FirstOrDefault(hex => hex.Q == (int)hexCoordinates.x
                                                                          && hex.R == (int)hexCoordinates.y
                                                                          && hex.S == (int)hexCoordinates.z);
                     if (hex != null) hexDict.Add(hex, _hexList.IndexOf(hex));
@@ -99,15 +99,15 @@ namespace Hex
             }
         }
 
-    /// <summary> ***********************************************
-    /// These are getter methods. Not much to say about these.
-    /// </summary> **********************************************
-    public List<Hex> GetHexList() { return _hexList; }
-    public List<GameObject> GetGameObjectList() { return _gameObjects; }
-    public Dictionary<Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
-    public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
-    public Vector3[] GetDirectionVector(){ return DirectionVectors; }
-    public List<City> GetCityList() {return _cityList;}
+        /// <summary> ***********************************************
+        /// These are getter methods. Not much to say about these.
+        /// </summary> **********************************************
+        public List<Hex> GetHexList() { return _hexList; }
+        public List<GameObject> GetGameObjectList() { return _gameObjects; }
+        public List<City> GetCityList() { return _cityList; }
+        public Dictionary<Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
+        public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
+        public Vector3[] GetDirectionVector(){ return DirectionVectors; }
     
     
     
@@ -131,7 +131,7 @@ namespace Hex
         private void GenerateGrid()
         {
             // store the center of the map
-            global::Hex.Hex center = new global::Hex.Hex(0, 0);
+            Hex center = new Hex(0, 0);
             _hexList.Add(center);
             // call ring from center outward. while i < 4, generate only land for center island
             for (int i = 1; i < mapRadius; i++)
@@ -147,7 +147,7 @@ namespace Hex
         /// its way counter-clockwise. It adds each new hex to the
         /// list that the user passed in.
         /// </summary> **********************************************
-        private static void HexRing(Vector3 center, int radius, List<global::Hex.Hex> hexListToAddTo)
+        private static void HexRing(Vector3 center, int radius, List<Hex> hexListToAddTo)
         {
             Vector3 hexCoordinates = AddCoordinates(center,
                 CoordinateScale(DirectionVectors[4], radius));
@@ -155,7 +155,7 @@ namespace Hex
             {
                 for(int j = 0; j < radius; j++)
                 {
-                    hexListToAddTo.Add(new global::Hex.Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
+                    hexListToAddTo.Add(new Hex((int)hexCoordinates.x, (int)hexCoordinates.y));
                     hexCoordinates = HexNeighbor(hexCoordinates, i);
                 }
             }
@@ -195,14 +195,14 @@ namespace Hex
         /// It takes in coordinates and a boolean to signify if
         /// air hexes will be generated.
         /// </summary> **********************************************
-        private void GetHexType(global::Hex.Hex hex, bool hasAir)
+        private void GetHexType(Hex hex, bool hasAir)
         {
             // air, basic, forest, mountain
             int[] typeCount = new int[4];
             // get all neighbors
             for (int i = 0; i < 6; i++)
             {
-                global::Hex.Hex neighbor = GetHexAt(HexNeighbor(hex.GetVectorCoordinates(), i));
+                Hex neighbor = GetHexAt(HexNeighbor(hex.GetVectorCoordinates(), i));
 
                 if (neighbor == null) {} // do nothing
                 else if (neighbor.GetHexType() == global::Hex.Hex.HexType.Air) typeCount[0]++;
@@ -232,7 +232,7 @@ namespace Hex
         /// This function takes in a Vector3 and returns the hex at
         /// those coordinates. Returns null if hex doesn't exist.
         /// </summary> **********************************************
-        public global::Hex.Hex GetHexAt(Vector3 coordinates)
+        public Hex GetHexAt(Vector3 coordinates)
         {
             return _hexList.FirstOrDefault(hex => hex.Q == (int)coordinates.x 
                                                   && hex.R == (int)coordinates.y 
@@ -260,7 +260,7 @@ namespace Hex
         {
             for (int i = 0; i < playerCount; i++)
             {
-                global::Hex.Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
+                Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
                 CreateCityAt(hexToPut, i + 1, true);
             }
         }
@@ -268,7 +268,7 @@ namespace Hex
         /// <summary> ***********************************************
         /// This function will create a city.
         /// </summary> **********************************************
-        private void CreateCityAt(global::Hex.Hex cityCenter, int ownerID, bool isCapitol)
+        private void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
         {
             City city = new City(cityCenter, ownerID, isCapitol);
 
