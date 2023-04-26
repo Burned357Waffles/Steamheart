@@ -1,5 +1,6 @@
 using Hex;
 using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MapObjects
@@ -16,6 +17,9 @@ namespace MapObjects
         private HexMovement _hexMovement;
         private int _currentPlayer;
 
+        private List<City> _cityList;
+        private City _city;
+
         private void Start()
         {
             UnitTypesData.InitUnitTypeDict();
@@ -23,6 +27,7 @@ namespace MapObjects
             _hexMovement = FindObjectOfType<HexMovement>();
             _currentPlayer = 1;
             playerIndicator.text = _currentPlayer.ToString();
+            _cityList = new List<City>();
         }
 
         private void Update()
@@ -41,17 +46,41 @@ namespace MapObjects
         {
             
             Hex.Hex hex = _hexGrid.GetHexAt(new Vector3(0, 0, 0));
-            if (_hexGrid.GetUnitDictionary().ContainsKey(hex)) return;
-            
-            Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Ranged);  // TODO: change to player select
 
-            Vector3 vectorToPlaceAt = new Vector3(hex.GetVectorCoordinates().x,
-                hex.GetVectorCoordinates().y + 1.3f,
-                hex.GetVectorCoordinates().z);
-            GameObject newUnitObject = Instantiate(unit, vectorToPlaceAt, transform.rotation);
+            List<City> citylist = _hexGrid.GetCityList();
+
+            Debug.Log("Before foreach");
+            // loop through city
+            foreach(City city in citylist)
+            {
+                if(city.ownerID() == _currentPlayer )
+                {
+                    if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityHexes()[0])) return;
+                    Vector3 vectorToPlace = new Vector3(city.GetCityHexes()[0].WorldPosition.x,
+                        city.GetCityHexes()[0].WorldPosition.y + 1.3f,
+                        city.GetCityHexes()[0].WorldPosition.z);
+                    GameObject newUnitObject = Instantiate(unit, vectorToPlace, transform.rotation);
+                    Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Melee);
+                    _hexGrid.GetUnitDictionary().Add(city.GetCityHexes()[0], newUnit);
+                    _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject); 
+                    Debug.Log("spawned");
+                    
+
+                }
+                
+            }
+            Debug.Log("after foreach");
+
+            //if (_hexGrid.GetUnitDictionary().ContainsKey(hex)) return;
             
-            _hexGrid.GetUnitDictionary().Add(hex, newUnit);
-            _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject); 
+            // Vector3 vectorToPlaceAt = new Vector3(hex.GetVectorCoordinates().x,
+            //     hex.GetVectorCoordinates().y + 1.3f,
+            //     hex.GetVectorCoordinates().z);
+            // GameObject newUnitObject = Instantiate(unit, vectorToPlaceAt, transform.rotation);
+        
+            // _hexGrid.GetUnitDictionary().Add(hex, newUnit);
+            // _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject); 
+
         }
 
         /// <summary> ***********************************************
@@ -66,5 +95,6 @@ namespace MapObjects
 
             playerIndicator.text = _currentPlayer.ToString();
         }
+
     }
 }  

@@ -33,7 +33,13 @@ namespace MapObjects
             _hexGrid = Object.FindObjectOfType<HexGrid>();
             CreateCity();
         }
-        
+
+        public int ownerID()
+        {
+            return _ownerID;
+        }
+
+
         /// <summary> ***********************************************
         /// This is the same logic of creating the map.
         /// </summary> **********************************************

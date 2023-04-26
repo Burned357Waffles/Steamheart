@@ -99,14 +99,15 @@ namespace Hex
             }
         }
 
-        /// <summary> ***********************************************
-        /// These are getter methods. Not much to say about these.
-        /// </summary> **********************************************
-        public List<global::Hex.Hex> GetHexList() { return _hexList; }
-        public List<GameObject> GetGameObjectList() { return _gameObjects; }
-        public Dictionary<global::Hex.Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
-        public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
-        public Vector3[] GetDirectionVector(){ return DirectionVectors; }
+    /// <summary> ***********************************************
+    /// These are getter methods. Not much to say about these.
+    /// </summary> **********************************************
+    public List<Hex> GetHexList() { return _hexList; }
+    public List<GameObject> GetGameObjectList() { return _gameObjects; }
+    public Dictionary<Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
+    public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
+    public Vector3[] GetDirectionVector(){ return DirectionVectors; }
+    public List<City> GetCityList() {return _cityList;}
     
     
     
