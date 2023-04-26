@@ -15,6 +15,7 @@ namespace MapObjects
         private HexGrid _hexGrid;
         private HexMovement _hexMovement;
         private int _currentPlayer;
+        public Material lowPolyCharacterTexture;
 
         private void Start()
         {
@@ -23,6 +24,7 @@ namespace MapObjects
             _hexMovement = FindObjectOfType<HexMovement>();
             _currentPlayer = 1;
             playerIndicator.text = _currentPlayer.ToString();
+            //GetComponent<Renderer>().material = lowPolyCharacterTexture;
         }
 
         private void Update()
