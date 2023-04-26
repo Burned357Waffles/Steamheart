@@ -16,6 +16,8 @@ namespace MapObjects
         private HexGrid _hexGrid;
         private HexMovement _hexMovement;
         private int _currentPlayer;
+        public Material lowPolyCharacterTexture;
+
 
         private List<City> _cityList;
         private City _city;
