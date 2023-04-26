@@ -65,5 +65,6 @@ namespace MapObjects
         /// </summary> **********************************************
         public List<Hex.Hex> GetCityHexes(){ return _controlledHexes; }
         public Dictionary<Hex.Hex, int> GetCityDictionary() { return _controlledHexDictionary; }
+        public Hex.Hex GetCityCenter() { return _controlledHexes[0]; }
     }
 }
