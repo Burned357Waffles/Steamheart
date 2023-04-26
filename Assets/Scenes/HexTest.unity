@@ -123,6 +123,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &3226937 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 267560266037539038, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
+  m_PrefabInstance: {fileID: 40357119}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3226941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3226937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1001 &40357119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -194,7 +242,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 267560266037539038, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3226941}
   m_SourcePrefab: {fileID: 100100000, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
 --- !u!114 &118560295 stripped
 MonoBehaviour:
@@ -1984,7 +2035,7 @@ GameObject:
   - component: {fileID: 1849815607}
   - component: {fileID: 1849815608}
   m_Layer: 0
-  m_Name: Wind Sound
+  m_Name: Ambience
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2018,6 +2069,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraRig: {fileID: 600101633}
+  hexGrid: {fileID: 250597338}
 --- !u!114 &1849815608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2033,11 +2085,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 98102613
-      Data2: 1168093916
-      Data3: -296775774
-      Data4: 1811549699
-    Path: event:/BGM/Wind
+      Data1: -605366711
+      Data2: 1183601450
+      Data3: 1653693089
+      Data4: 1730659828
+    Path: event:/Ambience/Main Ambience
   Event: 
   PlayEvent: 0
   StopEvent: 0
