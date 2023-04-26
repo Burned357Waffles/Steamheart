@@ -104,6 +104,7 @@ namespace Hex
         /// </summary> **********************************************
         public List<global::Hex.Hex> GetHexList() { return _hexList; }
         public List<GameObject> GetGameObjectList() { return _gameObjects; }
+        public List<City> GetCityList() { return _cityList; }
         public Dictionary<global::Hex.Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
         public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
         public Vector3[] GetDirectionVector(){ return DirectionVectors; }
