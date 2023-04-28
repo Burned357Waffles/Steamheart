@@ -268,7 +268,7 @@ namespace Hex
         /// <summary> ***********************************************
         /// This function will create a city.
         /// </summary> **********************************************
-        private void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
+        public void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
         {
             City city = new City(cityCenter, ownerID, isCapitol);
 

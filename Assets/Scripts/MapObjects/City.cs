@@ -43,7 +43,7 @@ namespace MapObjects
         /// <summary> ***********************************************
         /// This is the same logic of creating the map.
         /// </summary> **********************************************
-        private void CreateCity()
+        public void CreateCity()
         {
             // call ring from center outward. while i < 4, generate only land for center island
             Hex.Hex center = _controlledHexes[0];
