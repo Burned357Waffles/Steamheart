@@ -144,7 +144,7 @@ namespace MapObjects
             // check if a unit is clicked
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("unit Left click detected in UnitMovement.cs");
+                //Debug.Log("unit Left click detected in UnitMovement.cs");
                 Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 if(!hit.transform.CompareTag("Unit")) return;
@@ -159,10 +159,10 @@ namespace MapObjects
 
             if (Input.GetMouseButtonDown(1) && _currentHexIndex != -1)
             {
-                Debug.Log("Tile right click detected in UnitMovement.cs");
+                //Debug.Log("Tile right click detected in UnitMovement.cs");
                 Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-                Debug.Log("passed first if");
+                //Debug.Log("passed first if");
 
                 _goalHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
                 if (_currentHexIndex < 0 || _goalHexIndex < 0) return;
@@ -176,7 +176,7 @@ namespace MapObjects
                     _goalHexIndex = -1;
                     return;
                 }
-                Debug.Log("made it to comparetag");
+                //Debug.Log("made it to comparetag");
                 bool doDeplete = false;
                 if (hit.transform.CompareTag("Unit"))
                 {

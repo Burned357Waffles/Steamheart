@@ -27,16 +27,16 @@ public class Settler : MonoBehaviour
     }
     private void Update() 
     {
-       // detectClick();
+        detectClick();
 
     }
     public void detectClick()
     {
         
         _selectedPosition = null;
-        if(Input.GetMouseButtonDown(2))
+        if(Input.GetMouseButtonDown(1))
         {
-            Debug.Log("middle click detected in Settler.cs");
+            Debug.Log("left click detected in Settler.cs");
             Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
@@ -59,14 +59,18 @@ public class Settler : MonoBehaviour
         // If there is multiple cities check for whcih one is clicked
         //  copy variables from UnitMovement.cs to get rid of errors
         // */
+
+        Debug.Log("after the first big IF");
         if (_selectedPosition == null){ return;}
         
         
         if(Input.GetKeyDown(KeyCode.N)) // this will be replaced soon
         {
+            Debug.Log("detected n click");
             if(compare(_selectedPosition))
             {
                 _hexGrid.CreateCityAt(_selectedPosition, _currentPlayer, false);
+                Debug.Log("city created");
             }
         }
         return;
