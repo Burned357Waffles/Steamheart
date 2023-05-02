@@ -54,8 +54,6 @@ namespace MapObjects
             Hex.Hex hex = _hexGrid.GetHexAt(new Vector3(0, 0, 0));
 
             List<City> citylist = _hexGrid.GetCityList();
-
-            //Debug.Log("Before foreach");
             // loop through city
 
             foreach(City city in citylist)
@@ -63,21 +61,17 @@ namespace MapObjects
                 if(city.ownerID() == _currentPlayer )
                 {
                     if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityHexes()[0])) return;
-                    Vector3 vectorToPlace = new Vector3(city.GetCityHexes()[0].WorldPosition.x,
-                        city.GetCityHexes()[0].WorldPosition.y + 1.3f,
-                        city.GetCityHexes()[0].WorldPosition.z);
-                    GameObject newUnitObject = Instantiate(unit, vectorToPlace, transform.rotation);
-                    Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Settler);
-                    newUnitObject.AddComponent<Settler>();
-                    _hexGrid.GetUnitDictionary().Add(city.GetCityHexes()[0], newUnit);
-                    _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject); 
-                    //Debug.Log("spawned");
-                    
-
+                    //Vector3 vectorToPlace = new Vector3(city.GetCityHexes()[0].WorldPosition.x,
+                        //city.GetCityHexes()[0].WorldPosition.y,
+                        //city.GetCityHexes()[0].WorldPosition.z);
+                    //vectorToPlace = new Vector3(0f, 0f, 0f);
+                    GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
+                    Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Melee);
+                    _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
+                    _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
                 }
                 
             }
-            //Debug.Log("after foreach");
 
             //if (_hexGrid.GetUnitDictionary().ContainsKey(hex)) return;
             

@@ -294,8 +294,8 @@ namespace MapObjects
             _selectedUnit.S = _goalHex.S;
 
             Vector3 goalVector = _goalHex.WorldPosition; 
-            Vector3 vectorToChange = new Vector3(goalVector.x, _goalHex.WorldPosition.y + 1.3f, goalVector.z);
-            _selectedUnitObject.transform.position = vectorToChange;
+            //Vector3 vectorToChange = new Vector3(goalVector.x, _goalHex.WorldPosition.y + 1.3f, goalVector.z);
+            _selectedUnitObject.transform.position = goalVector;
         
             _hexGrid.GetUnitDictionary().Remove(_currentHex);
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
