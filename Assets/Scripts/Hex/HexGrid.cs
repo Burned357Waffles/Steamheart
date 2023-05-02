@@ -205,10 +205,10 @@ namespace Hex
                 Hex neighbor = GetHexAt(HexNeighbor(hex.GetVectorCoordinates(), i));
 
                 if (neighbor == null) {} // do nothing
-                else if (neighbor.GetHexType() == global::Hex.Hex.HexType.Air) typeCount[0]++;
-                else if (neighbor.GetHexType() == global::Hex.Hex.HexType.Basic) typeCount[1]++;
-                else if (neighbor.GetHexType() == global::Hex.Hex.HexType.Forest) typeCount[2]++;
-                else if (neighbor.GetHexType() == global::Hex.Hex.HexType.Mountain) typeCount[3]++;
+                else if (neighbor.GetHexType() == Hex.HexType.Air) typeCount[0]++;
+                else if (neighbor.GetHexType() == Hex.HexType.Basic) typeCount[1]++;
+                else if (neighbor.GetHexType() == Hex.HexType.Forest) typeCount[2]++;
+                else if (neighbor.GetHexType() == Hex.HexType.Mountain) typeCount[3]++;
             }
 
             int randomOffset = Random.Range(0, 1000); // random offset so generation is different each run
@@ -297,11 +297,11 @@ namespace Hex
         /// </summary> **********************************************
         private void ChangeCityHexPrefabs(City city)
         {
-            foreach (KeyValuePair<global::Hex.Hex, int> entry in city.GetCityDictionary())
+            foreach (KeyValuePair<Hex, int> entry in city.GetCityDictionary())
             {
-                if (entry.Key.GetHexType() == global::Hex.Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
-                else if (entry.Key.GetHexType() == global::Hex.Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
-                else if (entry.Key.GetHexType() == global::Hex.Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
+                if (entry.Key.GetHexType() == Hex.HexType.Basic) ownedHexPrefab = ownedBasicHex;
+                else if (entry.Key.GetHexType() == Hex.HexType.Forest) ownedHexPrefab = ownedForestHex;
+                else if (entry.Key.GetHexType() == Hex.HexType.Mountain) ownedHexPrefab = ownedMountainHex;
                 else continue;
             
                 Destroy(_gameObjects[entry.Value]);
