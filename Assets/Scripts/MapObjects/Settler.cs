@@ -15,6 +15,7 @@ public class Settler : MonoBehaviour
     private int _currentPlayer;
     private Camera _camera;
     private int _currentHexIndex;
+    private Unit _unit;
 
     private void Start()
     {
@@ -32,26 +33,21 @@ public class Settler : MonoBehaviour
     }
     public void detectClick()
     {
-        
-        _selectedPosition = null;
-        if(Input.GetMouseButtonDown(1))
+        if(Input.GetMouseButtonDown(0))
         {
-            Debug.Log("left click detected in Settler.cs");
             Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
             if(!hit.transform.CompareTag("Unit")) return; 
-            Debug.Log("Unit selected"); // doesn't get here
             _currentHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
-            _selectedPosition = _hexGrid.GetHexList()[_currentHexIndex]; 
+            _selectedPosition = _hexGrid.GetHexList()[_currentHexIndex];
+            _unit = _hexGrid.GetUnitDictionary()[_selectedPosition];
 
             // is the unit a settler
-            if(_hexGrid.GetUnitDictionary()[_selectedPosition].GetUnitType() != Unit.UnitType.Settler)
-            {
-                Debug.Log("IN last if in detectClick in Settler.cs");
-                _selectedPosition = null;
-                return;
-            }
+            if (_unit.GetUnitType() == Unit.UnitType.Settler) return;
+            
+            _currentHexIndex = -1;
+            _selectedPosition = null;
             return;
             
         }
@@ -59,19 +55,20 @@ public class Settler : MonoBehaviour
         // If there is multiple cities check for whcih one is clicked
         //  copy variables from UnitMovement.cs to get rid of errors
         // */
-
-        Debug.Log("after the first big IF");
-        if (_selectedPosition == null){ return;}
         
+        if (_selectedPosition == null){ return;}
         
         if(Input.GetKeyDown(KeyCode.N)) // this will be replaced soon
         {
-            Debug.Log("detected n click");
+            _selectedPosition = _hexGrid.GetHexAt(_unit.GetVectorCoordinates());
             if(compare(_selectedPosition))
             {
                 _hexGrid.CreateCityAt(_selectedPosition, _currentPlayer, false);
-                Debug.Log("city created");
+                Destroy(_hexGrid.GetUnitObjectDictionary()[_unit]);
             }
+
+            _selectedPosition = null;
+            _currentHexIndex = -1;
         }
         return;
     }

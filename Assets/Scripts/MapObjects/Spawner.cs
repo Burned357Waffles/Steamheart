@@ -12,6 +12,7 @@ namespace MapObjects
     public class Spawner : MonoBehaviour
     {
         [SerializeField] public GameObject unit;
+        [SerializeField] public GameObject settlerUnit;
         [SerializeField] public TextMeshProUGUI playerIndicator;
         private HexGrid _hexGrid;
         private HexMovement _hexMovement;
@@ -65,8 +66,9 @@ namespace MapObjects
                         //city.GetCityHexes()[0].WorldPosition.y,
                         //city.GetCityHexes()[0].WorldPosition.z);
                     //vectorToPlace = new Vector3(0f, 0f, 0f);
+                    unit = settlerUnit;
                     GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
-                    Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Melee);
+                    Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Settler);
                     _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
                     _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
                 }
