@@ -1442,6 +1442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unit: {fileID: 311624380264057446, guid: 186861921f4e23b4eb972e54e018189f, type: 3}
+  settlerUnit: {fileID: 311624380264057446, guid: c080612c53cc64f4e86aff38f4f7b489, type: 3}
   playerIndicator: {fileID: 118560295}
   lowPolyCharacterTexture: {fileID: 2100000, guid: 95fcf9331ca635c459a201f2c56f44dc, type: 2}
 --- !u!4 &1498733352
