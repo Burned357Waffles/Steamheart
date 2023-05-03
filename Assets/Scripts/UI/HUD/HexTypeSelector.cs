@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using Hex;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace Hex
+namespace UI.HUD
 {
     /// <summary> ************************************************************
     /// This is meant to be called by a button to change the type of the Hex
     /// to be placed by HexPlacer.
     /// </summary> ************************************************************
-    public class HexSelector : MonoBehaviour
+    public class HexTypeSelector : MonoBehaviour
     {
         [SerializeField] private GameObject NONE;
         [SerializeField] private GameObject basicButton;
@@ -69,8 +70,10 @@ namespace Hex
             basicButton.GetComponent<Button>().interactable = true;
             forestButton.GetComponent<Button>().interactable = true;
             mountainButton.GetComponent<Button>().interactable = true;
-        
-           
+        }
+
+        public void SetNextPlayer()
+        {
             _currentPlayer++;
             if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
             _hexPlacer.SetPlayer(_currentPlayer);

@@ -144,13 +144,12 @@ namespace MapObjects
             // check if a unit is clicked
             if (Input.GetMouseButtonDown(0))
             {
-                //Debug.Log("unit Left click detected in UnitMovement.cs");
                 Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 if(!hit.transform.CompareTag("Unit")) return;
 
                 _currentHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
-
+                
                 return;
             }
 
@@ -159,24 +158,21 @@ namespace MapObjects
 
             if (Input.GetMouseButtonDown(1) && _currentHexIndex != -1)
             {
-                //Debug.Log("Tile right click detected in UnitMovement.cs");
                 Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-                //Debug.Log("passed first if");
-
+                
                 _goalHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
                 if (_currentHexIndex < 0 || _goalHexIndex < 0) return;
-                
                 _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
                 _goalHex = _hexGrid.GetHexList()[_goalHexIndex];
-
+                
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetCurrentMovementPoints() <= 0)
                 {
                     _currentHexIndex = -1;
                     _goalHexIndex = -1;
                     return;
                 }
-                //Debug.Log("made it to comparetag");
+                
                 bool doDeplete = false;
                 if (hit.transform.CompareTag("Unit"))
                 {
@@ -206,7 +202,7 @@ namespace MapObjects
                 if (_goalHex.IsBlocked() && 
                     _hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Airship)
                     return;
-
+                
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID)
@@ -267,7 +263,7 @@ namespace MapObjects
         /// This function takes in a Vector3 of world coordinates
         /// and returns the Hex at that position.
         /// </summary> **********************************************
-        private int GetHexIndexAtWorldPos(Vector3 coordinates)
+        public int GetHexIndexAtWorldPos(Vector3 coordinates)
         {
             int hexIndex = -1;
             for (int i = 0; i < _hexGrid.GetHexList().Count; i++)

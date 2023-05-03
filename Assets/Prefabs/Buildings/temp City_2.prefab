@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3340044681555092816}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: City
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -193,6 +193,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b883e992581a50d4a9ae59a56a653bf6, type: 3}
       propertyPath: m_Name
       value: basic_tile_2_owned
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b883e992581a50d4a9ae59a56a653bf6, type: 3}
+      propertyPath: m_TagString
+      value: City
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
