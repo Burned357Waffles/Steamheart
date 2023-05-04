@@ -331,7 +331,7 @@ MonoBehaviour:
   cityPrefab: {fileID: 8582613802384748761, guid: 7ad6273c25a2e6f4c8184850730195e7, type: 3}
   mapRadius: 64
   centerIslandRadius: 3
-  playerCount: 2
+  playerCount: 6
   capitolDistance: 40
 --- !u!4 &250597339
 Transform:

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MapObjects;
+using UI.HUD;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -315,6 +316,7 @@ namespace Hex
                 ChangeCityHexPrefabs(city);
                 Transform unitSelectorPanel = cityObject.transform.GetChild(0);
                 unitSelectorPanel.gameObject.SetActive(false);
+                UnitProductionSelector.AssignButtons(unitSelectorPanel);
                 return;
             }
         }
