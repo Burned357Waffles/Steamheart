@@ -34,7 +34,7 @@ namespace MapObjects
             CreateCity();
         }
 
-        public int ownerID()
+        public int OwnerID()
         {
             return _ownerID;
         }

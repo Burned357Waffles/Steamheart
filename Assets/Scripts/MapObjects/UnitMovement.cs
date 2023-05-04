@@ -10,7 +10,7 @@ namespace MapObjects
     /// player is only allowed to move their own units.
     /// </summary> ***********************************************************
     /// TODO: maybe transfer some of the combat related functions to the combat file
-    public class HexMovement : MonoBehaviour
+    public class UnitMovement : MonoBehaviour
     {
         private HexGrid _hexGrid;
         private int _currentHexIndex;
@@ -121,6 +121,8 @@ namespace MapObjects
 
         // use WorldPosition in Hex to get actual position
 
+        public void SetCurrentIndex(int index) { _currentHexIndex = index; }
+        
         private void Start()
         {
             _camera = Camera.main;
@@ -148,7 +150,7 @@ namespace MapObjects
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 if(!hit.transform.CompareTag("Unit")) return;
 
-                _currentHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+                _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
                 
                 return;
             }
@@ -161,7 +163,7 @@ namespace MapObjects
                 Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 
-                _goalHexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+                _goalHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
                 if (_currentHexIndex < 0 || _goalHexIndex < 0) return;
                 _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
                 _goalHex = _hexGrid.GetHexList()[_goalHexIndex];
@@ -220,7 +222,7 @@ namespace MapObjects
                 MoveUnit();
                 
                 if (doDeplete) _selectedUnit.DepleteMovementPoints();
-                _currentHexIndex = -1;
+                _currentHexIndex = _goalHexIndex;
                 _goalHexIndex = -1;
             }
         }
@@ -260,25 +262,6 @@ namespace MapObjects
         }
 
         /// <summary> ***********************************************
-        /// This function takes in a Vector3 of world coordinates
-        /// and returns the Hex at that position.
-        /// </summary> **********************************************
-        public int GetHexIndexAtWorldPos(Vector3 coordinates)
-        {
-            int hexIndex = -1;
-            for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
-            {
-                if (_hexGrid.GetHexList()[i].WorldPosition.x == coordinates.x &&
-                    _hexGrid.GetHexList()[i].WorldPosition.z == coordinates.z)
-                {
-                    hexIndex = i;
-                    break;
-                }
-            }
-            return hexIndex;
-        }
-
-        /// <summary> ***********************************************
         /// This function updates the Units' coordinates and updates
         /// the dictionary that holds the relation between the Hex
         /// and the Unit.
@@ -290,7 +273,6 @@ namespace MapObjects
             _selectedUnit.S = _goalHex.S;
 
             Vector3 goalVector = _goalHex.WorldPosition; 
-            //Vector3 vectorToChange = new Vector3(goalVector.x, _goalHex.WorldPosition.y + 1.3f, goalVector.z);
             _selectedUnitObject.transform.position = goalVector;
         
             _hexGrid.GetUnitDictionary().Remove(_currentHex);

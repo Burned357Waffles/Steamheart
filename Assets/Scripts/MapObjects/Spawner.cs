@@ -20,7 +20,7 @@ namespace MapObjects
         [SerializeField] public TextMeshProUGUI playerIndicator;
         private HexGrid _hexGrid;
         private int _currentHexIndex;
-        private HexMovement _hexMovement;
+        private UnitMovement _unitMovement;
         private int _currentPlayer;
         public Material lowPolyCharacterTexture;
         public bool unitTypeSelected;
@@ -38,7 +38,7 @@ namespace MapObjects
             _camera = Camera.main;
             _hexGrid = FindObjectOfType<HexGrid>();
             _currentHexIndex = -1;
-            _hexMovement = FindObjectOfType<HexMovement>();
+            _unitMovement = FindObjectOfType<UnitMovement>();
             _currentPlayer = 1;
             playerIndicator.text = _currentPlayer.ToString();
             _cityList = new List<City>();
@@ -65,9 +65,9 @@ namespace MapObjects
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 if(!hit.transform.CompareTag("City")) return;
 
-                _currentHexIndex = _hexMovement.GetHexIndexAtWorldPos(hit.transform.position);
+                _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
                 
-                return;
+                
             }
         }
         
@@ -85,12 +85,9 @@ namespace MapObjects
 
             foreach(City city in citylist)
             {
-                if (city.ownerID() != _currentPlayer) continue;
+                if (city.OwnerID() != _currentPlayer) continue;
                 if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityHexes()[0])) return;
-                //Vector3 vectorToPlace = new Vector3(city.GetCityHexes()[0].WorldPosition.x,
-                //city.GetCityHexes()[0].WorldPosition.y,
-                //city.GetCityHexes()[0].WorldPosition.z);
-                //vectorToPlace = new Vector3(0f, 0f, 0f);
+                
                 GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
                 Unit newUnit = new Unit(q, r, ownerID);
                 newUnit.SetType(unit.name);
@@ -98,17 +95,6 @@ namespace MapObjects
                 _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
 
             }
-
-            //if (_hexGrid.GetUnitDictionary().ContainsKey(hex)) return;
-            
-            // Vector3 vectorToPlaceAt = new Vector3(hex.GetVectorCoordinates().x,
-            //     hex.GetVectorCoordinates().y + 1.3f,
-            //     hex.GetVectorCoordinates().z);
-            // GameObject newUnitObject = Instantiate(unit, vectorToPlaceAt, transform.rotation);
-        
-            // _hexGrid.GetUnitDictionary().Add(hex, newUnit);
-            // _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject); 
-
         }
 
         /// <summary> ***********************************************
@@ -119,14 +105,15 @@ namespace MapObjects
         {
             _currentPlayer++;
             if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
-            _hexMovement.SetPlayer(_currentPlayer);
+            _unitMovement.SetPlayer(_currentPlayer);
 
             playerIndicator.text = _currentPlayer.ToString();
         }
-        public int currentPlayer()
-        {
-           return _currentPlayer;
-        }
+        
+        /// <summary> ***********************************************
+        /// Getter for _currentPlayer.
+        /// </summary> **********************************************
+        public int GetCurrentPlayer() { return _currentPlayer; }
 
     }
 }  

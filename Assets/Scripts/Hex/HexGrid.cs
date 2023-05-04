@@ -98,7 +98,25 @@ namespace Hex
                 }
             }
         }
-
+        
+        /// <summary> ***********************************************
+        /// This function takes in a Vector3 of world coordinates
+        /// and returns the Hex at that position.
+        /// </summary> **********************************************
+        public int GetHexIndexAtWorldPos(Vector3 coordinates)
+        {
+            int hexIndex = -1;
+            for (int i = 0; i < GetHexList().Count; i++)
+            {
+                if (GetHexList()[i].WorldPosition.x == coordinates.x &&
+                    GetHexList()[i].WorldPosition.z == coordinates.z)
+                {
+                    hexIndex = i;
+                    break;
+                }
+            }
+            return hexIndex;
+        }
         /// <summary> ***********************************************
         /// These are getter methods. Not much to say about these.
         /// </summary> **********************************************
