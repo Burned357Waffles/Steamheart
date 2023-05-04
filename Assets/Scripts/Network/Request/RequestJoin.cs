@@ -9,8 +9,9 @@ public class RequestJoin : NetworkRequest
 		request_id = Constants.CMSG_JOIN;
 	}
 
-	public void send()
+	public void send(string username)
 	{
 		packet = new GamePacket(request_id);
+		packet.addString(username);
 	}
 }
