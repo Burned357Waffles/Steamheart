@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 8120634332449289770}
   - component: {fileID: 5698900105944475092}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Info Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,6 +153,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 674384878383439491}
+  - {fileID: 4029184161240475156}
+  - {fileID: 8366824743301040679}
   - {fileID: 6407067138972608435}
   - {fileID: 1275859486696487264}
   - {fileID: 4749386573543597979}
@@ -1029,18 +1031,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5498258310638954958}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5545963391333207045}
-  m_Father: {fileID: 7182431772284382355}
+  m_Father: {fileID: 3187532437185911335}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 246, y: 50}
+  m_AnchoredPosition: {x: 246, y: -151.46805}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8314277626448351176
@@ -1227,18 +1229,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5735542532286050306}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8868903576409405571}
-  m_Father: {fileID: 7182431772284382355}
+  m_Father: {fileID: 3187532437185911335}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -327, y: 160}
+  m_AnchoredPosition: {x: -327, y: -41.468018}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2531271831117994967
@@ -1703,9 +1705,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3187532437185911335}
-  - {fileID: 4029184161240475156}
   - {fileID: 8246486795416390048}
-  - {fileID: 8366824743301040679}
   - {fileID: 5492481590635817284}
   - {fileID: 1902461090886382438}
   - {fileID: 2151030906348483806}
