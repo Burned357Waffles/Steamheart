@@ -1,7 +1,6 @@
 ﻿using Hex;
 using MapObjects;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace UI.HUD
@@ -83,7 +82,7 @@ namespace UI.HUD
             _spawner.unitTypeSelected = false;
             foreach (City city in _hexGrid.GetCityList())
             {
-                city.canSpawnThisTurn = true;
+                city.CanSpawnThisTurn = true;
             }
         }
         

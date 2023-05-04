@@ -65,7 +65,7 @@ namespace MapObjects
                     _hexGrid.GetUnitDictionary().Remove(_selectedPosition);
                     _hexGrid.GetUnitObjectDictionary().Remove(_unit);
 
-                    _hexGrid.GetCityAt(_selectedPosition).canSpawnThisTurn = false;
+                    _hexGrid.GetCityAt(_selectedPosition).CanSpawnThisTurn = false;
                 }
 
                 _selectedPosition = null;
@@ -92,7 +92,6 @@ namespace MapObjects
                     {
                         if (_hexGrid.GetHexAt(hexCoordinates).GetOwnerID() != 0)
                         {
-                            Debug.Log("FALSE");
                             return false;
                         }
                         hexCoordinates = HexGrid.HexNeighbor(hexCoordinates, k);

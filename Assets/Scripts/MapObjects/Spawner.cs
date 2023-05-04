@@ -1,7 +1,5 @@
 using Hex;
 using TMPro;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using UI.HUD;
 using UnityEngine;
@@ -65,7 +63,7 @@ namespace MapObjects
             _city = FindSelectedCity(_hexGrid.GetHexList()[_currentHexIndex]);
             if (_city == null) return;
                 
-            if (!_city.canSpawnThisTurn) return;
+            if (!_city.CanSpawnThisTurn) return;
             
             // bring up unit selection menu
             var obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
@@ -81,8 +79,7 @@ namespace MapObjects
                 _currentHexIndex = -1;
                 return;
             }
-                
-            Debug.Log(_city.GetCityCenter().GetVectorCoordinates());
+            
             SpawnUnit(_city, _currentPlayer);
             _unitSelectorPanel.gameObject.SetActive(false);
             _unitTypeSelector.ResetButtons();

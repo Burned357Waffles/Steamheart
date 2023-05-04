@@ -19,7 +19,7 @@ namespace MapObjects
         public int Damage;
         private readonly int _cityRadius;
         private readonly HexGrid _hexGrid;
-        public bool canSpawnThisTurn;
+        public bool CanSpawnThisTurn;
 
         private readonly Dictionary<Hex.Hex, int> _controlledHexDictionary = new Dictionary<Hex.Hex, int>();
         private readonly List<Hex.Hex> _controlledHexes = new List<Hex.Hex>();
@@ -35,7 +35,7 @@ namespace MapObjects
             _controlledHexes.Add(_center);
             _hexGrid = Object.FindObjectOfType<HexGrid>();
             CreateCity();
-            canSpawnThisTurn = true;
+            CanSpawnThisTurn = true;
         }
 
         public int OwnerID()

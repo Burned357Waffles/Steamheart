@@ -32,8 +32,8 @@ namespace Hex
         public int centerIslandRadius;
         public int playerCount;
         public int capitolDistance;
-    
-        public readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
+
+        private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
         private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
         private readonly Dictionary<Hex, Unit> _unitDictionary = new Dictionary<Hex, Unit>();
         private readonly List<Hex> _hexList = new List<Hex>();
