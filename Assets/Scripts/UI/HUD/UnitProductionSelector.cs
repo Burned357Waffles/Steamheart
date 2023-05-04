@@ -1,69 +1,90 @@
 ﻿using Hex;
 using MapObjects;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace UI.HUD
 {
     public class UnitProductionSelector : MonoBehaviour
     {
-        [SerializeField] private GameObject NONE;
-        [SerializeField] private GameObject meleeButton;
-        [SerializeField] private GameObject rangedButton;
-        [SerializeField] private GameObject airshipButton;
-        [SerializeField] private GameObject settlerButton;
+        private static GameObject NONE;
+        private static GameObject _meleeButton;
+        private static GameObject _rangedButton;
+        private static GameObject _airshipButton;
+        private static GameObject _settlerButton;
         
+        private HexGrid _hexGrid;
         private Spawner _spawner;
     
         private void Start()
         {
+            _hexGrid = FindObjectOfType<HexGrid>();
             _spawner = FindObjectOfType<Spawner>();
+        }
+        
+        
+        public static void AssignButtons(Transform canvas)
+        {
+            _meleeButton = canvas.GetChild(0).gameObject;
+            _rangedButton = canvas.GetChild(1).gameObject;
+            _airshipButton = canvas.GetChild(2).gameObject;
+            _settlerButton = canvas.GetChild(3).gameObject;
         }
         
         public void SetUnitTypeMeleeButton() 
         {
             _spawner.unit = _spawner.meleeUnit;
-            rangedButton.GetComponent<Button>().interactable = false;
-            airshipButton.GetComponent<Button>().interactable = false;
-            settlerButton.GetComponent<Button>().interactable = false;
+            if (_rangedButton == null) Debug.Log("NULLLLLL");
+            _rangedButton.GetComponent<Button>().interactable = false;
+            _airshipButton.GetComponent<Button>().interactable = false;
+            _settlerButton.GetComponent<Button>().interactable = false;
             _spawner.unitTypeSelected = true;
+            _spawner.AfterButtonClick();
         }
         
         public void SetUnitTypeRangedButton() 
         {
             _spawner.unit = _spawner.rangedUnit;
-            meleeButton.GetComponent<Button>().interactable = false;
-            airshipButton.GetComponent<Button>().interactable = false;
-            settlerButton.GetComponent<Button>().interactable = false;
+            _meleeButton.GetComponent<Button>().interactable = false;
+            _airshipButton.GetComponent<Button>().interactable = false;
+            _settlerButton.GetComponent<Button>().interactable = false;
             _spawner.unitTypeSelected = true;
+            _spawner.AfterButtonClick();
         }
         
         public void SetUnitTypeAirshipButton() 
         {
             _spawner.unit = _spawner.airshipUnit;
-            rangedButton.GetComponent<Button>().interactable = false;
-            meleeButton.GetComponent<Button>().interactable = false;
-            settlerButton.GetComponent<Button>().interactable = false;
+            _rangedButton.GetComponent<Button>().interactable = false;
+            _meleeButton.GetComponent<Button>().interactable = false;
+            _settlerButton.GetComponent<Button>().interactable = false;
             _spawner.unitTypeSelected = true;
+            _spawner.AfterButtonClick();
         }
         
         public void SetUnitTypeSettlerButton() 
         {
             _spawner.unit = _spawner.settlerUnit;
-            rangedButton.GetComponent<Button>().interactable = false;
-            airshipButton.GetComponent<Button>().interactable = false;
-            meleeButton.GetComponent<Button>().interactable = false;
+            _rangedButton.GetComponent<Button>().interactable = false;
+            _airshipButton.GetComponent<Button>().interactable = false;
+            _meleeButton.GetComponent<Button>().interactable = false;
             _spawner.unitTypeSelected = true;
+            _spawner.AfterButtonClick();
         }
 
         public void ResetButtons()
         {
             _spawner.unit = NONE;
-            meleeButton.GetComponent<Button>().interactable = true;
-            rangedButton.GetComponent<Button>().interactable = true;
-            airshipButton.GetComponent<Button>().interactable = true;
-            settlerButton.GetComponent<Button>().interactable = true;
+            _meleeButton.GetComponent<Button>().interactable = true;
+            _rangedButton.GetComponent<Button>().interactable = true;
+            _airshipButton.GetComponent<Button>().interactable = true;
+            _settlerButton.GetComponent<Button>().interactable = true;
             _spawner.unitTypeSelected = false;
+            foreach (City city in _hexGrid.GetCityList())
+            {
+                city.canSpawnThisTurn = true;
+            }
         }
         
     }

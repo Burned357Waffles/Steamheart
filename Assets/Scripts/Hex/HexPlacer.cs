@@ -94,6 +94,7 @@ namespace Hex
         
             Destroy(hexObject);
 
+            // TODO: land tiles placed here
             GameObject newHex = Instantiate(hexPrefab,
                 selectedHex.WorldPosition,
                 Quaternion.identity,

@@ -62,6 +62,10 @@ namespace MapObjects
                     SetPlayer();
                     _hexGrid.CreateCityAt(_selectedPosition, _currentPlayer, false);
                     Destroy(_hexGrid.GetUnitObjectDictionary()[_unit]);
+                    _hexGrid.GetUnitDictionary().Remove(_selectedPosition);
+                    _hexGrid.GetUnitObjectDictionary().Remove(_unit);
+
+                    _hexGrid.GetCityAt(_selectedPosition).canSpawnThisTurn = false;
                 }
 
                 _selectedPosition = null;

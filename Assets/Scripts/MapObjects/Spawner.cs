@@ -2,6 +2,8 @@ using Hex;
 using TMPro;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using UI.HUD;
 using UnityEngine;
 
 namespace MapObjects
@@ -18,19 +20,20 @@ namespace MapObjects
         [SerializeField] public GameObject airshipUnit;
         [SerializeField] public GameObject settlerUnit;
         [SerializeField] public TextMeshProUGUI playerIndicator;
-        private HexGrid _hexGrid;
-        private int _currentHexIndex;
-        private UnitMovement _unitMovement;
-        private int _currentPlayer;
-        public Material lowPolyCharacterTexture;
+        
         public bool unitTypeSelected;
-
-
-        private List<City> _cityList;
+        public bool citySpawnedThisTurn;
+        
+        private Transform _unitSelectorPanel;
+        private HexGrid _hexGrid;
+        private Hex.Hex _currentHex;
         private City _city;
+        private UnitMovement _unitMovement;
+        private UnitProductionSelector _unitTypeSelector;
+        private int _currentPlayer;
+        private int _currentHexIndex;
+
         private Camera _camera;
-
-
 
         private void Start()
         {
@@ -39,9 +42,9 @@ namespace MapObjects
             _hexGrid = FindObjectOfType<HexGrid>();
             _currentHexIndex = -1;
             _unitMovement = FindObjectOfType<UnitMovement>();
+            _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
             _currentPlayer = 1;
             playerIndicator.text = _currentPlayer.ToString();
-            _cityList = new List<City>();
             unitTypeSelected = false;
         }
 
@@ -50,51 +53,59 @@ namespace MapObjects
             DetectClick();
         }
 
-        public void DetectClick()
+        private void DetectClick()
         {
-            if(Input.GetKeyDown(KeyCode.C)) // this will be replaced soon
+            if (!Input.GetMouseButtonDown(0)) return;
+            
+            Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
+            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+            if(!hit.transform.CompareTag("City")) return;
+
+            _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
+            _city = FindSelectedCity(_hexGrid.GetHexList()[_currentHexIndex]);
+            if (_city == null) return;
+                
+            if (!_city.canSpawnThisTurn) return;
+            
+            // bring up unit selection menu
+            var obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            _unitSelectorPanel = obj.transform.GetChild(0);
+            UnitProductionSelector.AssignButtons(_unitSelectorPanel);
+            _unitSelectorPanel.gameObject.SetActive(true);
+        }
+
+        public void AfterButtonClick()
+        {
+            if (!unitTypeSelected)
             {
-                if (!unitTypeSelected) return;
-                SpawnUnit(0, 0, _currentPlayer);
+                _currentHexIndex = -1;
                 return;
             }
-            
-            if (Input.GetMouseButtonDown(0))
-            {
-                Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
-                if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-                if(!hit.transform.CompareTag("City")) return;
+                
+            Debug.Log(_city.GetCityCenter().GetVectorCoordinates());
+            SpawnUnit(_city, _currentPlayer);
+            _unitSelectorPanel.gameObject.SetActive(false);
+            _unitTypeSelector.ResetButtons();
+        }
 
-                _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
-                
-                
-            }
+        private City FindSelectedCity(Hex.Hex hex)
+        {
+            return _hexGrid.GetCityList().FirstOrDefault(city => hex == city.GetCityCenter());
         }
         
         /// <summary> ***********************************************
         /// This function will spawn a unit given coordinates and
         /// ownerID of the current player.
         /// </summary> ***********************************************
-        private void SpawnUnit(int q, int r, int ownerID)
+        private void SpawnUnit(City city, int ownerID)
         {
+            if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityHexes()[0])) return;
             
-            Hex.Hex hex = _hexGrid.GetHexAt(new Vector3(0, 0, 0));
-
-            List<City> citylist = _hexGrid.GetCityList();
-            // loop through city
-
-            foreach(City city in citylist)
-            {
-                if (city.OwnerID() != _currentPlayer) continue;
-                if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityHexes()[0])) return;
-                
-                GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
-                Unit newUnit = new Unit(q, r, ownerID);
-                newUnit.SetType(unit.name);
-                _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
-                _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
-
-            }
+            GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
+            Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID);
+            newUnit.SetType(unit.name);
+            _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
+            _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
         }
 
         /// <summary> ***********************************************

@@ -125,6 +125,7 @@ namespace Hex
         public List<City> GetCityList() { return _cityList; }
         public Dictionary<Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
         public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
+        public Dictionary<Hex, GameObject> GetHexObjectDictionary() { return _hexDictionary; }
         public Vector3[] GetDirectionVector(){ return DirectionVectors; }
     
     
@@ -197,13 +198,14 @@ namespace Hex
                 hex.SetPosition();
                 hex.WorldPosition = AddHeight(hex.WorldPosition);
             
-                GameObject newHex = Instantiate(hexPrefab,
+                // TODO: separate for networking
+                GameObject newHexObject = Instantiate(hexPrefab,
                     hex.WorldPosition,
                     Quaternion.identity,
                     this.transform);
-                newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
-                _gameObjects.Add(newHex);
-                _hexDictionary.Add(hex, newHex);
+                newHexObject.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+                _gameObjects.Add(newHexObject);
+                _hexDictionary.Add(hex, newHexObject);
                 hexCount++;
             }
         }
@@ -256,6 +258,11 @@ namespace Hex
                                                   && hex.R == (int)coordinates.y 
                                                   && hex.S == (int)coordinates.z);
         }
+
+        public City GetCityAt(Hex hex)
+        {
+            return _cityList.FirstOrDefault(iHex => hex == iHex.GetCityCenter());
+        }
     
         /// <summary> ***********************************************
         /// This function is used to add a randomized height to the
@@ -296,6 +303,7 @@ namespace Hex
             
                 Destroy(_gameObjects[i]);
                 
+                // TODO: City instantiated here
                 GameObject cityObject = Instantiate(cityPrefab,
                     cityCenter.WorldPosition,
                     Quaternion.identity,
@@ -305,6 +313,8 @@ namespace Hex
                 _gameObjects[i] = cityObject;
                 _cityList.Add(city);
                 ChangeCityHexPrefabs(city);
+                Transform unitSelectorPanel = cityObject.transform.GetChild(0);
+                unitSelectorPanel.gameObject.SetActive(false);
                 return;
             }
         }

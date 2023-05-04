@@ -219,6 +219,7 @@ namespace MapObjects
                 _selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
+                // TODO: add variables to network
                 MoveUnit();
                 
                 if (doDeplete) _selectedUnit.DepleteMovementPoints();
@@ -278,6 +279,7 @@ namespace MapObjects
             _hexGrid.GetUnitDictionary().Remove(_currentHex);
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
             _selectedUnit.UseMovementPoints();
+            if (_goalHex.GetHexType() == Hex.Hex.HexType.Forest) _selectedUnit.UseMovementPoints();
         }
 
         /// <summary> ***********************************************
