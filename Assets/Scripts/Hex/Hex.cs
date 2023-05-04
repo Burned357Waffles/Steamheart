@@ -99,6 +99,7 @@ namespace Hex
         /// This function sets who owns this hex.
         /// </summary> **********************************************
         public void SetOwnerID(int ownerID) { _ownerID = ownerID; }
+        public int GetOwnerID(){return _ownerID;}
 
         /// <summary> ***********************************************
         /// This function returns what type this hex is.
