@@ -90,10 +90,8 @@ namespace MapObjects
                 {
                     for(int j = 0; j < i; j++)
                     {
-                        if (_hexGrid.GetHexAt(hexCoordinates).GetOwnerID() != 0)
-                        {
-                            return false;
-                        }
+                        City city = _hexGrid.GetCityAt(_hexGrid.GetHexAt(hexCoordinates));
+                        if (city != null) return false;
                         hexCoordinates = HexGrid.HexNeighbor(hexCoordinates, k);
                     }
                 }

@@ -3,6 +3,7 @@ using TMPro;
 using System.Linq;
 using UI.HUD;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MapObjects
 {
@@ -57,12 +58,13 @@ namespace MapObjects
             
             Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
             if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-            if(!hit.transform.CompareTag("City")) return;
+            if (!hit.transform.CompareTag("City")) return;
+            //if(!CheckIfCityOrButton(hit)) return;
 
             _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
             _city = FindSelectedCity(_hexGrid.GetHexList()[_currentHexIndex]);
             if (_city == null) return;
-                
+            if (_city.GetOwnerID() != _currentPlayer) return;
             if (!_city.CanSpawnThisTurn) return;
             
             // bring up unit selection menu
@@ -72,6 +74,29 @@ namespace MapObjects
             _unitSelectorPanel.gameObject.SetActive(true);
         }
 
+        private bool CheckIfCityOrButton(RaycastHit hit)
+        {
+            if (!hit.transform.CompareTag("City"))
+            {
+                //*
+                Debug.Log("exiting on city");
+                Button button = hit.transform.GetComponent<Button>();
+                Debug.Log(button.name);
+                if (button != null)
+                {
+                    Debug.Log("is button");
+                    return true;
+                }
+                
+                if (_unitSelectorPanel != null) _unitSelectorPanel.gameObject.SetActive(false);
+                Debug.Log("exiting on button");
+                //*/
+                return false;
+            }
+            Debug.Log("is city");
+            return true;
+        }
+        
         public void AfterButtonClick()
         {
             if (!unitTypeSelected)

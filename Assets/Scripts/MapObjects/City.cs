@@ -38,11 +38,7 @@ namespace MapObjects
             CanSpawnThisTurn = true;
         }
 
-        public int OwnerID()
-        {
-            return _ownerID;
-        }
-
+        public int GetOwnerID() { return _ownerID; }
 
         /// <summary> ***********************************************
         /// This is the same logic of creating the map.
