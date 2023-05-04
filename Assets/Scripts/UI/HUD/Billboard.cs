@@ -1,14 +1,20 @@
+using System;
 using UnityEngine;
 
 namespace UI.HUD
 {
     public class Billboard : MonoBehaviour
     {
-        public Transform cam;
+        private Transform _camera;
+
+        private void Start()
+        {
+            _camera = FindObjectOfType<Camera>().transform;
+        }
 
         private void LateUpdate()
         {
-            transform.LookAt(transform.position + cam.forward);
+            transform.LookAt(transform.position + _camera.forward);
         }
     }
 }
