@@ -309,7 +309,7 @@ namespace Hex
                     cityCenter.WorldPosition,
                     Quaternion.identity,
                     this.transform);
-                
+                cityObject.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
                 _hexList[i].MakeHexBuildingType();
                 _gameObjects[i] = cityObject;
                 _cityList.Add(city);
