@@ -72,6 +72,17 @@ namespace UI.HUD
             _spawner.AfterButtonClick();
         }
 
+        
+        public void ResetOnlyButtons()
+        {
+            _spawner.unit = NONE;
+            _meleeButton.GetComponent<Button>().interactable = true;
+            _rangedButton.GetComponent<Button>().interactable = true;
+            _airshipButton.GetComponent<Button>().interactable = true;
+            _settlerButton.GetComponent<Button>().interactable = true;
+            _spawner.unitTypeSelected = false;
+        }
+        
         public void ResetButtons()
         {
             _spawner.unit = NONE;

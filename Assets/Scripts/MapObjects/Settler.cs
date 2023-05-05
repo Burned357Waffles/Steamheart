@@ -80,7 +80,7 @@ namespace MapObjects
         /// </summary> **********************************************
         private bool CheckValidPlacement(Hex.Hex selectedPosition)
         {
-            int mapRadius = 6;
+            int mapRadius = 7;
             Vector3 center = selectedPosition.GetVectorCoordinates();   
             for (int i = 1; i < mapRadius; i++)
             {

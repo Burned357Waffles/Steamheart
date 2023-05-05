@@ -60,7 +60,7 @@ namespace MapObjects
             if (!Physics.Raycast(ray, out RaycastHit hit)) return;
             if (!hit.transform.CompareTag("City")) return;
             //if(!CheckIfCityOrButton(hit)) return;
-
+            
             _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
             _city = FindSelectedCity(_hexGrid.GetHexList()[_currentHexIndex]);
             if (_city == null) return;
@@ -107,7 +107,6 @@ namespace MapObjects
             
             SpawnUnit(_city, _currentPlayer);
             _unitSelectorPanel.gameObject.SetActive(false);
-            _unitTypeSelector.ResetButtons();
         }
 
         private City FindSelectedCity(Hex.Hex hex)
@@ -121,13 +120,19 @@ namespace MapObjects
         /// </summary> ***********************************************
         private void SpawnUnit(City city, int ownerID)
         {
-            if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityHexes()[0])) return;
+            if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityCenter()))
+            {
+                _unitTypeSelector.ResetOnlyButtons();
+                return;
+            }
             
             GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
             Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID);
             newUnit.SetType(unit.name);
             _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
             _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
+
+            city.CanSpawnThisTurn = false;
         }
 
         /// <summary> ***********************************************
