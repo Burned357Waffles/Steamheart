@@ -22,6 +22,7 @@ namespace MapObjects
 
         private int _playerID;
         private Camera _camera;
+        private FMODUnity.StudioEventEmitter _selectEmitter;
         
         /* Heuristic was needed for A* algorithm
      https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
@@ -130,6 +131,8 @@ namespace MapObjects
             _currentHexIndex = -1;
             _goalHexIndex = -1;
             _playerID = 1;
+
+            _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
         }
 
         private void Update()
@@ -151,6 +154,8 @@ namespace MapObjects
                 if(!hit.transform.CompareTag("Unit")) return;
 
                 _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
+
+                _selectEmitter.Play();
                 
                 return;
             }
