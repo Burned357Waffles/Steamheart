@@ -34,6 +34,7 @@ namespace MapObjects
 
         private Camera _camera;
         private FMODUnity.StudioEventEmitter _endTurnEmitter;
+        private FMODUnity.StudioEventEmitter _selectEmitter;
 
         private void Start()
         {
@@ -74,6 +75,7 @@ namespace MapObjects
             _unitSelectorPanel = obj.transform.GetChild(0);
             UnitProductionSelector.AssignButtons(_unitSelectorPanel);
             _unitSelectorPanel.gameObject.SetActive(true);
+            _selectEmitter.Play();
         }
 
         private bool CheckIfCityOrButton(RaycastHit hit)
