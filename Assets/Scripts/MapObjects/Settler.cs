@@ -13,11 +13,13 @@ namespace MapObjects
         private Camera _camera;
         private int _currentPlayer;
         private int _currentHexIndex;
+        private FMODUnity.StudioEventEmitter _cityCreateEmitter;
         
         private void Start()
         {
             _hexGrid = FindObjectOfType<HexGrid>();
             _spawner = FindObjectOfType<Spawner>();
+            _cityCreateEmitter = GameObject.Find("CityCreate").GetComponent<FMODUnity.StudioEventEmitter>();
             _camera = Camera.main;
         }
         private void Update() 
@@ -64,6 +66,7 @@ namespace MapObjects
                     Destroy(_hexGrid.GetUnitObjectDictionary()[_unit]);
                     _hexGrid.GetUnitDictionary().Remove(_selectedPosition);
                     _hexGrid.GetUnitObjectDictionary().Remove(_unit);
+                    _cityCreateEmitter.Play();
 
                     _hexGrid.GetCityAt(_selectedPosition).CanSpawnThisTurn = false;
                 }
