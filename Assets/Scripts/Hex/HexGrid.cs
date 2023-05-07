@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MapObjects;
+using Misc;
 using UI.HUD;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -33,13 +34,14 @@ namespace Hex
         public int centerIslandRadius;
         public int playerCount;
         public int capitolDistance;
-
+        
         private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
         private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
         private readonly Dictionary<Hex, Unit> _unitDictionary = new Dictionary<Hex, Unit>();
         private readonly List<Hex> _hexList = new List<Hex>();
         private readonly List<GameObject> _gameObjects = new List<GameObject>();
         private readonly List<City> _cityList = new List<City>();
+        private List<Player> _playerList = new List<Player>();
 
         private static readonly Vector3[] DirectionVectors =
         {
@@ -124,6 +126,7 @@ namespace Hex
         public List<Hex> GetHexList() { return _hexList; }
         public List<GameObject> GetGameObjectList() { return _gameObjects; }
         public List<City> GetCityList() { return _cityList; }
+        public List<Player> GetPlayerList() { return _playerList; }
         public Dictionary<Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
         public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
         public Dictionary<Hex, GameObject> GetHexObjectDictionary() { return _hexDictionary; }
@@ -277,6 +280,11 @@ namespace Hex
 
             return hex;
         }
+
+        public Player FindPlayerOfID(int id)
+        {
+            return _playerList.FirstOrDefault(player => player.GetPlayerID() == id);
+        }
     
         /// <summary> ***********************************************
         /// This function creates all the player capitols at the
@@ -287,6 +295,7 @@ namespace Hex
             for (int i = 0; i < playerCount; i++)
             {
                 Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
+                _playerList.Add(new Player(i + 1));
                 CreateCityAt(hexToPut, i + 1, true);
             }
         }
@@ -296,7 +305,9 @@ namespace Hex
         /// </summary> **********************************************
         public void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
         {
+            Player player = FindPlayerOfID(ownerID);
             City city = new City(cityCenter, ownerID, isCapitol);
+            player.AssignCity(city);
 
             for (int i = 0; i < _hexList.Count(); i++)
             {

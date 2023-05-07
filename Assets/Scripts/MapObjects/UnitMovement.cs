@@ -1,5 +1,6 @@
 using System;
 using Hex;
+using Misc;
 using UnityEngine;
 
 namespace MapObjects
@@ -151,7 +152,7 @@ namespace MapObjects
             {
                 Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-                if(!hit.transform.CompareTag("Unit")) return;
+                if (!hit.transform.CompareTag("Unit")) return;
 
                 _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
 
@@ -167,23 +168,27 @@ namespace MapObjects
             {
                 Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-                
+
                 _goalHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
                 if (_currentHexIndex < 0 || _goalHexIndex < 0) return;
                 _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
                 _goalHex = _hexGrid.GetHexList()[_goalHexIndex];
-                
+
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetCurrentMovementPoints() <= 0)
                 {
                     _currentHexIndex = -1;
                     _goalHexIndex = -1;
                     return;
                 }
-                
+
                 bool doDeplete = false;
-                if (hit.transform.CompareTag("Unit"))
+                if (hit.transform.CompareTag("Unit") || hit.transform.CompareTag("City"))
                 {
-                    if (_hexGrid.GetUnitDictionary()[_currentHex] == _hexGrid.GetUnitDictionary()[_goalHex]) return;
+                    if (hit.transform.CompareTag("City") && 
+                        _hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() == _hexGrid.GetCityAt(_goalHex).GetOwnerID())
+                        return;
+                    else if (_hexGrid.GetUnitDictionary()[_currentHex] == _hexGrid.GetUnitDictionary()[_goalHex])
+                        return;
                     if (!IsTargetInRange(_hexGrid.GetUnitDictionary()[_currentHex].AttackRadius)) return;
                     
                     doDeplete = true;
@@ -304,6 +309,23 @@ namespace MapObjects
 
             if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID) return true;
 
+            if (_hexGrid.GetCityAt(_goalHex) != null)
+            {
+                City city = _hexGrid.GetCityAt(_goalHex);
+                bool taken = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
+                    city);
+                if (!taken)
+                {
+                    Player attackerPlayer = _hexGrid.FindPlayerOfID(_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID());
+                    Player defenderPlayer = _hexGrid.FindPlayerOfID(city.GetOwnerID());
+                    defenderPlayer.RemoveCity(city);
+                    if (!defenderPlayer.isAlive) _hexGrid.GetPlayerList().Remove(defenderPlayer);
+                    attackerPlayer.AssignCity(city);
+                    // TODO: send player to end screen
+                    return true;
+                }
+            }
+            
             bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
                 _hexGrid.GetUnitDictionary()[_goalHex]);
             if (!dead) return true;

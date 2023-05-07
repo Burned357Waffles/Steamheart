@@ -1,5 +1,6 @@
 using Hex;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MapObjects
 {
@@ -15,6 +16,7 @@ namespace MapObjects
         private int _currentHexIndex;
         private FMODUnity.StudioEventEmitter _cityCreateEmitter;
         private FMODUnity.StudioEventEmitter _selectEmitter;
+        private Button _settleButton;
         
         private void Start()
         {
@@ -78,6 +80,11 @@ namespace MapObjects
                 _selectedPosition = null;
                 _currentHexIndex = -1;
             }
+        }
+
+        public void AfterButtonClick()
+        {
+
         }
 
         /// <summary> ***********************************************
