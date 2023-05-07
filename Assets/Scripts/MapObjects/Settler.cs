@@ -14,12 +14,14 @@ namespace MapObjects
         private int _currentPlayer;
         private int _currentHexIndex;
         private FMODUnity.StudioEventEmitter _cityCreateEmitter;
+        private FMODUnity.StudioEventEmitter _selectEmitter;
         
         private void Start()
         {
             _hexGrid = FindObjectOfType<HexGrid>();
             _spawner = FindObjectOfType<Spawner>();
             _cityCreateEmitter = GameObject.Find("CityCreate").GetComponent<FMODUnity.StudioEventEmitter>();
+            _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
             _camera = Camera.main;
         }
         private void Update() 
@@ -49,6 +51,8 @@ namespace MapObjects
             
                 _currentHexIndex = -1;
                 _selectedPosition = null;
+
+                _selectEmitter.Play();
                 return;
             
             }
