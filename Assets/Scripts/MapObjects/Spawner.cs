@@ -45,6 +45,7 @@ namespace MapObjects
             _unitMovement = FindObjectOfType<UnitMovement>();
             _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
             _endTurnEmitter = GameObject.Find("EndTurn").GetComponent<FMODUnity.StudioEventEmitter>();
+            _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
             _currentPlayer = 1;
             playerIndicator.text = _currentPlayer.ToString();
             unitTypeSelected = false;
