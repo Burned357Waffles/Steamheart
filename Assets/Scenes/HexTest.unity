@@ -593,7 +593,7 @@ MonoBehaviour:
   StopEvent: 0
   AllowFadeout: 1
   TriggerOnce: 0
-  Preload: 0
+  Preload: 1
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
@@ -628,7 +628,6 @@ Transform:
   m_Children:
   - {fileID: 1849815606}
   - {fileID: 1259472779}
-  - {fileID: 1219757451}
   - {fileID: 228368543}
   - {fileID: 1663720618}
   m_Father: {fileID: 0}
@@ -3149,37 +3148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9928b1de803746aea882d13028ce1e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1219757450
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1219757451}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1219757451
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1219757450}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 246949152}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1241690718
 GameObject:
   m_ObjectHideFlags: 0
@@ -3375,7 +3343,7 @@ MonoBehaviour:
   StopEvent: 0
   AllowFadeout: 1
   TriggerOnce: 0
-  Preload: 0
+  Preload: 1
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
@@ -4955,7 +4923,7 @@ MonoBehaviour:
   StopEvent: 0
   AllowFadeout: 1
   TriggerOnce: 0
-  Preload: 0
+  Preload: 1
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1
@@ -5734,19 +5702,7 @@ MonoBehaviour:
   - eventID: 4
     callback:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 7648003083591640592, guid: 83cea3c1aa24ca6429e839b93edc3060, type: 3}
-          m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
-          m_MethodName: Play
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
 --- !u!224 &2024922490 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8366824743301040679, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
