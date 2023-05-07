@@ -141,6 +141,7 @@ namespace Hex
         /// </summary> **********************************************
         private void Start()
         {
+            //playerCount = 6;
             GenerateGrid();
             CreateCapitols();
         }
