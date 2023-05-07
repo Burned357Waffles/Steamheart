@@ -146,6 +146,7 @@ namespace MapObjects
             _currentPlayer++;
             if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
             _unitMovement.SetPlayer(_currentPlayer);
+            _endTurnEmitter.Play();
 
             playerIndicator.text = _currentPlayer.ToString();
         }
