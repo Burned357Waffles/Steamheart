@@ -33,6 +33,7 @@ namespace MapObjects
         private int _currentHexIndex;
 
         private Camera _camera;
+        private FMODUnity.StudioEventEmitter _endTurnEmitter;
 
         private void Start()
         {
@@ -42,6 +43,7 @@ namespace MapObjects
             _currentHexIndex = -1;
             _unitMovement = FindObjectOfType<UnitMovement>();
             _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
+            _endTurnEmitter = GameObject.Find("EndTurn").GetComponent<FMODUnity.StudioEventEmitter>();
             _currentPlayer = 1;
             playerIndicator.text = _currentPlayer.ToString();
             unitTypeSelected = false;
