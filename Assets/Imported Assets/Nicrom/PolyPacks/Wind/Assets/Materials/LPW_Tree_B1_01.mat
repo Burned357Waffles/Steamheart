@@ -74,6 +74,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaCutoff: 0.5
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -81,7 +82,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _MBAmplitude: 4
+    - _MBAmplitude: 3
     - _MBAmplitudeOffset: 2
     - _MBDefaultBending: 0
     - _MBFrequency: 1.11
@@ -90,7 +91,7 @@ Material:
     - _MBPhase: 1
     - _MBWindBlend: 0
     - _MBWindDir: 30
-    - _MBWindDirOffset: 63
+    - _MBWindDirOffset: 20
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1

@@ -12,15 +12,16 @@ namespace Misc
         private void Update()
         {
             transform.Translate(Vector3.right * (Time.deltaTime * _moveSpeed));
-            transform.Translate(Vector3.forward * (Time.deltaTime * _moveSpeed));
             
             if (transform.position.x > _endPosX) Destroy(gameObject);
+            if (transform.position.z > _endPosZ) Destroy(gameObject);
         }
 
-        public void StartFloating(float speed, float endPosX)
+        public void StartFloating(float speed, float endPosX, float endPosZ)
         {
             _moveSpeed = speed;
             _endPosX = endPosX;
+            _endPosZ = endPosZ;
         }
     }
 }

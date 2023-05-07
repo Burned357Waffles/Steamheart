@@ -1,5 +1,6 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
+using MapObjects;
 
 namespace Hex
 {
@@ -17,20 +18,22 @@ namespace Hex
 
         private int _playerID;
         private HexGrid _hexGrid;
+        private UnitMovement _unitMovement;
         private Camera _camera;
         private bool _isHexPrefabNull;
+        private bool _isSelecting;
 
         public void SetPlayer(int id)
         {
             _playerID = id;
         }
-    
 
         private void Start()
         {
             _isHexPrefabNull = hexPrefab == null;
             _camera = Camera.main;
             _hexGrid = GameObject.FindObjectOfType<HexGrid>();
+            _unitMovement = FindObjectOfType<UnitMovement>();
             _playerID = 1;
         }
 
@@ -40,7 +43,8 @@ namespace Hex
         }
 
         /// <summary> ***********************************************
-        /// This function will detect if a Hex is clicked.
+        /// This function will detect if a Hex is clicked. And does
+        /// the checks to place a hex at that location.
         /// </summary> **********************************************
         private void DetectClick()
         {
@@ -50,29 +54,16 @@ namespace Hex
                 Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
 
-                int hexIndex = GetHexIndexAtWorldPos(hit.transform.position);
+                int hexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
+                if (hexIndex < 0) return;
+                
                 if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID)) return;
                 if (!PlacementCount(hexIndex)) return;
-                if (hexIndex != -1) ConvertHex(hexIndex);
+                _unitMovement.SetCurrentIndex(-1);
+                ConvertHex(hexIndex);
             }
         }
 
-        /// <summary> ***********************************************
-        /// This function takes in a Vector3 of world coordinates
-        /// and returns the Hex at that position.
-        /// </summary> **********************************************
-        private int GetHexIndexAtWorldPos(Vector3 coordinates)
-        {
-            int hexIndex = -1;
-            for (int i = 0; i < _hexGrid.GetHexList().Count; i++)
-            {
-                if (_hexGrid.GetHexList()[i].WorldPosition != coordinates) continue;
-                hexIndex = i;
-                break;
-            }
-            return hexIndex;
-        }
-    
         /// <summary> ***********************************************
         /// This function takes in a Vector3 of grid coordinates and
         /// returns the Hex at that position.
@@ -103,6 +94,7 @@ namespace Hex
         
             Destroy(hexObject);
 
+            // TODO: land tiles placed here
             GameObject newHex = Instantiate(hexPrefab,
                 selectedHex.WorldPosition,
                 Quaternion.identity,
