@@ -1,4 +1,3 @@
-using Hex;
 using TMPro;
 using System.Linq;
 using UI.HUD;
@@ -26,6 +25,13 @@ namespace MapObjects
         private Transform _unitSelectorPanel;
         private HexGrid _hexGrid;
         private Hex.Hex _currentHex;
+        private HexMovement _hexMovement;
+        private int _currentPlayer;
+        private Animation anim;
+        public Material lowPolyCharacterTexture;
+
+
+        private List<City> _cityList;
         private City _city;
         private UnitMovement _unitMovement;
         private UnitProductionSelector _unitTypeSelector;
@@ -49,6 +55,8 @@ namespace MapObjects
             _currentPlayer = 1;
             playerIndicator.text = _currentPlayer.ToString();
             unitTypeSelected = false;
+            _cityList = new List<City>();
+            anim = gameObject.GetComponent<Animation>();
         }
 
         private void Update()
@@ -127,8 +135,22 @@ namespace MapObjects
         {
             if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityCenter()))
             {
+                if(city.ownerID() == _currentPlayer )
+                {
+                    if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityHexes()[0])) return;
+                    //Vector3 vectorToPlace = new Vector3(city.GetCityHexes()[0].WorldPosition.x,
+                        //city.GetCityHexes()[0].WorldPosition.y,
+                        //city.GetCityHexes()[0].WorldPosition.z);
+                    //vectorToPlace = new Vector3(0f, 0f, 0f);
+                    GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
+                    anim.Play();
+                    Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Melee);
+                    _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
+                    _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
+                }
                 _unitTypeSelector.ResetOnlyButtons();
                 return;
+                
             }
             
             GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);

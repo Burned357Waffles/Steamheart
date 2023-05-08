@@ -4453,6 +4453,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1498733352}
   - component: {fileID: 1498733351}
+  - component: {fileID: 1498733353}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -4495,6 +4496,23 @@ Transform:
   m_Father: {fileID: 2052600386}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!111 &1498733353
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1498733350}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: -6206981513316247533, guid: c346a9e2503cda64ba4698db6aa5e707, type: 3}
+  m_Animations:
+  - {fileID: -6206981513316247533, guid: c346a9e2503cda64ba4698db6aa5e707, type: 3}
+  - {fileID: 7831638795069683802, guid: 248146b68218df34c9ed1a14ba7a443b, type: 3}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1001 &1524739364
 PrefabInstance:
   m_ObjectHideFlags: 0
