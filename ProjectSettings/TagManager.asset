@@ -7,6 +7,9 @@ TagManager:
   - Unit
   - Hex
   - Water
+  - City
+  - Undefined
+  - Button
   layers:
   - Default
   - TransparentFX
@@ -43,4 +46,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: cog
+    uniqueID: 197964539
+    locked: 0
+  - name: 
+    uniqueID: 964031083
     locked: 0

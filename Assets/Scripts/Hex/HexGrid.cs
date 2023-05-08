@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using MapObjects;
+using Misc;
+using UI.HUD;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -32,13 +34,14 @@ namespace Hex
         public int centerIslandRadius;
         public int playerCount;
         public int capitolDistance;
-    
-        public readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
+        
+        private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
         private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
         private readonly Dictionary<Hex, Unit> _unitDictionary = new Dictionary<Hex, Unit>();
         private readonly List<Hex> _hexList = new List<Hex>();
         private readonly List<GameObject> _gameObjects = new List<GameObject>();
         private readonly List<City> _cityList = new List<City>();
+        private List<Player> _playerList = new List<Player>();
 
         private static readonly Vector3[] DirectionVectors =
         {
@@ -98,15 +101,35 @@ namespace Hex
                 }
             }
         }
-
+        
+        /// <summary> ***********************************************
+        /// This function takes in a Vector3 of world coordinates
+        /// and returns the Hex at that position.
+        /// </summary> **********************************************
+        public int GetHexIndexAtWorldPos(Vector3 coordinates)
+        {
+            int hexIndex = -1;
+            for (int i = 0; i < GetHexList().Count; i++)
+            {
+                if (GetHexList()[i].WorldPosition.x == coordinates.x &&
+                    GetHexList()[i].WorldPosition.z == coordinates.z)
+                {
+                    hexIndex = i;
+                    break;
+                }
+            }
+            return hexIndex;
+        }
         /// <summary> ***********************************************
         /// These are getter methods. Not much to say about these.
         /// </summary> **********************************************
         public List<Hex> GetHexList() { return _hexList; }
         public List<GameObject> GetGameObjectList() { return _gameObjects; }
         public List<City> GetCityList() { return _cityList; }
+        public List<Player> GetPlayerList() { return _playerList; }
         public Dictionary<Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
         public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
+        public Dictionary<Hex, GameObject> GetHexObjectDictionary() { return _hexDictionary; }
         public Vector3[] GetDirectionVector(){ return DirectionVectors; }
     
     
@@ -118,6 +141,7 @@ namespace Hex
         /// </summary> **********************************************
         private void Start()
         {
+            //playerCount = 6;
             GenerateGrid();
             CreateCapitols();
         }
@@ -179,13 +203,14 @@ namespace Hex
                 hex.SetPosition();
                 hex.WorldPosition = AddHeight(hex.WorldPosition);
             
-                GameObject newHex = Instantiate(hexPrefab,
+                // TODO: separate for networking
+                GameObject newHexObject = Instantiate(hexPrefab,
                     hex.WorldPosition,
                     Quaternion.identity,
                     this.transform);
-                newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
-                _gameObjects.Add(newHex);
-                _hexDictionary.Add(hex, newHex);
+                newHexObject.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+                _gameObjects.Add(newHexObject);
+                _hexDictionary.Add(hex, newHexObject);
                 hexCount++;
             }
         }
@@ -238,6 +263,11 @@ namespace Hex
                                                   && hex.R == (int)coordinates.y 
                                                   && hex.S == (int)coordinates.z);
         }
+
+        public City GetCityAt(Hex hex)
+        {
+            return _cityList.FirstOrDefault(iHex => hex == iHex.GetCityCenter());
+        }
     
         /// <summary> ***********************************************
         /// This function is used to add a randomized height to the
@@ -251,6 +281,11 @@ namespace Hex
 
             return hex;
         }
+
+        public Player FindPlayerOfID(int id)
+        {
+            return _playerList.FirstOrDefault(player => player.GetPlayerID() == id);
+        }
     
         /// <summary> ***********************************************
         /// This function creates all the player capitols at the
@@ -261,6 +296,7 @@ namespace Hex
             for (int i = 0; i < playerCount; i++)
             {
                 Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
+                _playerList.Add(new Player(i + 1));
                 CreateCityAt(hexToPut, i + 1, true);
             }
         }
@@ -268,9 +304,11 @@ namespace Hex
         /// <summary> ***********************************************
         /// This function will create a city.
         /// </summary> **********************************************
-        private void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
+        public void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
         {
+            Player player = FindPlayerOfID(ownerID);
             City city = new City(cityCenter, ownerID, isCapitol);
+            player.AssignCity(city);
 
             for (int i = 0; i < _hexList.Count(); i++)
             {
@@ -278,15 +316,19 @@ namespace Hex
             
                 Destroy(_gameObjects[i]);
                 
+                // TODO: City instantiated here
                 GameObject cityObject = Instantiate(cityPrefab,
                     cityCenter.WorldPosition,
                     Quaternion.identity,
                     this.transform);
-                
+                cityObject.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
                 _hexList[i].MakeHexBuildingType();
                 _gameObjects[i] = cityObject;
                 _cityList.Add(city);
                 ChangeCityHexPrefabs(city);
+                Transform unitSelectorPanel = cityObject.transform.GetChild(0);
+                unitSelectorPanel.gameObject.SetActive(false);
+                UnitProductionSelector.AssignButtons(unitSelectorPanel);
                 return;
             }
         }

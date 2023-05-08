@@ -12,33 +12,33 @@ namespace MapObjects
     /// </summary> ***********************************************************
     public class City
     {
+        private Hex.Hex _center;
         private readonly int _ownerID;
         private bool _isCapitol;
         public int Health;
         public int Damage;
         private readonly int _cityRadius;
         private readonly HexGrid _hexGrid;
+        public bool CanSpawnThisTurn;
 
         private readonly Dictionary<Hex.Hex, int> _controlledHexDictionary = new Dictionary<Hex.Hex, int>();
         private readonly List<Hex.Hex> _controlledHexes = new List<Hex.Hex>();
 
         public City(Hex.Hex cityCenterHex, int ownerID, bool isCapitol)
         {
+            _center = cityCenterHex;
             _cityRadius = 4;
             _ownerID = ownerID;
             _isCapitol = isCapitol;
-            Health = 100; // we can play with values
+            Health = 6; // we can play with values
             Damage = 10; // we can play with values
-            _controlledHexes.Add(cityCenterHex);
+            _controlledHexes.Add(_center);
             _hexGrid = Object.FindObjectOfType<HexGrid>();
             CreateCity();
+            CanSpawnThisTurn = true;
         }
 
-        public int ownerID()
-        {
-            return _ownerID;
-        }
-
+        public int GetOwnerID() { return _ownerID; }
 
         /// <summary> ***********************************************
         /// This is the same logic of creating the map.
@@ -71,6 +71,6 @@ namespace MapObjects
         /// </summary> **********************************************
         public List<Hex.Hex> GetCityHexes(){ return _controlledHexes; }
         public Dictionary<Hex.Hex, int> GetCityDictionary() { return _controlledHexDictionary; }
-        public Hex.Hex GetCityCenter() { return _controlledHexes[0]; }
+        public Hex.Hex GetCityCenter() { return _center; }
     }
 }

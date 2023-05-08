@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace MapObjects
 {
@@ -19,21 +20,15 @@ namespace MapObjects
 
         private readonly int _ownerID;
         private UnitType _unitType;
-        private readonly int _baseMovementPoints;
+        private int _baseMovementPoints;
         private int _currentMovementPoints; 
 
-        public Unit(int q, int r, int ownerID, UnitType unitType)
+        public Unit(int q, int r, int ownerID)
         {
             Q = q;
             R = r;
             S = S = -(q + r);
             _ownerID = ownerID;
-            _unitType = unitType;
-            int[] stats = UnitTypesData.GetStats(unitType);
-            Damage= stats[0];
-            Health = stats[1];
-            _baseMovementPoints = stats[2];
-            AttackRadius= stats[3];
             _currentMovementPoints = _baseMovementPoints;
         }
         
@@ -48,7 +43,24 @@ namespace MapObjects
         public void UseMovementPoints() { _currentMovementPoints--; }
         public void DepleteMovementPoints() { _currentMovementPoints = 0;}
         public void ResetMovementPoints() { _currentMovementPoints = _baseMovementPoints; }
-        
+
+        public void SetType(string type)
+        {
+            _unitType = type switch
+            {
+                "melee_unit" => UnitType.Melee,
+                "ranged_unit" => UnitType.Ranged,
+                "airship_unit" => UnitType.Airship,
+                "settler_unit" => UnitType.Settler,
+                _ => throw new Exception($"Unit of type {_unitType} not supported")
+            };
+            
+            int[] stats = UnitTypesData.GetStats(_unitType);
+            Damage= stats[0];
+            Health = stats[1];
+            _baseMovementPoints = stats[2];
+            AttackRadius= stats[3];
+        }
         public enum  UnitType
         {
             Melee,

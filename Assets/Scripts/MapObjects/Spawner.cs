@@ -1,7 +1,9 @@
 using Hex;
 using TMPro;
-using System.Collections.Generic;
+using System.Linq;
+using UI.HUD;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MapObjects
 {
@@ -12,75 +14,130 @@ namespace MapObjects
     public class Spawner : MonoBehaviour
     {
         [SerializeField] public GameObject unit;
+        [SerializeField] public GameObject meleeUnit;
+        [SerializeField] public GameObject rangedUnit;
+        [SerializeField] public GameObject airshipUnit;
+        [SerializeField] public GameObject settlerUnit;
         [SerializeField] public TextMeshProUGUI playerIndicator;
+        
+        public bool unitTypeSelected;
+        public bool citySpawnedThisTurn;
+        
+        private Transform _unitSelectorPanel;
         private HexGrid _hexGrid;
-        private HexMovement _hexMovement;
-        private int _currentPlayer;
-        private Animation anim;
-        public Material lowPolyCharacterTexture;
-
-
-        private List<City> _cityList;
+        private Hex.Hex _currentHex;
         private City _city;
+        private UnitMovement _unitMovement;
+        private UnitProductionSelector _unitTypeSelector;
+        private int _currentPlayer;
+        private int _currentHexIndex;
+
+        private Camera _camera;
+        private FMODUnity.StudioEventEmitter _endTurnEmitter;
+        private FMODUnity.StudioEventEmitter _selectEmitter;
 
         private void Start()
         {
             UnitTypesData.InitUnitTypeDict();
+            _camera = Camera.main;
             _hexGrid = FindObjectOfType<HexGrid>();
-            _hexMovement = FindObjectOfType<HexMovement>();
+            _currentHexIndex = -1;
+            _unitMovement = FindObjectOfType<UnitMovement>();
+            _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
+            _endTurnEmitter = GameObject.Find("EndTurn").GetComponent<FMODUnity.StudioEventEmitter>();
+            _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
             _currentPlayer = 1;
             playerIndicator.text = _currentPlayer.ToString();
-            _cityList = new List<City>();
-            anim = gameObject.GetComponent<Animation>();
+            unitTypeSelected = false;
         }
 
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.C)) // this will be replaced soon
+            DetectClick();
+        }
+
+        private void DetectClick()
+        {
+            if (!Input.GetMouseButtonDown(0)) return;
+            
+            Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
+            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+            if (!hit.transform.CompareTag("City")) return;
+            //if(!CheckIfCityOrButton(hit)) return;
+            
+            _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
+            _city = FindSelectedCity(_hexGrid.GetHexList()[_currentHexIndex]);
+            if (_city == null) return;
+            if (_city.GetOwnerID() != _currentPlayer) return;
+            if (!_city.CanSpawnThisTurn) return;
+            
+            // bring up unit selection menu
+            var obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            _unitSelectorPanel = obj.transform.GetChild(0);
+            UnitProductionSelector.AssignButtons(_unitSelectorPanel);
+            _unitSelectorPanel.gameObject.SetActive(true);
+            _selectEmitter.Play();
+        }
+
+        private bool CheckIfCityOrButton(RaycastHit hit)
+        {
+            if (!hit.transform.CompareTag("City"))
             {
-                SpawnUnit(0, 0, _currentPlayer);
+                //*
+                Debug.Log("exiting on city");
+                Button button = hit.transform.GetComponent<Button>();
+                Debug.Log(button.name);
+                if (button != null)
+                {
+                    Debug.Log("is button");
+                    return true;
+                }
+                
+                if (_unitSelectorPanel != null) _unitSelectorPanel.gameObject.SetActive(false);
+                Debug.Log("exiting on button");
+                //*/
+                return false;
             }
+            Debug.Log("is city");
+            return true;
+        }
+        
+        public void AfterButtonClick()
+        {
+            if (!unitTypeSelected)
+            {
+                _currentHexIndex = -1;
+                return;
+            }
+            
+            SpawnUnit(_city, _currentPlayer);
+            _unitSelectorPanel.gameObject.SetActive(false);
+        }
+
+        private City FindSelectedCity(Hex.Hex hex)
+        {
+            return _hexGrid.GetCityList().FirstOrDefault(city => hex == city.GetCityCenter());
         }
         
         /// <summary> ***********************************************
         /// This function will spawn a unit given coordinates and
         /// ownerID of the current player.
         /// </summary> ***********************************************
-        private void SpawnUnit(int q, int r, int ownerID)
+        private void SpawnUnit(City city, int ownerID)
         {
-            
-            Hex.Hex hex = _hexGrid.GetHexAt(new Vector3(0, 0, 0));
-
-            List<City> citylist = _hexGrid.GetCityList();
-            // loop through city
-            foreach(City city in citylist)
+            if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityCenter()))
             {
-                if(city.ownerID() == _currentPlayer )
-                {
-                    if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityHexes()[0])) return;
-                    //Vector3 vectorToPlace = new Vector3(city.GetCityHexes()[0].WorldPosition.x,
-                        //city.GetCityHexes()[0].WorldPosition.y,
-                        //city.GetCityHexes()[0].WorldPosition.z);
-                    //vectorToPlace = new Vector3(0f, 0f, 0f);
-                    GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
-                    anim.Play();
-                    Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Melee);
-                    _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
-                    _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
-                }
-                
+                _unitTypeSelector.ResetOnlyButtons();
+                return;
             }
-
-            //if (_hexGrid.GetUnitDictionary().ContainsKey(hex)) return;
             
-            // Vector3 vectorToPlaceAt = new Vector3(hex.GetVectorCoordinates().x,
-            //     hex.GetVectorCoordinates().y + 1.3f,
-            //     hex.GetVectorCoordinates().z);
-            // GameObject newUnitObject = Instantiate(unit, vectorToPlaceAt, transform.rotation);
-        
-            // _hexGrid.GetUnitDictionary().Add(hex, newUnit);
-            // _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject); 
+            GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
+            Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID);
+            newUnit.SetType(unit.name);
+            _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
+            _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
 
+            city.CanSpawnThisTurn = false;
         }
 
         /// <summary> ***********************************************
@@ -91,10 +148,16 @@ namespace MapObjects
         {
             _currentPlayer++;
             if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
-            _hexMovement.SetPlayer(_currentPlayer);
+            _unitMovement.SetPlayer(_currentPlayer);
+            _endTurnEmitter.Play();
 
             playerIndicator.text = _currentPlayer.ToString();
         }
+        
+        /// <summary> ***********************************************
+        /// Getter for _currentPlayer.
+        /// </summary> **********************************************
+        public int GetCurrentPlayer() { return _currentPlayer; }
 
     }
 }  
