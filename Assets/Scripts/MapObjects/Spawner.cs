@@ -16,6 +16,7 @@ namespace MapObjects
         private HexGrid _hexGrid;
         private HexMovement _hexMovement;
         private int _currentPlayer;
+        private Animation anim;
         public Material lowPolyCharacterTexture;
 
 
@@ -30,6 +31,7 @@ namespace MapObjects
             _currentPlayer = 1;
             playerIndicator.text = _currentPlayer.ToString();
             _cityList = new List<City>();
+            anim = gameObject.GetComponent<Animation>();
         }
 
         private void Update()
@@ -61,6 +63,7 @@ namespace MapObjects
                         //city.GetCityHexes()[0].WorldPosition.z);
                     //vectorToPlace = new Vector3(0f, 0f, 0f);
                     GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
+                    anim.Play();
                     Unit newUnit = new Unit(q, r, ownerID, Unit.UnitType.Melee);
                     _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
                     _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
