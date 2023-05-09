@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Misc
 {
@@ -14,7 +15,7 @@ namespace Misc
         public float minZoom;
         public float maxZoom;
         public float worldBorderX;
-        public float wordBorderZ;
+        public float worldBorderZ;
         public Vector3 zoomAmount;
 
         public Vector3 newPosition;
@@ -155,7 +156,7 @@ namespace Misc
         {
             // binds position to world border
             float clampedPositionX = Mathf.Clamp(newPosition.x, -worldBorderX, worldBorderX);
-            float clampedPositionZ = Mathf.Clamp(newPosition.z, -wordBorderZ, wordBorderZ);
+            float clampedPositionZ = Mathf.Clamp(newPosition.z, -worldBorderZ, worldBorderZ);
             newPosition = new Vector3(clampedPositionX, 0.1f, clampedPositionZ);
 
             // binds position to min and max zoom amount

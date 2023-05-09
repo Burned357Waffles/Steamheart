@@ -30,6 +30,8 @@ namespace Hex
 
         [SerializeField] public GameObject cityPrefab;
 
+        [SerializeField] public GameObject CameraRig;
+
         public int mapRadius;
         public int centerIslandRadius;
         public int playerCount;
@@ -141,8 +143,11 @@ namespace Hex
         /// </summary> **********************************************
         private void Start()
         {
-            playerCount = PlayerCount.GetPlayerCount();
+            playerCount = MatchSettings.GetPlayerCount();
+            mapRadius = MatchSettings.GetMapSize();
             _capitolDistance = (int)(mapRadius * 0.65f);
+            CameraRig.GetComponent<MoveCamera>().worldBorderZ = 1.5625f * mapRadius;
+            CameraRig.GetComponent<MoveCamera>().worldBorderX = 1.5625f * mapRadius;
             //playerCount = 1; // for debugging
             GenerateGrid();
             CreateCapitols();
