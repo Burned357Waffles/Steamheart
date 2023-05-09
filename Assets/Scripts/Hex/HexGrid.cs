@@ -141,7 +141,7 @@ namespace Hex
         /// </summary> **********************************************
         private void Start()
         {
-            //playerCount = 6;
+            playerCount = PlayerCount.GetPlayerCount();
             GenerateGrid();
             CreateCapitols();
         }
@@ -293,9 +293,19 @@ namespace Hex
         /// </summary> ***********************************************
         private void CreateCapitols()
         {
+            int[] arrayToShuffle = {0, 4, 2, 1, 3, 5};
+            for (int t = 0; t < arrayToShuffle.Length; t++ )
+            {
+                int tmp = arrayToShuffle[t];
+                int r = Random.Range(t, arrayToShuffle.Length);
+                arrayToShuffle[t] = arrayToShuffle[r];
+                arrayToShuffle[r] = tmp;
+            }
+            
             for (int i = 0; i < playerCount; i++)
             {
-                Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
+                Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(),
+                    CoordinateScale(DirectionVectors[arrayToShuffle[i]], capitolDistance)));
                 _playerList.Add(new Player(i + 1));
                 CreateCityAt(hexToPut, i + 1, true);
             }
