@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Hex;
 using Misc;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace MapObjects
@@ -21,7 +24,7 @@ namespace MapObjects
         private Unit _selectedUnit;
         private GameObject _selectedUnitObject;
 
-        private int _playerID;
+        private int _currentPlayer;
         private Camera _camera;
         private FMODUnity.StudioEventEmitter _selectEmitter;
         
@@ -131,7 +134,7 @@ namespace MapObjects
             _hexGrid = FindObjectOfType<HexGrid>();
             _currentHexIndex = -1;
             _goalHexIndex = -1;
-            _playerID = 1;
+            _currentPlayer = 1;
 
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
         }
@@ -153,9 +156,16 @@ namespace MapObjects
                 Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 if (!hit.transform.CompareTag("Unit")) return;
-
+                
                 _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
-
+                if (_currentHexIndex < 0) return;
+                _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
+                if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
+                {
+                    _currentHexIndex = -1;
+                    return;
+                }
+                
                 _selectEmitter.Play();
                 
                 return;
@@ -241,7 +251,7 @@ namespace MapObjects
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
-                    if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID)
+                    if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                     {
                         _currentHexIndex = -1;
                         _goalHexIndex = -1;
@@ -322,7 +332,7 @@ namespace MapObjects
         /// </summary> **********************************************
         public void SetPlayer(int currentPlayer)
         {
-            _playerID = currentPlayer;
+            _currentPlayer = currentPlayer;
         }
 
         private bool DoCityCombat()
@@ -331,26 +341,35 @@ namespace MapObjects
             
             Debug.Log("ATTACKING CITY");
             City city = _hexGrid.GetCityAt(_goalHex);
+            if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
+            {
+                if (DoCombat()) return true;
+            }
+            
             bool taken = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
                 city);
-            if (taken)
+            if (!taken) return false;
+            Debug.Log("TAKEN");
+            Player attackerPlayer = _hexGrid.FindPlayerOfID(_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID());
+            Player defenderPlayer = _hexGrid.FindPlayerOfID(city.GetOwnerID());
+            defenderPlayer.RemoveCity(city);
+            attackerPlayer.AssignCity(city);
+            
+            if (defenderPlayer.IsAlive) return true;
+            Debug.Log("Player " + defenderPlayer.GetPlayerID() + " has been defeated");
+            foreach (KeyValuePair<Hex.Hex, Unit> keyValue in _hexGrid.GetUnitDictionary()
+                         .Where(pair => pair.Value.GetOwnerID() == defenderPlayer.GetPlayerID()).ToList())
             {
-                Debug.Log("TAKEN");
-                Player attackerPlayer = _hexGrid.FindPlayerOfID(_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID());
-                Player defenderPlayer = _hexGrid.FindPlayerOfID(city.GetOwnerID());
-                defenderPlayer.RemoveCity(city);
-                attackerPlayer.AssignCity(city);
-                if (!defenderPlayer.IsAlive)
-                {
-                    Debug.Log("Player " + defenderPlayer.GetPlayerID() + " has been defeated");
-                    _hexGrid.GetPlayerList().Remove(defenderPlayer);
-                    // TODO: send player to end screen
-                }
-                
-                return true;
+                Debug.Log("Removing Unit");
+                Destroy(_hexGrid.GetUnitObjectDictionary()[keyValue.Value]);
+                _hexGrid.GetUnitObjectDictionary().Remove(keyValue.Value);
+                _hexGrid.GetUnitDictionary().Remove(keyValue.Key);
             }
+            _hexGrid.GetPlayerList().Remove(defenderPlayer);
+            // TODO: send player to end screen
 
-            return false;
+            return true;
+
         }
 
         private bool DoCombat()
@@ -359,7 +378,7 @@ namespace MapObjects
                 !_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
                 return true;
 
-            if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID) return true;
+            if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer) return true;
 
             Debug.Log("ATTACKING UNIT");
             bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],

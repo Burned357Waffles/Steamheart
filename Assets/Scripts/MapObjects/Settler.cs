@@ -47,7 +47,17 @@ namespace MapObjects
                 _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
                 _selectedPosition = _hexGrid.GetHexList()[_currentHexIndex];
                 _unit = _hexGrid.GetUnitDictionary()[_selectedPosition];
+                _currentPlayer = _spawner.GetCurrentPlayer();
 
+                Debug.Log("unit id: " + _unit.GetOwnerID() + "current: " + _currentPlayer);
+                if (_unit.GetOwnerID() != _currentPlayer)
+                {
+                    Debug.Log("not your unit");
+                    _currentHexIndex = -1;
+                    _selectedPosition = null;
+                    return;
+                }
+                
                 // is the unit a settler
                 if (_unit.GetUnitType() == Unit.UnitType.Settler) return;
             
