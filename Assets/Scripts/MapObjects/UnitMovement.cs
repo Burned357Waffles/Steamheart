@@ -218,7 +218,8 @@ namespace MapObjects
                     // if target is still alive
                     if (DoCombat()) 
                     {
-                        _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
+                        if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
+                            _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
                         _currentHexIndex = -1;
                         _goalHexIndex = -1;
                         return;
@@ -363,8 +364,18 @@ namespace MapObjects
             Debug.Log("ATTACKING UNIT");
             bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
                 _hexGrid.GetUnitDictionary()[_goalHex]);
-            if (!dead) return true;
-
+            if (!dead)
+            {
+                if (_hexGrid.GetUnitDictionary()[_currentHex].Health <= 0)
+                {
+                    Destroy(_hexGrid.GetUnitObjectDictionary()[_hexGrid.GetUnitDictionary()[_currentHex]]);
+                    _hexGrid.GetUnitObjectDictionary().Remove(_hexGrid.GetUnitDictionary()[_currentHex]);
+                    _hexGrid.GetUnitDictionary().Remove(_currentHex);
+                }
+                
+                return true;
+            }
+            
             Destroy(_hexGrid.GetUnitObjectDictionary()[_hexGrid.GetUnitDictionary()[_goalHex]]);
             _hexGrid.GetUnitObjectDictionary().Remove(_hexGrid.GetUnitDictionary()[_goalHex]);
             _hexGrid.GetUnitDictionary().Remove(_goalHex);
