@@ -33,7 +33,7 @@ namespace UI.HUD
             }
             #else 
 		    {
-			Application.Quit();
+			    Application.Quit();
 		    }
             #endif
         }

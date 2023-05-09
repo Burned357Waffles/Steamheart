@@ -67,8 +67,15 @@ namespace UI.Menu
 
         private void Quit()
         {
-            Application.Quit();
-            Debug.Log("Application quit only works in build!");
+            #if UNITY_EDITOR
+            {
+                UnityEditor.EditorApplication.isPlaying = false;
+            }
+            #else 
+		    {
+			    Application.Quit();
+		    }
+            #endif
         }
     }
 }
