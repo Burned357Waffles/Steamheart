@@ -1,4 +1,5 @@
 ﻿using Hex;
+using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -75,8 +76,26 @@ namespace UI.HUD
         public void SetNextPlayer()
         {
             _currentPlayer++;
-            if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
+            if (_currentPlayer > _hexGrid.GetPlayerList().Count) _currentPlayer = 1;
             _hexPlacer.SetPlayer(_currentPlayer);
+            Debug.Log("Player count = " + _hexGrid.playerCount);
+            foreach (Player player in _hexGrid.GetPlayerList())
+            {
+                Debug.Log("Player " + player.GetPlayerID() + " has " + player.GetOwnedCities().Count +
+                          " cities and " + player.GetNumCapitols() + " capitols");
+                if (player.GetNumCapitols() != _hexGrid.playerCount) continue;
+                Debug.Log("Player " + player.GetPlayerID() + " has won!");
+                #if UNITY_EDITOR
+                {
+                    UnityEditor.EditorApplication.isPlaying = false;
+                }
+                #else 
+		        {
+			        Application.Quit();
+		        }
+                #endif
+
+            }
         }
     }
 }

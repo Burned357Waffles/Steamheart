@@ -33,8 +33,8 @@ namespace Hex
         public int mapRadius;
         public int centerIslandRadius;
         public int playerCount;
-        public int capitolDistance;
         
+        private int _capitolDistance;
         private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
         private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
         private readonly Dictionary<Hex, Unit> _unitDictionary = new Dictionary<Hex, Unit>();
@@ -142,6 +142,8 @@ namespace Hex
         private void Start()
         {
             playerCount = PlayerCount.GetPlayerCount();
+            _capitolDistance = (int)(mapRadius * 0.65f);
+            //playerCount = 1; // for debugging
             GenerateGrid();
             CreateCapitols();
         }
@@ -305,7 +307,7 @@ namespace Hex
             for (int i = 0; i < playerCount; i++)
             {
                 Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(),
-                    CoordinateScale(DirectionVectors[arrayToShuffle[i]], capitolDistance)));
+                    CoordinateScale(DirectionVectors[arrayToShuffle[i]], _capitolDistance)));
                 _playerList.Add(new Player(i + 1));
                 CreateCityAt(hexToPut, i + 1, true);
             }

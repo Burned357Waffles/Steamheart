@@ -10,6 +10,7 @@ TagManager:
   - City
   - Undefined
   - Button
+  - UnitSelectButton
   layers:
   - Default
   - TransparentFX

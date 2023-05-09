@@ -31,8 +31,9 @@ namespace Misc
         public void Start()
         {
             _camera = Camera.main;
-            newPosition = transform.position;
-            newRotation = transform.rotation;
+            var transform1 = transform;
+            newPosition = transform1.position;
+            newRotation = transform1.rotation;
             newZoom = cameraTransform.localPosition;
         }
 
@@ -144,8 +145,9 @@ namespace Misc
             }
 
             clampCamera();
-            transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * movementTime);
+            Transform transform1;
+            (transform1 = transform).position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
+            transform.rotation = Quaternion.Lerp(transform1.rotation, newRotation, Time.deltaTime * movementTime);
             cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);        
         }
 

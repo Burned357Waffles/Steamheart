@@ -48,7 +48,7 @@
             if (_attacker.Damage >= _defenderCity.Health) return true;
 
             _defenderCity.Health -= _attacker.Damage;
-            _attacker.Health -= _defenderUnit.Damage;
+            _attacker.Health -= _defenderCity.Damage;
             return false;
         }
     }

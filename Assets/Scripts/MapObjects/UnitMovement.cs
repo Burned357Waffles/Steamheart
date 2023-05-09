@@ -182,13 +182,36 @@ namespace MapObjects
                 }
 
                 bool doDeplete = false;
-                if (hit.transform.CompareTag("Unit") || hit.transform.CompareTag("City"))
+
+                if (_hexGrid.GetCityAt(_goalHex) != null)
                 {
-                    if (hit.transform.CompareTag("City") && 
-                        _hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() == _hexGrid.GetCityAt(_goalHex).GetOwnerID())
+                    // if another player's city is clicked
+                    Debug.Log("City Clicked");
+                    if (_hexGrid.GetCityAt(_goalHex) != null &&
+                        _hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() ==
+                        _hexGrid.GetCityAt(_goalHex).GetOwnerID())
+                    {
+                        Debug.Log("first if return");
                         return;
-                    else if (_hexGrid.GetUnitDictionary()[_currentHex] == _hexGrid.GetUnitDictionary()[_goalHex])
+                    }
+                    
+                    doDeplete = true;
+                    // if target is still alive
+                    if (!DoCityCombat()) 
+                    {
+                        _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
+                        _currentHexIndex = -1;
+                        _goalHexIndex = -1;
                         return;
+                    }
+                }
+                
+                else if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
+                {
+                    // if there is already a unit at this hex
+                    if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
+                        if (_hexGrid.GetUnitDictionary()[_currentHex] == _hexGrid.GetUnitDictionary()[_goalHex])
+                            return;
                     if (!IsTargetInRange(_hexGrid.GetUnitDictionary()[_currentHex].AttackRadius)) return;
                     
                     doDeplete = true;
@@ -301,6 +324,34 @@ namespace MapObjects
             _playerID = currentPlayer;
         }
 
+        private bool DoCityCombat()
+        {
+            if (_hexGrid.GetCityAt(_goalHex) == null) return false;
+            
+            Debug.Log("ATTACKING CITY");
+            City city = _hexGrid.GetCityAt(_goalHex);
+            bool taken = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
+                city);
+            if (taken)
+            {
+                Debug.Log("TAKEN");
+                Player attackerPlayer = _hexGrid.FindPlayerOfID(_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID());
+                Player defenderPlayer = _hexGrid.FindPlayerOfID(city.GetOwnerID());
+                defenderPlayer.RemoveCity(city);
+                attackerPlayer.AssignCity(city);
+                if (!defenderPlayer.IsAlive)
+                {
+                    Debug.Log("Player " + defenderPlayer.GetPlayerID() + " has been defeated");
+                    _hexGrid.GetPlayerList().Remove(defenderPlayer);
+                    // TODO: send player to end screen
+                }
+                
+                return true;
+            }
+
+            return false;
+        }
+
         private bool DoCombat()
         {
             if (!_hexGrid.GetUnitDictionary().ContainsKey(_currentHex) ||
@@ -309,23 +360,7 @@ namespace MapObjects
 
             if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _playerID) return true;
 
-            if (_hexGrid.GetCityAt(_goalHex) != null)
-            {
-                City city = _hexGrid.GetCityAt(_goalHex);
-                bool taken = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
-                    city);
-                if (!taken)
-                {
-                    Player attackerPlayer = _hexGrid.FindPlayerOfID(_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID());
-                    Player defenderPlayer = _hexGrid.FindPlayerOfID(city.GetOwnerID());
-                    defenderPlayer.RemoveCity(city);
-                    if (!defenderPlayer.isAlive) _hexGrid.GetPlayerList().Remove(defenderPlayer);
-                    attackerPlayer.AssignCity(city);
-                    // TODO: send player to end screen
-                    return true;
-                }
-            }
-            
+            Debug.Log("ATTACKING UNIT");
             bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
                 _hexGrid.GetUnitDictionary()[_goalHex]);
             if (!dead) return true;

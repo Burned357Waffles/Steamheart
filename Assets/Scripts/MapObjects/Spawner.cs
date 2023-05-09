@@ -15,6 +15,7 @@ namespace MapObjects
     public class Spawner : MonoBehaviour
     {
         [SerializeField] public GameObject unit;
+        [SerializeField] public GameObject NONE;
         [SerializeField] public GameObject meleeUnit;
         [SerializeField] public GameObject rangedUnit;
         [SerializeField] public GameObject airshipUnit;
@@ -29,8 +30,7 @@ namespace MapObjects
         private Hex.Hex _currentHex;
         private UnitMovement _hexMovement;
         private int _currentPlayer;
-        private Animation anim;
-        public Material lowPolyCharacterTexture;
+        private Animation _anim;
 
 
         private List<City> _cityList;
@@ -57,7 +57,7 @@ namespace MapObjects
             playerIndicator.text = _currentPlayer.ToString();
             unitTypeSelected = false;
             _cityList = new List<City>();
-            anim = gameObject.GetComponent<Animation>();
+            _anim = gameObject.GetComponent<Animation>();
         }
 
         private void Update()
@@ -77,7 +77,11 @@ namespace MapObjects
             _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
             _city = FindSelectedCity(_hexGrid.GetHexList()[_currentHexIndex]);
             if (_city == null) return;
-            if (_city.GetOwnerID() != _currentPlayer) return;
+            if (_city.GetOwnerID() != _currentPlayer)
+            {
+                _currentHexIndex = -1;
+                return;
+            }
             if (!_city.CanSpawnThisTurn) return;
             
             // bring up unit selection menu
@@ -90,25 +94,18 @@ namespace MapObjects
 
         private bool CheckIfCityOrButton(RaycastHit hit)
         {
-            if (!hit.transform.CompareTag("City"))
+            if (hit.collider.CompareTag("UnitSelectButton") ||
+                hit.transform.CompareTag("City"))
             {
-                //*
-                Debug.Log("exiting on city");
-                Button button = hit.transform.GetComponent<Button>();
-                Debug.Log(button.name);
-                if (button != null)
-                {
-                    Debug.Log("is button");
-                    return true;
-                }
-                
-                if (_unitSelectorPanel != null) _unitSelectorPanel.gameObject.SetActive(false);
-                Debug.Log("exiting on button");
-                //*/
-                return false;
+                Debug.Log("true");
+                return true;
             }
-            Debug.Log("is city");
-            return true;
+
+            if (_unitSelectorPanel != null) _unitSelectorPanel.gameObject.SetActive(false);
+            Debug.Log(hit.collider.tag);
+            Debug.Log("false");
+            
+            return false;   
         }
         
         public void AfterButtonClick()
@@ -134,6 +131,13 @@ namespace MapObjects
         /// </summary> ***********************************************
         private void SpawnUnit(City city, int ownerID)
         {
+            if (city.GetOwnerID() != _currentPlayer)
+            {
+                _currentHexIndex = -1;
+                _unitTypeSelector.ResetOnlyButtons();
+                return;
+            }
+            
             if (_hexGrid.GetUnitDictionary().ContainsKey(city.GetCityCenter()))
             {
                 _unitTypeSelector.ResetOnlyButtons();
@@ -141,7 +145,7 @@ namespace MapObjects
             }
             
             GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
-            anim.Play();
+            _anim.Play();
             Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID);
             newUnit.SetType(unit.name);
             _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
@@ -157,7 +161,7 @@ namespace MapObjects
         public void SetPlayer()
         {
             _currentPlayer++;
-            if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
+            if (_currentPlayer > _hexGrid.GetPlayerList().Count) _currentPlayer = 1;
             _unitMovement.SetPlayer(_currentPlayer);
             _endTurnEmitter.Play();
 

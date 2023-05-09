@@ -672,10 +672,9 @@ MonoBehaviour:
   ownedForestHex: {fileID: 8295349956468922480, guid: 8c775c9821c3bb843a17c8e431fe3b0e, type: 3}
   ownedMountainHex: {fileID: 7178512327020780823, guid: 5b596f4cdfd302646914080166682dec, type: 3}
   cityPrefab: {fileID: 8582613802384748761, guid: 7ad6273c25a2e6f4c8184850730195e7, type: 3}
-  mapRadius: 64
+  mapRadius: 15
   centerIslandRadius: 3
-  playerCount: 6
-  capitolDistance: 40
+  playerCount: 1
 --- !u!4 &250597339
 Transform:
   m_ObjectHideFlags: 0
@@ -3997,11 +3996,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4029184161240475156, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 120
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4029184161240475156, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 120
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4029184161240475156, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_LocalScale.x
@@ -4194,6 +4193,10 @@ PrefabInstance:
     - target: {fileID: 5698900105944475092, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_Color.r
       value: 0.09803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 5735542532286050306, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
+      propertyPath: m_Name
+      value: CurrentPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 5798819534027438457, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_Color.a
@@ -4788,6 +4791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unit: {fileID: 311624380264057446, guid: 186861921f4e23b4eb972e54e018189f, type: 3}
+  NONE: {fileID: 0}
   meleeUnit: {fileID: 311624380264057446, guid: c0986e2af6a835c428d1164716424063, type: 3}
   rangedUnit: {fileID: 311624380264057446, guid: a00fbb264ca264941b76855bc979b5d2, type: 3}
   airshipUnit: {fileID: 311624380264057446, guid: 4df28dfe96e618641a8d0be6957c650c, type: 3}
@@ -4795,7 +4799,6 @@ MonoBehaviour:
   playerIndicator: {fileID: 118560295}
   unitTypeSelected: 0
   citySpawnedThisTurn: 0
-  lowPolyCharacterTexture: {fileID: 0}
 --- !u!4 &1498733352
 Transform:
   m_ObjectHideFlags: 0

@@ -9669,7 +9669,7 @@ GameObject:
   - component: {fileID: 5514913264979506374}
   m_Layer: 5
   m_Name: hex (3)
-  m_TagString: Untagged
+  m_TagString: UnitSelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14728,7 +14728,7 @@ GameObject:
   - component: {fileID: 2000680246671020284}
   m_Layer: 5
   m_Name: Settler
-  m_TagString: Untagged
+  m_TagString: UnitSelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14860,7 +14860,7 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 32
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -14882,7 +14882,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 11
 --- !u!114 &2108286454405550508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24822,7 +24822,7 @@ GameObject:
   - component: {fileID: 7510441541423355403}
   m_Layer: 0
   m_Name: UnitMenu
-  m_TagString: Untagged
+  m_TagString: UnitSelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29873,7 +29873,7 @@ GameObject:
   - component: {fileID: 5342398668307322505}
   m_Layer: 5
   m_Name: hex (1)
-  m_TagString: Untagged
+  m_TagString: UnitSelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29954,7 +29954,7 @@ GameObject:
   - component: {fileID: 5319076751572715366}
   m_Layer: 5
   m_Name: Ranged
-  m_TagString: Untagged
+  m_TagString: UnitSelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30086,7 +30086,7 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 32
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -30108,7 +30108,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 11
 --- !u!114 &8852666526973994325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30267,7 +30267,7 @@ GameObject:
   - component: {fileID: 5969389022506027063}
   m_Layer: 5
   m_Name: Melee
-  m_TagString: Untagged
+  m_TagString: UnitSelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30399,7 +30399,7 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 32
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -30421,7 +30421,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 11
 --- !u!114 &402916591049091599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30540,7 +30540,7 @@ GameObject:
   - component: {fileID: 1303406587792566690}
   m_Layer: 5
   m_Name: hex (1)
-  m_TagString: Untagged
+  m_TagString: UnitSelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35531,7 +35531,7 @@ GameObject:
   - component: {fileID: 3554068065825231544}
   m_Layer: 5
   m_Name: Airship
-  m_TagString: Untagged
+  m_TagString: UnitSelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35663,7 +35663,7 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 32
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -35685,7 +35685,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 11
 --- !u!114 &2936957536850382991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40756,7 +40756,7 @@ GameObject:
   - component: {fileID: 1416731244085725924}
   m_Layer: 5
   m_Name: hex (2)
-  m_TagString: Untagged
+  m_TagString: UnitSelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

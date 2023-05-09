@@ -7,7 +7,6 @@ namespace UI.HUD
 {
     public class UnitProductionSelector : MonoBehaviour
     {
-        private static GameObject NONE;
         private static GameObject _meleeButton;
         private static GameObject _rangedButton;
         private static GameObject _airshipButton;
@@ -75,7 +74,7 @@ namespace UI.HUD
         
         public void ResetOnlyButtons()
         {
-            _spawner.unit = NONE;
+            _spawner.unit = _spawner.NONE;
             _meleeButton.GetComponent<Button>().interactable = true;
             _rangedButton.GetComponent<Button>().interactable = true;
             _airshipButton.GetComponent<Button>().interactable = true;
@@ -85,7 +84,7 @@ namespace UI.HUD
         
         public void ResetButtons()
         {
-            _spawner.unit = NONE;
+            _spawner.unit = _spawner.NONE;
             _meleeButton.GetComponent<Button>().interactable = true;
             _rangedButton.GetComponent<Button>().interactable = true;
             _airshipButton.GetComponent<Button>().interactable = true;

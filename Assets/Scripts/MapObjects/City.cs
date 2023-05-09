@@ -13,7 +13,7 @@ namespace MapObjects
     public class City
     {
         private Hex.Hex _center;
-        private readonly int _ownerID;
+        private int _ownerID;
         private bool _isCapitol;
         public int Health;
         public int Damage;
@@ -60,9 +60,18 @@ namespace MapObjects
         /// </summary> **********************************************
         private void SetOwnership()
         {
-            foreach (var key in _controlledHexDictionary.Keys)
+            foreach (Hex.Hex hex in _controlledHexes)
             {
-                key.SetOwnerID(_ownerID);
+                hex.SetOwnerID(_ownerID);
+            }
+        }
+        
+        public void SetOwnership(int id)
+        {
+            _ownerID = id;
+            foreach (Hex.Hex hex in _controlledHexes)
+            {
+                hex.SetOwnerID(id);
             }
         }
 
@@ -72,5 +81,6 @@ namespace MapObjects
         public List<Hex.Hex> GetCityHexes(){ return _controlledHexes; }
         public Dictionary<Hex.Hex, int> GetCityDictionary() { return _controlledHexDictionary; }
         public Hex.Hex GetCityCenter() { return _center; }
+        public bool IsCapitol() { return _isCapitol; }
     }
 }
