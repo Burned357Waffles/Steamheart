@@ -30,8 +30,8 @@ namespace MapObjects
             _cityRadius = 4;
             _ownerID = ownerID;
             _isCapitol = isCapitol;
-            Health = 6; // we can play with values
-            Damage = 10; // we can play with values
+            Health = 25; // we can play with values
+            Damage = 5; // we can play with values
             _controlledHexes.Add(_center);
             _hexGrid = Object.FindObjectOfType<HexGrid>();
             CreateCity();
