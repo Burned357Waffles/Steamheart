@@ -23,16 +23,8 @@ public class ResponseLeave extends GameResponse {
         GamePacket packet = new GamePacket(responseCode);
         packet.addInt32(player.getID());
 
-        GameServer gs = GameServer.getInstance();
-        List<Player> activePlayers = gs.getActivePlayers(); 
-      
-        for(Player p : activePlayers) {
-            if(p.getID() == player.getID()) 
-                gs.removeActivePlayer(p.getID()); 
-        }
+        GameServer.getInstance().removeActivePlayer(player.getID());
 
-        Log.printf("Player with id %d has left.", player.getID());
-        player.setReadyStatusOn(false);
         return packet.getBytes();
     }
 

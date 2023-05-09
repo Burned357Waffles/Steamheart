@@ -2,13 +2,15 @@ package networking.request;
 
 // Java Imports
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 // Other Imports
 import core.GameServer;
 import core.NetworkManager;
 import model.Player;
+import networking.response.GameResponse;
 import networking.response.ResponseJoin;
-import networking.response.ResponseName;
 import utility.DataReader;
 import utility.Log;
 
@@ -19,11 +21,9 @@ import utility.Log;
 
 public class RequestJoin extends GameRequest {
     // Data
-    private Player player;
     private String username;
 
     // Responses
-    private ResponseJoin response;
 
 
     @Override
@@ -34,19 +34,29 @@ public class RequestJoin extends GameRequest {
     @Override
     public void doBusiness() throws Exception {
         GameServer server = GameServer.getInstance();
-        int id = server.getID();
-        if (id == 0) {
-            response.status = 1;
-            responses.add(response);
+        int newID = server.getID();
+        if (newID == 0) {
+            responses.add(new ResponseJoin());
             return;
         }
-        player = new Player(id, username);
-        server.setActivePlayer(player);
-        player.setClient(client);
-        client.setPlayer(player);
-        
+        Player joiningPlayer = new Player(newID, username);
+        server.setActivePlayer(joiningPlayer);
+        joiningPlayer.setClient(client);
+        client.setPlayer(joiningPlayer);
+
+        ResponseJoin newPlayerResponse = new ResponseJoin(joiningPlayer);
+        responses.add(newPlayerResponse);
+        NetworkManager.addResponseForAllOnlinePlayers(newID, newPlayerResponse);
+        for (Player player : server.getActivePlayers()) {
+            if (player.getID() != newID) {
+                responses.add(new ResponseJoin(player));
+            }
+        }
+        System.out.println(joiningPlayer);
 
     }
+}
+
 
 //        GameServer gs = GameServer.getInstance();
 //        int id = gs.getID();
@@ -71,4 +81,4 @@ public class RequestJoin extends GameRequest {
 //            responseJoin.setStatus((short) 1);
 //        }
 //    }
-}
+

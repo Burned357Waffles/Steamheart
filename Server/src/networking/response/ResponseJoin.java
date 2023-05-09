@@ -18,12 +18,27 @@ public class ResponseJoin extends GameResponse {
     
     public ResponseJoin() {
         responseCode = Constants.SMSG_JOIN;
+        status = 1;
+    }
+
+    public ResponseJoin(Player player) {
+        responseCode = Constants.SMSG_JOIN;
+        status = 0;
+        this.player = player;
     }
 
     @Override
     public byte[] constructResponseInBytes() {
-
+        GamePacket packet = new GamePacket(responseCode);
+        packet.addShort16(status);
+        if (status == 0) {
+            packet.addInt32(player.getID());
+            packet.addString(player.getName());
+        }
+        return packet.getBytes();
     }
+}
+
 //        GamePacket packet = new GamePacket(responseCode);
 //        packet.addShort16(status);
 //        if (status == 0) {
@@ -58,4 +73,3 @@ public class ResponseJoin extends GameResponse {
 //    public void setPlayer(Player player) {
 //        this.player = player;
 //    }
-}

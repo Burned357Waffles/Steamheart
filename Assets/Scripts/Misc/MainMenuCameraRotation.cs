@@ -4,7 +4,7 @@ namespace Misc
 {
     public class MainMenuCameraRotation : MonoBehaviour
     {
-        public float rotationSpeed = 0.25f;
+        public float rotationSpeed = 0.05f;
         private Vector3 pivotPoint = Vector3.zero;
         private float distance = 6.0f;
         private float height = 3.0f;

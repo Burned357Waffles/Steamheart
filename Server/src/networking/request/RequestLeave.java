@@ -10,23 +10,18 @@ import core.NetworkManager;
 
 public class RequestLeave extends GameRequest {
     // Responses
-    private ResponseLeave responseLeave;
-
-    public RequestLeave() {
-        responses.add(responseLeave = new ResponseLeave());
-    }
 
     @Override
     public void parse() throws IOException {
-    
+
     }
 
     @Override
     public void doBusiness() throws Exception {
+        ResponseLeave response = new ResponseLeave();
         Player player = client.getPlayer();
-
-        responseLeave.setPlayer(player);
-
-        NetworkManager.addResponseForAllOnlinePlayers(player.getID(), responseLeave);
+        response.setPlayer(player);
+        responses.add(response);
+        NetworkManager.addResponseForAllOnlinePlayers(player.getID(), response);
     }
 }

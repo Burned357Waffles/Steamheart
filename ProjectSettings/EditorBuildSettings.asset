@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Network Test.unity
+    guid: e10a2e1934ecf4c1bb8e5776e5643e59
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000

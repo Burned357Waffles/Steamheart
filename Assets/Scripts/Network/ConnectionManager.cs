@@ -24,17 +24,10 @@ public class ConnectionManager : MonoBehaviour
 			Debug.Log("Already Connected");
 			return;
 		}
-		try
-		{
-			mySocket = new TcpClient (Constants.REMOTE_HOST, Constants.REMOTE_PORT);
-			theStream = mySocket.GetStream();
-			socketReady = true;
-			Debug.Log("Connected");
-		}
-		catch (Exception e)
-		{
-			Debug.Log("Socket error: " + e);
-		}
+		mySocket = new TcpClient (Constants.REMOTE_HOST, Constants.REMOTE_PORT);
+		theStream = mySocket.GetStream();
+		socketReady = true;
+		Debug.Log("Connected");
 	}
 
 	public void readSocket()

@@ -5,7 +5,8 @@
 **/.vscode/
 .vsconfig
 .idea
-UserSettings/
+/[Uu]ser[Ss]ettings/
+.DS_Store
 
 ################
 ### </other> ###
@@ -115,4 +116,8 @@ fmod.log
 ###############
 ### </RIDER> ###
 ###############
+UserSettings/Layouts/default-2022.dwlt
+UserSettings/Layouts/default-2022.dwlt
+UserSettings/Layouts/default-2022.dwlt
+UserSettings/Layouts/default-2022.dwlt
 UserSettings/Layouts/default-2022.dwlt
