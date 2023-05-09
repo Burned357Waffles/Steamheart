@@ -33,7 +33,6 @@ namespace UI.HUD
         public void SetUnitTypeMeleeButton() 
         {
             _spawner.unit = _spawner.meleeUnit;
-            if (_rangedButton == null) Debug.Log("NULLLLLL");
             _rangedButton.GetComponent<Button>().interactable = false;
             _airshipButton.GetComponent<Button>().interactable = false;
             _settlerButton.GetComponent<Button>().interactable = false;

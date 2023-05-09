@@ -1,5 +1,4 @@
 ﻿using Hex;
-using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,11 +17,9 @@ namespace UI.HUD
 
         private HexGrid _hexGrid;
         private HexPlacer _hexPlacer;
-        private int _currentPlayer;
     
         private void Start()
         {
-            _currentPlayer = 1;
             _hexGrid = FindObjectOfType<HexGrid>();
             _hexPlacer = FindObjectOfType<HexPlacer>();
         }
@@ -71,31 +68,6 @@ namespace UI.HUD
             basicButton.GetComponent<Button>().interactable = true;
             forestButton.GetComponent<Button>().interactable = true;
             mountainButton.GetComponent<Button>().interactable = true;
-        }
-
-        public void SetNextPlayer()
-        {
-            _currentPlayer++;
-            if (_currentPlayer > _hexGrid.GetPlayerList().Count) _currentPlayer = 1;
-            _hexPlacer.SetPlayer(_currentPlayer);
-            Debug.Log("Player count = " + _hexGrid.playerCount);
-            foreach (Player player in _hexGrid.GetPlayerList())
-            {
-                Debug.Log("Player " + player.GetPlayerID() + " has " + player.GetOwnedCities().Count +
-                          " cities and " + player.GetNumCapitols() + " capitols");
-                if (player.GetNumCapitols() != _hexGrid.playerCount) continue;
-                Debug.Log("Player " + player.GetPlayerID() + " has won!");
-                #if UNITY_EDITOR
-                {
-                    UnityEditor.EditorApplication.isPlaying = false;
-                }
-                #else 
-		        {
-			        Application.Quit();
-		        }
-                #endif
-
-            }
         }
     }
 }

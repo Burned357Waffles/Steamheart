@@ -17,6 +17,7 @@ namespace MapObjects
         private bool _isCapitol;
         public int Health;
         public int Damage;
+        public int AttackRadius;
         private readonly int _cityRadius;
         private readonly HexGrid _hexGrid;
         public bool CanSpawnThisTurn;
@@ -32,6 +33,7 @@ namespace MapObjects
             _isCapitol = isCapitol;
             Health = 25; // we can play with values
             Damage = 5; // we can play with values
+            AttackRadius = 2;
             _controlledHexes.Add(_center);
             _hexGrid = Object.FindObjectOfType<HexGrid>();
             CreateCity();

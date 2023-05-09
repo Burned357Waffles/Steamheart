@@ -6,22 +6,30 @@
     /// </summary> ***********************************************************
     public static class Combat
     {
-        private static Unit _attacker;
+        private static Unit _attackerUnit;
         private static Unit _defenderUnit;
+        private static City _attackerCity;
         private static City _defenderCity;
         
         public static bool InitiateCombat(Unit attacker, Unit defender)
         {
-            _attacker = attacker;
+            _attackerUnit = attacker;
             _defenderUnit = defender;
-            return _attacker.GetOwnerID() != _defenderUnit.GetOwnerID() && UnitFight();
+            return _attackerUnit.GetOwnerID() != _defenderUnit.GetOwnerID() && UnitFight();
         }
         
         public static bool InitiateCombat(Unit attacker, City defender)
         {
-            _attacker = attacker;
+            _attackerUnit = attacker;
             _defenderCity = defender;
-            return _attacker.GetOwnerID() != _defenderCity.GetOwnerID() && CityFight();
+            return _attackerUnit.GetOwnerID() != _defenderCity.GetOwnerID() && CityFight();
+        }
+        
+        public static bool InitiateCombat(City attacker, Unit defender)
+        {
+            _attackerCity = attacker;
+            _defenderUnit = defender;
+            return _attackerUnit.GetOwnerID() != _defenderCity.GetOwnerID() && CityFight();
         }
 
         /// <summary> ***********************************************
@@ -31,10 +39,9 @@
         /// </summary> **********************************************
         private static bool UnitFight()
         {
-            if (_attacker.Damage >= _defenderUnit.Health) return true;
+            if (_attackerUnit.Damage >= _defenderUnit.Health) return true;
 
-            _defenderUnit.Health -= _attacker.Damage;
-            _attacker.Health -= _defenderUnit.Damage;
+            _defenderUnit.Health -= _attackerUnit.Damage;
             return false;
         }
         
@@ -45,10 +52,9 @@
         /// </summary> **********************************************
         private static bool CityFight()
         {
-            if (_attacker.Damage >= _defenderCity.Health) return true;
+            if (_attackerUnit.Damage >= _defenderCity.Health) return true;
 
-            _defenderCity.Health -= _attacker.Damage;
-            _attacker.Health -= _defenderCity.Damage;
+            _defenderCity.Health -= _attackerUnit.Damage;
             return false;
         }
     }

@@ -49,7 +49,7 @@ namespace MapObjects
                 _unit = _hexGrid.GetUnitDictionary()[_selectedPosition];
                 _currentPlayer = _spawner.GetCurrentPlayer();
 
-                Debug.Log("unit id: " + _unit.GetOwnerID() + "current: " + _currentPlayer);
+                Debug.Log("unit id: " + _unit.GetOwnerID() + " current: " + _currentPlayer);
                 if (_unit.GetOwnerID() != _currentPlayer)
                 {
                     Debug.Log("not your unit");

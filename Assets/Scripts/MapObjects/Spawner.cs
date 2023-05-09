@@ -20,10 +20,10 @@ namespace MapObjects
         [SerializeField] public GameObject rangedUnit;
         [SerializeField] public GameObject airshipUnit;
         [SerializeField] public GameObject settlerUnit;
-        [SerializeField] public TextMeshProUGUI playerIndicator;
+        
         
         public bool unitTypeSelected;
-        public bool citySpawnedThisTurn;
+        //public bool citySpawnedThisTurn;
         
         private Transform _unitSelectorPanel;
         private HexGrid _hexGrid;
@@ -40,7 +40,6 @@ namespace MapObjects
         private int _currentHexIndex;
 
         private Camera _camera;
-        private FMODUnity.StudioEventEmitter _endTurnEmitter;
         private FMODUnity.StudioEventEmitter _selectEmitter;
 
         private void Start()
@@ -51,10 +50,8 @@ namespace MapObjects
             _currentHexIndex = -1;
             _unitMovement = FindObjectOfType<UnitMovement>();
             _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
-            _endTurnEmitter = GameObject.Find("EndTurn").GetComponent<FMODUnity.StudioEventEmitter>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
             _currentPlayer = 1;
-            playerIndicator.text = _currentPlayer.ToString();
             unitTypeSelected = false;
             _cityList = new List<City>();
             _anim = gameObject.GetComponent<Animation>();
@@ -158,15 +155,7 @@ namespace MapObjects
         /// This function is called by a the end turn button and
         /// cycles the unit controller to the next player.
         /// </summary> **********************************************
-        public void SetPlayer()
-        {
-            _currentPlayer++;
-            if (_currentPlayer > _hexGrid.GetPlayerList().Count) _currentPlayer = 1;
-            _unitMovement.SetPlayer(_currentPlayer);
-            _endTurnEmitter.Play();
-
-            playerIndicator.text = _currentPlayer.ToString();
-        }
+        public void SetPlayer(int id) { _currentPlayer = id; }
         
         /// <summary> ***********************************************
         /// Getter for _currentPlayer.

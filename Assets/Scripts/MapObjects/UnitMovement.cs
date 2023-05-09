@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Hex;
 using Misc;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace MapObjects
@@ -222,7 +221,8 @@ namespace MapObjects
                     if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
                         if (_hexGrid.GetUnitDictionary()[_currentHex] == _hexGrid.GetUnitDictionary()[_goalHex])
                             return;
-                    if (!IsTargetInRange(_hexGrid.GetUnitDictionary()[_currentHex].AttackRadius)) return;
+                    if (!IsTargetInRange(_currentHex, _goalHex, _hexGrid.GetUnitDictionary()[_currentHex].AttackRadius))
+                        return;
                     
                     doDeplete = true;
                     // if target is still alive
@@ -298,9 +298,9 @@ namespace MapObjects
         /// This function compares the distance from attacker to
         /// the target. Returns true if target is in range.
         /// </summary> **********************************************
-        private bool IsTargetInRange(int range)
+        private bool IsTargetInRange(Hex.Hex current, Hex.Hex goal, int range)
         {
-            Vector3 resultVector = _currentHex.GetVectorCoordinates() - _goalHex.GetVectorCoordinates();
+            Vector3 resultVector = current.GetVectorCoordinates() - goal.GetVectorCoordinates();
             int distance = (int)(Math.Abs(resultVector.x) + Math.Abs(resultVector.y) + Math.Abs(resultVector.z)) / 2;
 
             return distance <= range;
@@ -340,17 +340,32 @@ namespace MapObjects
             if (_hexGrid.GetCityAt(_goalHex) == null) return false;
             
             Debug.Log("ATTACKING CITY");
+            Unit attacker = _hexGrid.GetUnitDictionary()[_currentHex];
             City city = _hexGrid.GetCityAt(_goalHex);
             if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
             {
                 if (DoCombat()) return true;
             }
             
-            bool taken = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
-                city);
-            if (!taken) return false;
+            bool taken = Combat.InitiateCombat(attacker, city);
+            if (!taken)
+            {
+                Debug.Log("Defender Not Dead");
+                if (IsTargetInRange(_goalHex, _currentHex, city.AttackRadius))
+                    Combat.InitiateCombat(city, attacker);
+                
+                Debug.Log("Attacker Health: " + attacker.Health);
+                if (attacker.Health > 0) return false;
+                
+                Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
+                _hexGrid.GetUnitObjectDictionary().Remove(attacker);
+                _hexGrid.GetUnitDictionary().Remove(_currentHex);
+
+                return false;
+            }
+            
             Debug.Log("TAKEN");
-            Player attackerPlayer = _hexGrid.FindPlayerOfID(_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID());
+            Player attackerPlayer = _hexGrid.FindPlayerOfID(attacker.GetOwnerID());
             Player defenderPlayer = _hexGrid.FindPlayerOfID(city.GetOwnerID());
             defenderPlayer.RemoveCity(city);
             attackerPlayer.AssignCity(city);
@@ -369,7 +384,6 @@ namespace MapObjects
             // TODO: send player to end screen
 
             return true;
-
         }
 
         private bool DoCombat()
@@ -378,40 +392,33 @@ namespace MapObjects
                 !_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
                 return true;
 
-            if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer) return true;
+            Unit attacker = _hexGrid.GetUnitDictionary()[_currentHex];
+            Unit defender = _hexGrid.GetUnitDictionary()[_goalHex];
+            
+            //if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer) return true;
 
             Debug.Log("ATTACKING UNIT");
-            bool dead = Combat.InitiateCombat(_hexGrid.GetUnitDictionary()[_currentHex],
-                _hexGrid.GetUnitDictionary()[_goalHex]);
+            bool dead = Combat.InitiateCombat(attacker, defender);
             if (!dead)
             {
-                if (_hexGrid.GetUnitDictionary()[_currentHex].Health <= 0)
-                {
-                    Destroy(_hexGrid.GetUnitObjectDictionary()[_hexGrid.GetUnitDictionary()[_currentHex]]);
-                    _hexGrid.GetUnitObjectDictionary().Remove(_hexGrid.GetUnitDictionary()[_currentHex]);
-                    _hexGrid.GetUnitDictionary().Remove(_currentHex);
-                }
+                Debug.Log("Defender Not Dead");
+                if (IsTargetInRange(_goalHex, _currentHex, defender.AttackRadius))
+                    Combat.InitiateCombat(defender, attacker);
                 
+                Debug.Log("Attacker Health: " + attacker.Health);
+                if (attacker.Health > 0) return true;
+                
+                Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
+                _hexGrid.GetUnitObjectDictionary().Remove(attacker);
+                _hexGrid.GetUnitDictionary().Remove(_currentHex);
+
                 return true;
             }
-            
-            Destroy(_hexGrid.GetUnitObjectDictionary()[_hexGrid.GetUnitDictionary()[_goalHex]]);
-            _hexGrid.GetUnitObjectDictionary().Remove(_hexGrid.GetUnitDictionary()[_goalHex]);
+            Destroy(_hexGrid.GetUnitObjectDictionary()[defender]);
+            _hexGrid.GetUnitObjectDictionary().Remove(defender);
             _hexGrid.GetUnitDictionary().Remove(_goalHex);
             
             return false;
-        }
-
-        /// <summary> ***********************************************
-        /// This function sets all unit movement points back to their
-        /// base values.
-        /// </summary> **********************************************
-        public void ResetUnitMovementPoints()
-        {
-            foreach (Unit unit in _hexGrid.GetUnitDictionary().Values)
-            {
-                unit.ResetMovementPoints();
-            }
         }
     }
 }
