@@ -4673,10 +4673,10 @@ PrefabInstance:
       addedObject: {fileID: 2024922500}
     - targetCorrespondingSourceObject: {fileID: 4652434950447279089, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1982809504}
+      addedObject: {fileID: 1982809503}
     - targetCorrespondingSourceObject: {fileID: 4652434950447279089, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1982809503}
+      addedObject: {fileID: 1982809504}
     - targetCorrespondingSourceObject: {fileID: 4652434950447279089, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1982809505}
@@ -6259,11 +6259,11 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: -887211359
-      Data2: 1157772712
-      Data3: 1313119630
-      Data4: -1754666789
-    Path: event:/SFX/UI Click
+      Data1: -945742670
+      Data2: 1084793453
+      Data3: -1285547633
+      Data4: -1124955573
+    Path: event:/SFX/End Turn
   Event: 
   PlayEvent: 0
   StopEvent: 0

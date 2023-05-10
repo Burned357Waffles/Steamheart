@@ -344,7 +344,7 @@ namespace MapObjects
             City city = _hexGrid.GetCityAt(_goalHex);
             if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
             {
-                if (DoCombat()) return true;
+                return DoCombat(); //TODO: return after attack
             }
             
             bool taken = Combat.InitiateCombat(attacker, city);
