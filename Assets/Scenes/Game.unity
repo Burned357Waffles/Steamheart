@@ -2200,7 +2200,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 406878860913710650, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_Type
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 406878860913710650, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_Sprite
@@ -2593,6 +2593,10 @@ PrefabInstance:
     - target: {fileID: 5545963391333207045, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5698900105944475092, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
+      propertyPath: m_Type
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5698900105944475092, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_Color.b

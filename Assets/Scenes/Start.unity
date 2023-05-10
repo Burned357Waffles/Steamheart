@@ -859,6 +859,10 @@ PrefabInstance:
       propertyPath: m_ReferenceResolution.y
       value: 1080
       objectReference: {fileID: 0}
+    - target: {fileID: 3860332567965825986, guid: cab0a67969da89f4480793de4699a2d3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Game
+      objectReference: {fileID: 0}
     - target: {fileID: 7885078038621414019, guid: cab0a67969da89f4480793de4699a2d3, type: 3}
       propertyPath: m_Enabled
       value: 0
