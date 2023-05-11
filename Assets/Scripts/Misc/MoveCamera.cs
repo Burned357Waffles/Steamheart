@@ -47,7 +47,7 @@ namespace Misc
         public void CenterCamera(Vector3 tPos)
         {
             Vector3 finalPos = new Vector3(tPos.x, transform.position.y, tPos.z);
-            transform.position = finalPos;
+            newPosition = finalPos;
         }
         
         public void CenterCamera(GameObject obj)
