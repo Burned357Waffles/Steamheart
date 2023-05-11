@@ -44,15 +44,15 @@ namespace Misc
             HandleMouseInput();
         }
 
-        public void CenterCameraToWorldPosition(Vector3 tPos)
+        public void CenterCamera(Vector3 tPos)
         {
 
         }
         
-        public void CenterCameraToObject(GameObject obj)
+        public void CenterCamera(GameObject obj)
         {
             Vector3 objPos = obj.transform.position;
-            CenterCameraToWorldPosition(objPos);
+            CenterCamera(objPos);
         }
 
         private void HandleMouseInput()
