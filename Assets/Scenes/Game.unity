@@ -664,10 +664,8 @@ MonoBehaviour:
   ownedBasicHex: {fileID: 6464097055016101987, guid: 8a957bc949677714abdb3e2ff04f97ab, type: 3}
   ownedForestHex: {fileID: 8295349956468922480, guid: 8c775c9821c3bb843a17c8e431fe3b0e, type: 3}
   ownedMountainHex: {fileID: 7178512327020780823, guid: 5b596f4cdfd302646914080166682dec, type: 3}
-  cityPrefab: {fileID: 8582613802384748761, guid: 60c6a221295045a4580a4aad123da22d, type: 3}
   ownedCityPrefab: {fileID: 8582613802384748761, guid: 7ad6273c25a2e6f4c8184850730195e7, type: 3}
   CameraRig: {fileID: 1290427848}
-  endTurn: {fileID: 543008933}
   mapRadius: 15
   centerIslandRadius: 3
   playerCount: 1

@@ -29,7 +29,7 @@ namespace Hex
         [SerializeField] public GameObject ownedForestHex;
         [SerializeField] public GameObject ownedMountainHex;
 
-        [SerializeField] public GameObject cityPrefab;
+        //[SerializeField] public GameObject cityPrefab;
         [SerializeField] public GameObject ownedCityPrefab;
 
         [SerializeField] public GameObject CameraRig;

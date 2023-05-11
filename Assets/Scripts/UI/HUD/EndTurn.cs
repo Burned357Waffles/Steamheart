@@ -41,12 +41,12 @@ namespace UI.HUD
             _hexPrefabsDict.Add(_hexGrid.ownedBasicHex, _hexGrid.basicHex);
             _hexPrefabsDict.Add(_hexGrid.ownedForestHex, _hexGrid.forestHex);
             _hexPrefabsDict.Add(_hexGrid.ownedMountainHex, _hexGrid.mountainHex);
-            _hexPrefabsDict.Add(_hexGrid.ownedCityPrefab, _hexGrid.cityPrefab);
+            _hexPrefabsDict.Add(_hexGrid.ownedCityPrefab, _hexGrid.ownedCityPrefab);
             
             _hexTypeDict.Add(Hex.Hex.HexType.Basic, _hexGrid.basicHex);
             _hexTypeDict.Add(Hex.Hex.HexType.Forest, _hexGrid.forestHex);
             _hexTypeDict.Add(Hex.Hex.HexType.Mountain, _hexGrid.mountainHex);
-            _hexTypeDict.Add(Hex.Hex.HexType.Building, _hexGrid.cityPrefab);
+            _hexTypeDict.Add(Hex.Hex.HexType.Building, _hexGrid.ownedCityPrefab);
             //ChangeViews();
         }
 
