@@ -4,6 +4,7 @@ using MapObjects;
 using Misc;
 using UI.HUD;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Hex
@@ -29,6 +30,7 @@ namespace Hex
         [SerializeField] public GameObject ownedMountainHex;
 
         [SerializeField] public GameObject cityPrefab;
+        [SerializeField] public GameObject ownedCityPrefab;
 
         [SerializeField] public GameObject CameraRig;
 
@@ -141,7 +143,7 @@ namespace Hex
         /// <summary> ***********************************************
         /// Runs once on startup. This is from MonoBehavior.
         /// </summary> **********************************************
-        private void Start()
+        private void Awake()
         {
             playerCount = MatchSettings.GetPlayerCount();
             mapRadius = MatchSettings.GetMapSize();
@@ -227,7 +229,7 @@ namespace Hex
         /// It takes in coordinates and a boolean to signify if
         /// air hexes will be generated.
         /// </summary> **********************************************
-        private void GetHexType(Hex hex, bool hasAir)
+        public void GetHexType(Hex hex, bool hasAir)
         {
             // air, basic, forest, mountain
             int[] typeCount = new int[4];
@@ -281,7 +283,7 @@ namespace Hex
         /// hexes. It returns the new Vector3 with the changed
         /// y-value.
         /// </summary> **********************************************
-        private static Vector3 AddHeight(Vector3 hex)
+        public static Vector3 AddHeight(Vector3 hex)
         {
             float randomOffset = Random.Range(0, 8);
             hex.y += randomOffset/100;
@@ -334,7 +336,7 @@ namespace Hex
                 Destroy(_gameObjects[i]);
                 
                 // TODO: City instantiated here
-                GameObject cityObject = Instantiate(cityPrefab,
+                GameObject cityObject = Instantiate(ownedCityPrefab,
                     cityCenter.WorldPosition,
                     Quaternion.identity,
                     this.transform);

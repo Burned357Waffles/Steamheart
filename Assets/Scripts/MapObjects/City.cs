@@ -53,6 +53,11 @@ namespace MapObjects
             {
                 _hexGrid.HexRing(center.GetVectorCoordinates(), i, _controlledHexDictionary);
             }
+
+            foreach (Hex.Hex hex in _controlledHexDictionary.Keys)
+            {
+                _controlledHexes.Add(hex);
+            }
             SetOwnership();
         }
         
