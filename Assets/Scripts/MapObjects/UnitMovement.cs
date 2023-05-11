@@ -263,7 +263,7 @@ namespace MapObjects
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
                 // TODO: add variables to network
-                MoveUnit();
+                if (!MoveUnit()) return;
                 
                 if (doDeplete) _selectedUnit.DepleteMovementPoints();
                 _currentHexIndex = _goalHexIndex;
@@ -310,8 +310,21 @@ namespace MapObjects
         /// the dictionary that holds the relation between the Hex
         /// and the Unit.
         /// </summary> **********************************************
-        private void MoveUnit()
+        private bool MoveUnit()
         {
+            if ((_currentHex.GetHexType() == Hex.Hex.HexType.Forest || _goalHex.GetHexType() == Hex.Hex.HexType.Forest)
+                && _selectedUnit.GetUnitType() != Unit.UnitType.Airship)
+            {
+                if (_selectedUnit.GetCurrentMovementPoints() < 2)
+                {
+                    Debug.Log("returning on forest");
+                    return false;
+                }
+                Debug.Log("using movement on forest");
+                _selectedUnit.UseMovementPoints();
+            }
+                
+            
             _selectedUnit.Q = _goalHex.Q;
             _selectedUnit.R = _goalHex.R;
             _selectedUnit.S = _goalHex.S;
@@ -322,9 +335,7 @@ namespace MapObjects
             _hexGrid.GetUnitDictionary().Remove(_currentHex);
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
             _selectedUnit.UseMovementPoints();
-            if ((_currentHex.GetHexType() == Hex.Hex.HexType.Forest || _goalHex.GetHexType() == Hex.Hex.HexType.Forest) 
-                && _selectedUnit.GetUnitType() != Unit.UnitType.Airship) 
-                _selectedUnit.UseMovementPoints();
+            return true;
         }
 
         /// <summary> ***********************************************

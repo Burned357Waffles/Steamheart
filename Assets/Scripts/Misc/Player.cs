@@ -11,6 +11,9 @@ namespace Misc
     public class Player
     {
         public bool IsAlive;
+        public int TotalIronCount;
+        public int TotalWoodCount;
+        
         private readonly int _playerID;
         private int _ownedCapitols;
         private List<City> _ownedCities = new List<City>();

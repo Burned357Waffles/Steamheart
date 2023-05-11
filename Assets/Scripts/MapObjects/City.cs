@@ -14,13 +14,15 @@ namespace MapObjects
     {
         private Hex.Hex _center;
         private int _ownerID;
-        private bool _isCapitol;
+        private readonly bool _isCapitol;
         public int Health;
-        public int Damage;
+        public readonly int Damage;
         public readonly int AttackRadius;
         private readonly int _cityRadius;
         private readonly HexGrid _hexGrid;
         public bool CanSpawnThisTurn;
+        public int IronCount;
+        public int WoodCount;
 
         private readonly Dictionary<Hex.Hex, int> _controlledHexDictionary = new Dictionary<Hex.Hex, int>();
         private readonly List<Hex.Hex> _controlledHexes = new List<Hex.Hex>();

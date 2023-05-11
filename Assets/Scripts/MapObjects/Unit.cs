@@ -21,7 +21,9 @@ namespace MapObjects
         private readonly int _ownerID;
         private UnitType _unitType;
         private int _baseMovementPoints;
-        private int _currentMovementPoints; 
+        private int _currentMovementPoints;
+        private int _ironCost;
+        private int _woodCost;
 
         public Unit(int q, int r, int ownerID)
         {
@@ -60,6 +62,8 @@ namespace MapObjects
             Health = stats[1];
             _baseMovementPoints = stats[2];
             AttackRadius= stats[3];
+            _ironCost = stats[4];
+            _woodCost = stats[5];
         }
         public enum  UnitType
         {

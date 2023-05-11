@@ -136,6 +136,24 @@ namespace UI.HUD
             }
             
         }
+
+        private void AccumulateMaterials()
+        {
+            Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
+            foreach (City city in player.GetOwnedCities())
+            {
+                foreach (Hex.Hex hex in city.GetCityHexes())
+                {
+                    if (hex.GetHexType() == Hex.Hex.HexType.Forest)
+                        city.WoodCount++;
+                    else if (hex.GetHexType() == Hex.Hex.HexType.Mountain)
+                        city.IronCount++;
+                }
+
+                player.TotalWoodCount += city.WoodCount;
+                player.TotalIronCount += city.IronCount;
+            }
+        }
         
         public void ProcessEndTurn()
         {
@@ -144,6 +162,7 @@ namespace UI.HUD
             ResetUnitMovementPoints();
             //ChangeViews();
             AdvancePlayer();
+            AccumulateMaterials();
             _hexTypeSelector.ResetPlacementCount();
             CheckForWin();
         }
