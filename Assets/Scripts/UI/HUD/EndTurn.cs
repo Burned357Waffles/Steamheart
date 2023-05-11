@@ -18,6 +18,7 @@ namespace UI.HUD
         private int _currentPlayer;
         private UnitMovement _unitMovement;
         private FMODUnity.StudioEventEmitter _endTurnEmitter;
+        private MoveCamera _cameraRig;
 
         private void Start()
         {
@@ -28,6 +29,7 @@ namespace UI.HUD
             _spawner = FindObjectOfType<Spawner>();
             _unitMovement = FindObjectOfType<UnitMovement>();
             _endTurnEmitter = GameObject.Find("EndTurnButton").GetComponent<FMODUnity.StudioEventEmitter>();
+            _cameraRig = FindObjectOfType<MoveCamera>();
             playerIndicator.text = _currentPlayer.ToString();
         }
 
@@ -95,8 +97,16 @@ namespace UI.HUD
             //HealCity(); 
             ResetUnitMovementPoints();
             AdvancePlayer();
+            CenterCameraToPlayerCapital();
             _hexTypeSelector.ResetPlacementCount();
             CheckForWin();
+        }
+
+        private void CenterCameraToPlayerCapital()
+        {
+            Player player = _hexGrid.GetPlayerList().Find(x => x.GetPlayerID() == _currentPlayer);
+            Vector3 capitalPosition = player.GetOwnedCities().Find(x => x.IsCapitol()).GetCityCenter().WorldPosition;
+            _cameraRig.CenterCamera(capitalPosition);
         }
     }
 }
