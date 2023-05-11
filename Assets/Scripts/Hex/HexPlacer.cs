@@ -16,7 +16,7 @@ namespace Hex
     
         public int placementCount;
 
-        private int _playerID;
+        private int _currentPlayer;
         private HexGrid _hexGrid;
         private UnitMovement _unitMovement;
         private Camera _camera;
@@ -25,7 +25,7 @@ namespace Hex
 
         public void SetPlayer(int id)
         {
-            _playerID = id;
+            _currentPlayer = id;
         }
 
         private void Start()
@@ -34,7 +34,7 @@ namespace Hex
             _camera = Camera.main;
             _hexGrid = GameObject.FindObjectOfType<HexGrid>();
             _unitMovement = FindObjectOfType<UnitMovement>();
-            _playerID = 1;
+            SetPlayer(1);
         }
 
         private void Update()
@@ -57,11 +57,51 @@ namespace Hex
                 int hexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
                 if (hexIndex < 0) return;
                 
-                if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID)) return;
+                if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_currentPlayer)) return;
+                if (!SelectedTileIsNeighbor(hexIndex))
+                {
+                    if (!CheckForUnit(hexIndex)) return;
+                }
+                
+                Debug.Log("got through");
                 if (!PlacementCount(hexIndex)) return;
                 _unitMovement.SetCurrentIndex(-1);
                 ConvertHex(hexIndex);
             }
+        }
+
+        private bool SelectedTileIsNeighbor(int hexIndex)
+        {
+            Hex selectedHex = _hexGrid.GetHexList()[hexIndex];
+            for (int j = 0; j < 6; j++)
+            {
+                Vector3 neighbor = HexGrid.HexNeighbor(selectedHex.GetVectorCoordinates(), j);
+                Debug.Log(_hexGrid.GetHexAt(neighbor).GetOwnerID());
+                if (_hexGrid.GetHexAt(neighbor).GetOwnerID() == _currentPlayer )
+                {
+                    Debug.Log("found hex");
+                    return true;
+                }
+            }
+            Debug.Log("hex not found");
+            return false;
+        }
+
+        private bool CheckForUnit(int hexIndex)
+        {
+            Hex selectedHex = _hexGrid.GetHexList()[hexIndex];
+            for (int j = 0; j < 6; j++)
+            {
+                Vector3 neighbor = HexGrid.HexNeighbor(selectedHex.GetVectorCoordinates(), j);
+                if (!_hexGrid.GetUnitDictionary().ContainsKey(_hexGrid.GetHexAt(neighbor))) continue;
+                if (_hexGrid.GetUnitDictionary()[_hexGrid.GetHexAt(neighbor)].GetOwnerID() == _currentPlayer)
+                {
+                    Debug.Log("found unit");
+                    return true;
+                }
+            }
+            Debug.Log("unit not found");
+            return false;
         }
 
         /// <summary> ***********************************************
@@ -101,7 +141,9 @@ namespace Hex
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
             _hexGrid.GetGameObjectList()[hexIndex] = newHex;
+            _hexGrid.GetHexObjectDictionary()[_hexGrid.GetHexList()[hexIndex]] = newHex;
             selectedHex.SetHexType(hexPrefab.name);
+            selectedHex.SetOwnerID(_currentPlayer);
         }
 
         /// <summary> ***********************************************

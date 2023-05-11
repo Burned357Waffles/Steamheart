@@ -263,7 +263,7 @@ namespace MapObjects
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
                 // TODO: add variables to network
-                MoveUnit();
+                if (!MoveUnit()) return;
                 
                 if (doDeplete) _selectedUnit.DepleteMovementPoints();
                 _currentHexIndex = _goalHexIndex;
@@ -310,8 +310,21 @@ namespace MapObjects
         /// the dictionary that holds the relation between the Hex
         /// and the Unit.
         /// </summary> **********************************************
-        private void MoveUnit()
+        private bool MoveUnit()
         {
+            if ((_currentHex.GetHexType() == Hex.Hex.HexType.Forest || _goalHex.GetHexType() == Hex.Hex.HexType.Forest)
+                && _selectedUnit.GetUnitType() != Unit.UnitType.Airship)
+            {
+                if (_selectedUnit.GetCurrentMovementPoints() < 2)
+                {
+                    Debug.Log("returning on forest");
+                    return false;
+                }
+                Debug.Log("using movement on forest");
+                _selectedUnit.UseMovementPoints();
+            }
+                
+            
             _selectedUnit.Q = _goalHex.Q;
             _selectedUnit.R = _goalHex.R;
             _selectedUnit.S = _goalHex.S;
@@ -322,7 +335,7 @@ namespace MapObjects
             _hexGrid.GetUnitDictionary().Remove(_currentHex);
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
             _selectedUnit.UseMovementPoints();
-            if (_goalHex.GetHexType() == Hex.Hex.HexType.Forest) _selectedUnit.UseMovementPoints();
+            return true;
         }
 
         /// <summary> ***********************************************
@@ -361,7 +374,6 @@ namespace MapObjects
                     dead = Combat.InitiateCombat(city, attacker);
                     Debug.Log(dead ? "dead" : "not dead");
                 }
-                    
                 
                 Debug.Log("Attacker Health: " + attacker.Health);
                 if (!dead) return true;
@@ -373,25 +385,9 @@ namespace MapObjects
             }
             
             Debug.Log("TAKEN");
-            Player attackerPlayer = _hexGrid.FindPlayerOfID(attacker.GetOwnerID());
-            Player defenderPlayer = _hexGrid.FindPlayerOfID(city.GetOwnerID());
-            defenderPlayer.RemoveCity(city);
-            attackerPlayer.AssignCity(city);
-            
-            if (defenderPlayer.IsAlive) return true;
-            Debug.Log("Player " + defenderPlayer.GetPlayerID() + " has been defeated");
-            foreach (KeyValuePair<Hex.Hex, Unit> keyValue in _hexGrid.GetUnitDictionary()
-                         .Where(pair => pair.Value.GetOwnerID() == defenderPlayer.GetPlayerID()).ToList())
-            {
-                Debug.Log("Removing Unit");
-                Destroy(_hexGrid.GetUnitObjectDictionary()[keyValue.Value]);
-                _hexGrid.GetUnitObjectDictionary().Remove(keyValue.Value);
-                _hexGrid.GetUnitDictionary().Remove(keyValue.Key);
-            }
-            _hexGrid.GetPlayerList().Remove(defenderPlayer);
-            // TODO: send player to end screen
-
-            return false;
+            return RemovePlayer(_hexGrid.FindPlayerOfID(attacker.GetOwnerID()),
+                _hexGrid.FindPlayerOfID(city.GetOwnerID()),
+                city);
         }
 
         private bool DoCombat()
@@ -427,6 +423,33 @@ namespace MapObjects
             _hexGrid.GetUnitObjectDictionary().Remove(defender);
             _hexGrid.GetUnitDictionary().Remove(_goalHex);
             
+            return false;
+        }
+
+        private bool RemovePlayer(Player attackerPlayer, Player defenderPlayer, City city)
+        {
+            defenderPlayer.RemoveCity(city);
+            attackerPlayer.AssignCity(city);
+            
+            if (defenderPlayer.IsAlive) return true;
+            Debug.Log("Player " + defenderPlayer.GetPlayerID() + " has been defeated");
+            foreach (KeyValuePair<Hex.Hex, Unit> keyValue in _hexGrid.GetUnitDictionary()
+                         .Where(pair => pair.Value.GetOwnerID() == defenderPlayer.GetPlayerID()).ToList())
+            {
+                Debug.Log("Removing Unit");
+                Destroy(_hexGrid.GetUnitObjectDictionary()[keyValue.Value]);
+                _hexGrid.GetUnitObjectDictionary().Remove(keyValue.Value);
+                _hexGrid.GetUnitDictionary().Remove(keyValue.Key);
+            }
+            
+            // set all owned tiles not in border to ownerID 0
+            foreach (Hex.Hex hex in _hexGrid.GetHexList())
+            {
+                hex.SetOwnerID(0);
+            }
+            
+            _hexGrid.GetPlayerList().Remove(defenderPlayer);
+            // TODO: send player to end screen
             return false;
         }
 

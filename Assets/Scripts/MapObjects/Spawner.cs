@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using System.Linq;
 using Hex;
+using Misc;
 using UI.HUD;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,7 @@ namespace MapObjects
         private HexGrid _hexGrid;
         private Hex.Hex _currentHex;
         private UnitMovement _hexMovement;
+        private ResourceCounter _resourceCounter;
         private int _currentPlayer;
         private Animation _anim;
 
@@ -50,6 +52,7 @@ namespace MapObjects
             _currentHexIndex = -1;
             _unitMovement = FindObjectOfType<UnitMovement>();
             _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
+            _resourceCounter = FindObjectOfType<ResourceCounter>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
             _currentPlayer = 1;
             unitTypeSelected = false;
@@ -140,14 +143,32 @@ namespace MapObjects
                 _unitTypeSelector.ResetOnlyButtons();
                 return;
             }
+
+            Player player = _hexGrid.FindPlayerOfID(ownerID);
+            Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID, unit.name);
+            Debug.Log("before resource check");
+            Debug.Log("Iron Cost: " + newUnit.IronCost + " Total Iron: " + player.TotalIronCount);
+            Debug.Log("Wood Cost: " + newUnit.WoodCost + " Total Wood: " + player.TotalWoodCount);
+            if (newUnit.IronCost > player.TotalIronCount || newUnit.WoodCost > player.TotalWoodCount)
+            {
+                Debug.Log("not enough resources!");
+                _unitTypeSelector.ResetOnlyButtons();
+                return;
+            }
             
             GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
             _anim.Play();
-            Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID);
-            newUnit.SetType(unit.name);
-            _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
+            _hexGrid.GetUnitDictionary()
+                .Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
             _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
 
+            player.TotalIronCount -= newUnit.IronCost;
+            player.TotalWoodCount -= newUnit.WoodCost;
+            _resourceCounter.UpdateResourceCounts(_currentPlayer);
+            Debug.Log("after unit creation");
+            Debug.Log("Iron Cost: " + newUnit.IronCost + " Total Iron: " + player.TotalIronCount);
+            Debug.Log("Wood Cost: " + newUnit.WoodCost + " Total Wood: " + player.TotalWoodCount);
+            
             city.CanSpawnThisTurn = false;
         }
 
