@@ -52,8 +52,9 @@ namespace UI.HUD
 
         private void HealCity()
         {
-            foreach (var city in _hexGrid.GetCityList().Where(city => city.GetOwnerID() == _currentPlayer)) // TODO: fix healing each end turn
+            foreach (var city in _hexGrid.GetCityList().Where(city => city.GetOwnerID() == _currentPlayer))
             {
+                Debug.Log("city belongs to player: " + city.GetOwnerID());
                 Debug.Log("City health before: " + city.Health);
                 if (city.Health >= 25) continue;
                 int add = 25 - (city.Health % 25);
@@ -139,7 +140,7 @@ namespace UI.HUD
         public void ProcessEndTurn()
         {
             _endTurnEmitter.Play();
-            //HealCity(); 
+            HealCity(); 
             ResetUnitMovementPoints();
             //ChangeViews();
             AdvancePlayer();
