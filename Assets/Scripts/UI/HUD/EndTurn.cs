@@ -18,6 +18,7 @@ namespace UI.HUD
         private HexPlacer _hexPlacer;
         private HexTypeSelector _hexTypeSelector;
         private Spawner _spawner;
+        private ResourceCounter _resourceCounter;
         private int _currentPlayer;
         private UnitMovement _unitMovement;
         private FMODUnity.StudioEventEmitter _endTurnEmitter;
@@ -35,6 +36,7 @@ namespace UI.HUD
             _hexTypeSelector = FindObjectOfType<HexTypeSelector>();
             _spawner = FindObjectOfType<Spawner>();
             _unitMovement = FindObjectOfType<UnitMovement>();
+            _resourceCounter = FindObjectOfType<ResourceCounter>();
             _endTurnEmitter = endTurnButton.GetComponent<FMODUnity.StudioEventEmitter>();
             playerIndicator.text = _currentPlayer.ToString();
             
@@ -48,6 +50,7 @@ namespace UI.HUD
             _hexTypeDict.Add(Hex.Hex.HexType.Mountain, _hexGrid.mountainHex);
             _hexTypeDict.Add(Hex.Hex.HexType.Building, _hexGrid.ownedCityPrefab);
             //ChangeViews();
+            AccumulateMaterials();
         }
 
         private void HealCity()
@@ -137,24 +140,28 @@ namespace UI.HUD
             
         }
 
-        private void AccumulateMaterials()
+        public void AccumulateMaterials()
         {
             Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
             foreach (City city in player.GetOwnedCities())
             {
                 foreach (Hex.Hex hex in city.GetCityHexes())
                 {
-                    if (hex.GetHexType() == Hex.Hex.HexType.Forest)
-                        city.WoodCount++;
-                    else if (hex.GetHexType() == Hex.Hex.HexType.Mountain)
+                    if (hex.GetHexType() == Hex.Hex.HexType.Mountain)
+                    {
+                        player.TotalIronCount++;
                         city.IronCount++;
+                    }
+                    else if (hex.GetHexType() == Hex.Hex.HexType.Forest)
+                    {
+                        city.WoodCount++;
+                        player.TotalWoodCount++;
+                    }
                 }
-
-                player.TotalWoodCount += city.WoodCount;
-                player.TotalIronCount += city.IronCount;
             }
+            _resourceCounter.UpdateResourceCounts(_currentPlayer);
         }
-        
+
         public void ProcessEndTurn()
         {
             _endTurnEmitter.Play();

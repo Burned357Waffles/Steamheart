@@ -17,21 +17,22 @@ namespace MapObjects
         public int Health;
         public int Damage;
         public int AttackRadius;
+        public int IronCost;
+        public int WoodCost;
 
         private readonly int _ownerID;
         private UnitType _unitType;
         private int _baseMovementPoints;
         private int _currentMovementPoints;
-        private int _ironCost;
-        private int _woodCost;
 
-        public Unit(int q, int r, int ownerID)
+        public Unit(int q, int r, int ownerID, string type)
         {
             Q = q;
             R = r;
             S = S = -(q + r);
             _ownerID = ownerID;
             _currentMovementPoints = _baseMovementPoints;
+            SetType(type);
         }
         
         public Vector3 GetVectorCoordinates()
@@ -62,8 +63,8 @@ namespace MapObjects
             Health = stats[1];
             _baseMovementPoints = stats[2];
             AttackRadius= stats[3];
-            _ironCost = stats[4];
-            _woodCost = stats[5];
+            IronCost = stats[4];
+            WoodCost = stats[5];
         }
         public enum  UnitType
         {

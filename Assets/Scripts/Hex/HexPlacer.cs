@@ -34,7 +34,6 @@ namespace Hex
             _camera = Camera.main;
             _hexGrid = GameObject.FindObjectOfType<HexGrid>();
             _unitMovement = FindObjectOfType<UnitMovement>();
-            _currentPlayer = 1;
             SetPlayer(1);
         }
 
