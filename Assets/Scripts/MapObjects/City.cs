@@ -17,7 +17,7 @@ namespace MapObjects
         private bool _isCapitol;
         public int Health;
         public int Damage;
-        public int AttackRadius;
+        public readonly int AttackRadius;
         private readonly int _cityRadius;
         private readonly HexGrid _hexGrid;
         public bool CanSpawnThisTurn;

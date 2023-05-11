@@ -131,8 +131,7 @@ namespace MapObjects
         {
             _camera = Camera.main;
             _hexGrid = FindObjectOfType<HexGrid>();
-            _currentHexIndex = -1;
-            _goalHexIndex = -1;
+            ResetIndices();
             _currentPlayer = 1;
 
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
@@ -185,8 +184,7 @@ namespace MapObjects
 
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetCurrentMovementPoints() <= 0)
                 {
-                    _currentHexIndex = -1;
-                    _goalHexIndex = -1;
+                    ResetIndices();
                     return;
                 }
 
@@ -206,11 +204,15 @@ namespace MapObjects
                     
                     doDeplete = true;
                     // if target is still alive
-                    if (!DoCityCombat()) 
+                    if (DoCityCombat()) 
                     {
+                        if (!_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
+                        {
+                            ResetIndices();
+                            return;
+                        }
                         _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
-                        _currentHexIndex = -1;
-                        _goalHexIndex = -1;
+                        ResetIndices();
                         return;
                     }
                 }
@@ -230,16 +232,14 @@ namespace MapObjects
                     {
                         if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                             _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
-                        _currentHexIndex = -1;
-                        _goalHexIndex = -1;
+                        ResetIndices();
                         return;
                     }
 
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Melee)
                     {
                         _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
-                        _currentHexIndex = -1;
-                        _goalHexIndex = -1;
+                        ResetIndices();
                         return;
                     }
                 }
@@ -253,8 +253,7 @@ namespace MapObjects
                 {
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                     {
-                        _currentHexIndex = -1;
-                        _goalHexIndex = -1;
+                        ResetIndices();
                         return;
                     }
                 }
@@ -337,11 +336,15 @@ namespace MapObjects
 
         private bool DoCityCombat()
         {
-            if (_hexGrid.GetCityAt(_goalHex) == null) return false;
+            if (_hexGrid.GetCityAt(_goalHex) == null) return true;
             
             Debug.Log("ATTACKING CITY");
             Unit attacker = _hexGrid.GetUnitDictionary()[_currentHex];
             City city = _hexGrid.GetCityAt(_goalHex);
+            
+            Debug.Log("Attacker health before attack: " + attacker.Health);
+            Debug.Log("Defender health before attack: " + city.Health);
+            
             if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
             {
                 return DoCombat(); //TODO: return after attack
@@ -351,17 +354,22 @@ namespace MapObjects
             if (!taken)
             {
                 Debug.Log("Defender Not Dead");
+                bool dead = false;
                 if (IsTargetInRange(_goalHex, _currentHex, city.AttackRadius))
-                    Combat.InitiateCombat(city, attacker);
+                {
+                    Debug.Log("City retaliating");
+                    dead = Combat.InitiateCombat(city, attacker);
+                    Debug.Log(dead ? "dead" : "not dead");
+                }
+                    
                 
                 Debug.Log("Attacker Health: " + attacker.Health);
-                if (attacker.Health > 0) return false;
+                if (!dead) return true;
                 
                 Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
                 _hexGrid.GetUnitObjectDictionary().Remove(attacker);
                 _hexGrid.GetUnitDictionary().Remove(_currentHex);
-
-                return false;
+                return true;
             }
             
             Debug.Log("TAKEN");
@@ -383,7 +391,7 @@ namespace MapObjects
             _hexGrid.GetPlayerList().Remove(defenderPlayer);
             // TODO: send player to end screen
 
-            return true;
+            return false;
         }
 
         private bool DoCombat()
@@ -402,11 +410,12 @@ namespace MapObjects
             if (!dead)
             {
                 Debug.Log("Defender Not Dead");
+                bool attackerDead = false;
                 if (IsTargetInRange(_goalHex, _currentHex, defender.AttackRadius))
-                    Combat.InitiateCombat(defender, attacker);
+                    attackerDead = Combat.InitiateCombat(defender, attacker);
                 
                 Debug.Log("Attacker Health: " + attacker.Health);
-                if (attacker.Health > 0) return true;
+                if (!attackerDead) return true;
                 
                 Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
                 _hexGrid.GetUnitObjectDictionary().Remove(attacker);
@@ -419,6 +428,12 @@ namespace MapObjects
             _hexGrid.GetUnitDictionary().Remove(_goalHex);
             
             return false;
+        }
+
+        private void ResetIndices()
+        {
+            _currentHexIndex = -1;
+            _goalHexIndex = -1;
         }
     }
 }
