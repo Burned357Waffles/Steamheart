@@ -11,6 +11,9 @@ public class NetworkRequestTable {
 		requestTable = new Dictionary<short, Type>();
 		add(Constants.CMSG_JOIN, "RequestJoin");
 		add(Constants.CMSG_LEAVE, "RequestLeave");
+		add(Constants.CMSG_START_GAME, "StartGame");
+		add(Constants.CMSG_END_GAME, "EndGame");
+		add(Constants.CMSG_ADVANCE_TURN, "AdvanceTurn");
 	}
 	
 	public static void add(short request_id, string name) {

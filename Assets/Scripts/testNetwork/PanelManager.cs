@@ -34,13 +34,15 @@ namespace testNetwork
                 {
                     _playerList[i].SetActive(false);
                 }
+
+                return;
             }
             int index = 0;
             _playerList[index].GetComponentInChildren<TMP_Text>().text = _thisPlayer.GetUsername();
             _playerList[index++].SetActive(true);
             foreach(Player player in _lobby.GetPlayers())
             {
-                if (player.GetID() != _thisPlayer.GetID())
+                if (player != _thisPlayer)
                 {
                     _playerList[index].GetComponentInChildren<TMP_Text>().text = player.GetUsername();
                     _playerList[index++].SetActive(true);

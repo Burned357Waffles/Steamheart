@@ -15,6 +15,12 @@ public class Constants {
 	final public static short SMSG_JOIN = 201;
 	final public static short CMSG_LEAVE = 102;
 	final public static short SMSG_LEAVE = 202;
+	final public static short CMSG_START_GAME = 103;
+	final public static short SMSG_START_GAME = 203;
+	final public static short CMSG_END_GAME = 104;
+	final public static short SMSG_END_GAME = 204;
+	final public static short CMSG_ADVANCE_TURN = 105;
+	final public static short SMSG_ADVANCE_TURN = 205;
 
 	final public static short CMSG_HEARTBEAT = 111;
 

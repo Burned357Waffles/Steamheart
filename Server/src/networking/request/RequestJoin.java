@@ -36,7 +36,7 @@ public class RequestJoin extends GameRequest {
         GameServer server = GameServer.getInstance();
         int newID = server.getID();
         if (newID == 0) {
-            responses.add(new ResponseJoin());
+            responses.add(new ResponseJoin(server.isStarted ? "Game has already started" : "Lobby is full"));
             return;
         }
         Player joiningPlayer = new Player(newID, username);

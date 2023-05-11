@@ -40,6 +40,9 @@ public class GameServer {
     private Map<String, GameClient> activeThreads = new HashMap<String, GameClient>(); // Session ID -> Client
     private Map<Integer, Player> activePlayers = new HashMap<Integer, Player>(); // Player ID -> Player
 
+    public boolean isStarted = false;
+
+
     private final int PLAYER_COUNT = 6;
     private boolean[] occupied = new boolean[PLAYER_COUNT];
     /**
@@ -186,6 +189,16 @@ public class GameServer {
         } else
             return 0;
     }
+
+    public boolean isEmpty() {
+        for (boolean slot : occupied) {
+            if (slot) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Delete a player's GameClient thread out of the activeThreads

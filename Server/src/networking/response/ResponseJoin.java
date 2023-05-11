@@ -15,10 +15,12 @@ public class ResponseJoin extends GameResponse {
 
     public short status;
     public Player player;
+    public String errorMessage;
     
-    public ResponseJoin() {
+    public ResponseJoin(String error) {
         responseCode = Constants.SMSG_JOIN;
         status = 1;
+        errorMessage = error;
     }
 
     public ResponseJoin(Player player) {

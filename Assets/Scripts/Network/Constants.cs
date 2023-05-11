@@ -10,7 +10,12 @@ public class Constants
 	public static readonly short SMSG_JOIN = 201;
 	public static readonly short CMSG_LEAVE = 102;
 	public static readonly short SMSG_LEAVE = 202;
-	
+	public static readonly short CMSG_START_GAME = 103;
+	public static readonly short SMSG_START_GAME = 203;
+	public static readonly short CMSG_END_GAME = 104;
+	public static readonly short SMSG_END_GAME = 204;
+	public static readonly short CMSG_ADVANCE_TURN = 105;
+	public static readonly short SMSG_ADVANCE_TURN = 205;
 	
 	public static readonly short CMSG_HEARTBEAT = 111;
 

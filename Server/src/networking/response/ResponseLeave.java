@@ -20,10 +20,14 @@ public class ResponseLeave extends GameResponse {
 
     @Override
     public byte[] constructResponseInBytes() {
+        GameServer server = GameServer.getInstance();
         GamePacket packet = new GamePacket(responseCode);
         packet.addInt32(player.getID());
 
-        GameServer.getInstance().removeActivePlayer(player.getID());
+        server.removeActivePlayer(player.getID());
+        if (server.isEmpty()) {
+            server.isStarted = false;
+        }
 
         return packet.getBytes();
     }

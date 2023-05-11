@@ -27,9 +27,10 @@ namespace Network
         public void OnPlayerJoin(ExtendedEventArgs extArgs)
         {
             ResponseJoinEventArgs args = extArgs as ResponseJoinEventArgs;
-            if (args == null || args.status != 0)
+            if (args == null) return;
+            if (args.status != 0)
             {
-                return;
+                // display reason join failed with args.errorMessasge
             }
             if (_lobby.AddPlayer(new Player(args.user_id, args.username)))
             {

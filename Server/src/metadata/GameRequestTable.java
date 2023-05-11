@@ -23,6 +23,9 @@ public class GameRequestTable {
         // Populate the table using request codes and class names
         add(Constants.CMSG_JOIN, "RequestJoin");
         add(Constants.CMSG_LEAVE, "RequestLeave");
+        add(Constants.CMSG_START_GAME, "StartGame");
+        add(Constants.CMSG_END_GAME, "EndGame");
+        add(Constants.CMSG_ADVANCE_TURN, "AdvanceTurn");
 
         add(Constants.CMSG_HEARTBEAT, "RequestHeartbeat");
     }
