@@ -85,8 +85,8 @@ namespace MapObjects
             if (!_city.CanSpawnThisTurn) return;
             
             // bring up unit selection menu
-            var obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
-            _unitSelectorPanel = obj.transform.GetChild(0);
+            GameObject obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            _unitSelectorPanel = obj.transform.Find("UnitMenu");
             UnitProductionSelector.AssignButtons(_unitSelectorPanel);
             _unitSelectorPanel.gameObject.SetActive(true);
             _selectEmitter.Play();

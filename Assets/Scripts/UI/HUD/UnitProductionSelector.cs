@@ -24,10 +24,10 @@ namespace UI.HUD
         
         public static void AssignButtons(Transform canvas)
         {
-            _meleeButton = canvas.GetChild(0).gameObject;
-            _rangedButton = canvas.GetChild(1).gameObject;
-            _airshipButton = canvas.GetChild(2).gameObject;
-            _settlerButton = canvas.GetChild(3).gameObject;
+            _meleeButton = canvas.Find("Melee").gameObject;
+            _rangedButton = canvas.Find("Ranged").gameObject;
+            _airshipButton = canvas.Find("Airship").gameObject;
+            _settlerButton = canvas.Find("Settler").gameObject;
         }
         
         public void SetUnitTypeMeleeButton() 
