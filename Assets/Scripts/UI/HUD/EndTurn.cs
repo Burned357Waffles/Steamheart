@@ -179,7 +179,7 @@ namespace UI.HUD
 
         private void CenterCameraToPlayerCapital()
         {
-            Player player = _hexGrid.GetPlayerList().Find(x => x.GetPlayerID() == _currentPlayer);
+            Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
             Vector3 capitalPosition = player.GetOwnedCities().Find(x => x.IsCapitol()).GetCityCenter().WorldPosition;
             _cameraRig.CenterCamera(capitalPosition);
         }
