@@ -29,7 +29,7 @@
         {
             _attackerCity = attacker;
             _defenderUnit = defender;
-            return _attackerUnit.GetOwnerID() != _defenderCity.GetOwnerID() && CityFight();
+            return _attackerCity.GetOwnerID() != _defenderUnit.GetOwnerID() && CityAttack();
         }
 
         /// <summary> ***********************************************
@@ -55,6 +55,14 @@
             if (_attackerUnit.Damage >= _defenderCity.Health) return true;
 
             _defenderCity.Health -= _attackerUnit.Damage;
+            return false;
+        }
+        
+        private static bool CityAttack()
+        {
+            if (_attackerCity.Damage >= _defenderUnit.Health) return true;
+
+            _defenderUnit.Health -= _attackerCity.Damage;
             return false;
         }
     }
