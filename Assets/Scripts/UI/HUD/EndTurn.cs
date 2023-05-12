@@ -12,7 +12,7 @@ namespace UI.HUD
     {
         [SerializeField] public TextMeshProUGUI playerIndicator;
         [SerializeField] public GameObject endTurnButton;
-        [SerializeField] public GameObject unitInfoPanel;
+        [SerializeField] public GameObject InfoPanel;
         [SerializeField] public GameObject hexPrefab;
 
         private HexGrid _hexGrid;
@@ -20,7 +20,7 @@ namespace UI.HUD
         private HexTypeSelector _hexTypeSelector;
         private Spawner _spawner;
         private ResourceCounter _resourceCounter;
-        private UnitInfo _unitInfo;
+        private MapObjectInfo _objectInfo;
         private int _currentPlayer;
         private UnitMovement _unitMovement;
         private FMODUnity.StudioEventEmitter _endTurnEmitter;
@@ -41,7 +41,7 @@ namespace UI.HUD
             _unitMovement = FindObjectOfType<UnitMovement>();
             _cameraRig = FindObjectOfType<MoveCamera>();
             _resourceCounter = FindObjectOfType<ResourceCounter>();
-            _unitInfo = unitInfoPanel.GetComponent<UnitInfo>();
+            _objectInfo = InfoPanel.GetComponent<MapObjectInfo>();
             _endTurnEmitter = endTurnButton.GetComponent<FMODUnity.StudioEventEmitter>();
             playerIndicator.text = _currentPlayer.ToString();
             
@@ -142,6 +142,8 @@ namespace UI.HUD
         public void AccumulateMaterials()
         {
             Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
+            int mountainCount = 0;
+            int forestCount = 0;
             foreach (City city in player.GetOwnedCities())
             {
                 foreach (Hex.Hex hex in city.GetCityHexes())
@@ -149,14 +151,17 @@ namespace UI.HUD
                     if (hex.GetHexType() == Hex.Hex.HexType.Mountain)
                     {
                         player.TotalIronCount++;
-                        city.IronCount++;
+                        mountainCount++;
                     }
                     else if (hex.GetHexType() == Hex.Hex.HexType.Forest)
                     {
-                        city.WoodCount++;
                         player.TotalWoodCount++;
+                        forestCount++;
                     }
                 }
+
+                city.IronCount = mountainCount;
+                city.WoodCount = forestCount;
             }
             _resourceCounter.Init();
             _resourceCounter.UpdateResourceCounts(player);
@@ -186,7 +191,7 @@ namespace UI.HUD
             CenterCameraToPlayerCapital();
             AccumulateMaterials();
             _hexTypeSelector.ResetPlacementCount();
-            _unitInfo.DisableUnitInfo();
+            _objectInfo.DisableUnitInfo();
             CheckForWin();
         }
 
