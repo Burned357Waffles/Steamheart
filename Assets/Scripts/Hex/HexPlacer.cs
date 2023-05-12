@@ -63,7 +63,6 @@ namespace Hex
                     if (!CheckForUnit(hexIndex)) return;
                 }
                 
-                Debug.Log("got through");
                 if (!PlacementCount(hexIndex)) return;
                 _unitMovement.SetCurrentIndex(-1);
                 ConvertHex(hexIndex);
@@ -76,14 +75,11 @@ namespace Hex
             for (int j = 0; j < 6; j++)
             {
                 Vector3 neighbor = HexGrid.HexNeighbor(selectedHex.GetVectorCoordinates(), j);
-                Debug.Log(_hexGrid.GetHexAt(neighbor).GetOwnerID());
                 if (_hexGrid.GetHexAt(neighbor).GetOwnerID() == _currentPlayer )
                 {
-                    Debug.Log("found hex");
                     return true;
                 }
             }
-            Debug.Log("hex not found");
             return false;
         }
 
@@ -95,12 +91,8 @@ namespace Hex
                 Vector3 neighbor = HexGrid.HexNeighbor(selectedHex.GetVectorCoordinates(), j);
                 if (!_hexGrid.GetUnitDictionary().ContainsKey(_hexGrid.GetHexAt(neighbor))) continue;
                 if (_hexGrid.GetUnitDictionary()[_hexGrid.GetHexAt(neighbor)].GetOwnerID() == _currentPlayer)
-                {
-                    Debug.Log("found unit");
                     return true;
-                }
             }
-            Debug.Log("unit not found");
             return false;
         }
 

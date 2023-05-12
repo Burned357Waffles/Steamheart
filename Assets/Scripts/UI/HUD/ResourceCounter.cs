@@ -23,9 +23,8 @@ namespace UI.HUD
             _woodNumber.text = "0";
         }
 
-        public void UpdateResourceCounts(int playerID)
+        public void UpdateResourceCounts(Player player)
         {
-            Player player = _hexGrid.FindPlayerOfID(playerID);
             _ironNumber.text = player.TotalIronCount.ToString();
             _woodNumber.text = player.TotalWoodCount.ToString();
         }

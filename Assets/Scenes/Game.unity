@@ -1778,6 +1778,7 @@ MonoBehaviour:
   playerIndicator: {fileID: 1728168694}
   endTurnButton: {fileID: 1027663935}
   hexPrefab: {fileID: 0}
+  hexGrid: {fileID: 250597338}
 --- !u!1 &583223726
 GameObject:
   m_ObjectHideFlags: 0
@@ -4387,7 +4388,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ironCounter: {fileID: 1335157623}
   woodCounter: {fileID: 1584756365}
-  endTurn: {fileID: 543008931}
 --- !u!1 &1271073741
 GameObject:
   m_ObjectHideFlags: 0
@@ -4800,6 +4800,7 @@ MonoBehaviour:
   playerIndicator: {fileID: 1728168694}
   endTurnButton: {fileID: 0}
   hexPrefab: {fileID: 0}
+  hexGrid: {fileID: 0}
 --- !u!1001 &1422337841
 PrefabInstance:
   m_ObjectHideFlags: 0

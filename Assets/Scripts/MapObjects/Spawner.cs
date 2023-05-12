@@ -5,6 +5,7 @@ using Hex;
 using Misc;
 using UI.HUD;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace MapObjects
@@ -24,8 +25,6 @@ namespace MapObjects
         
         
         public bool unitTypeSelected;
-        //public bool citySpawnedThisTurn;
-        
         private Transform _unitSelectorPanel;
         private HexGrid _hexGrid;
         private Hex.Hex _currentHex;
@@ -164,7 +163,7 @@ namespace MapObjects
 
             player.TotalIronCount -= newUnit.IronCost;
             player.TotalWoodCount -= newUnit.WoodCost;
-            _resourceCounter.UpdateResourceCounts(_currentPlayer);
+            _resourceCounter.UpdateResourceCounts(player);
             Debug.Log("after unit creation");
             Debug.Log("Iron Cost: " + newUnit.IronCost + " Total Iron: " + player.TotalIronCount);
             Debug.Log("Wood Cost: " + newUnit.WoodCost + " Total Wood: " + player.TotalWoodCount);

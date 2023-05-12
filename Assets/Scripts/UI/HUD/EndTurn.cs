@@ -5,6 +5,7 @@ using MapObjects;
 using Misc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UI.HUD
 {
@@ -13,6 +14,7 @@ namespace UI.HUD
         [SerializeField] public TextMeshProUGUI playerIndicator;
         [SerializeField] public GameObject endTurnButton;
         [SerializeField] public GameObject hexPrefab;
+        //[SerializeField] public HexGrid _hexGrid;
         
         private HexGrid _hexGrid;
         private HexPlacer _hexPlacer;
@@ -49,6 +51,7 @@ namespace UI.HUD
             _hexTypeDict.Add(Hex.Hex.HexType.Forest, _hexGrid.forestHex);
             _hexTypeDict.Add(Hex.Hex.HexType.Mountain, _hexGrid.mountainHex);
             _hexTypeDict.Add(Hex.Hex.HexType.Building, _hexGrid.ownedCityPrefab);
+            CenterCameraToPlayerCapital();
             //ChangeViews();
             AccumulateMaterials();
         }
@@ -137,11 +140,11 @@ namespace UI.HUD
                 }
                 // handle owned
             }
-            
         }
 
         public void AccumulateMaterials()
         {
+            Debug.Log("Players: " + _hexGrid.GetPlayerList().Count);
             Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
             foreach (City city in player.GetOwnedCities())
             {
@@ -159,19 +162,41 @@ namespace UI.HUD
                     }
                 }
             }
-            _resourceCounter.UpdateResourceCounts(_currentPlayer);
+            _resourceCounter.UpdateResourceCounts(player);
+        }
+
+        private void ResetCityUI()
+        {
+            foreach (City city in _hexGrid.GetCityList())
+            {
+                
+                GameObject obj = _hexGrid.GetHexObjectDictionary()[city.GetCityCenter()];
+                Transform unitSelectorPanel = obj.transform.GetChild(0);
+                if (unitSelectorPanel != null) 
+                    unitSelectorPanel.gameObject.SetActive(false);
+            }
+            
         }
 
         public void ProcessEndTurn()
         {
             _endTurnEmitter.Play();
             HealCity(); 
+            ResetCityUI();
             ResetUnitMovementPoints();
             //ChangeViews();
             AdvancePlayer();
             AccumulateMaterials();
             _hexTypeSelector.ResetPlacementCount();
             CheckForWin();
+        }
+
+        private void CenterCameraToPlayerCapital()
+        {
+            Debug.Log("Centering on player: " + _currentPlayer);
+            Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
+            Vector3 capitalPosition = player.GetOwnedCities().Find(x => x.IsCapitol()).GetCityCenter().WorldPosition;
+            _cameraRig.CenterCamera(capitalPosition);
         }
     }
 }

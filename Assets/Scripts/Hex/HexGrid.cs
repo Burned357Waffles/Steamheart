@@ -153,6 +153,8 @@ namespace Hex
             //playerCount = 1; // for debugging
             GenerateGrid();
             CreateCapitols();
+            //EndTurn endTurn = FindObjectOfType<EndTurn>();
+            //endTurn.AccumulateMaterials();
         }
 
         /// <summary> ***********************************************
