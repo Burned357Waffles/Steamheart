@@ -346,6 +346,7 @@ namespace Hex
                 _hexList[i].MakeHexBuildingType();
                 _gameObjects[i] = cityObject;
                 _cityList.Add(city);
+                _hexDictionary[_hexList[i]] = cityObject;
                 ChangeCityHexPrefabs(city);
                 Transform unitSelectorPanel = cityObject.transform.GetChild(0);
                 unitSelectorPanel.gameObject.SetActive(false);
