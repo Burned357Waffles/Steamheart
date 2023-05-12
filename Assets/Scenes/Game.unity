@@ -7104,12 +7104,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45d63e4431e9c904c9b935f45450622e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 311624380264057446, guid: 186861921f4e23b4eb972e54e018189f, type: 3}
+  unit: {fileID: 1782702501690864755, guid: 60770bdb4dc667c45bea53db0339dc05, type: 3}
   NONE: {fileID: 0}
-  meleeUnit: {fileID: 311624380264057446, guid: c0986e2af6a835c428d1164716424063, type: 3}
-  rangedUnit: {fileID: 311624380264057446, guid: a00fbb264ca264941b76855bc979b5d2, type: 3}
+  meleeUnit: {fileID: 805241029478433215, guid: 7323a218684777f4f836bdc435909acb, type: 3}
+  rangedUnit: {fileID: 8501518584329758249, guid: fe23f35faac88694498dd5d906f51242, type: 3}
   airshipUnit: {fileID: 311624380264057446, guid: 4df28dfe96e618641a8d0be6957c650c, type: 3}
-  settlerUnit: {fileID: 311624380264057446, guid: c080612c53cc64f4e86aff38f4f7b489, type: 3}
+  settlerUnit: {fileID: 2962891210008775736, guid: c080612c53cc64f4e86aff38f4f7b489, type: 3}
   unitTypeSelected: 0
 --- !u!4 &1498733352
 Transform:

@@ -39,7 +39,6 @@ namespace MapObjects
         private UnitMovement _unitMovement;
         private UnitProductionSelector _unitTypeSelector;
         private int _currentHexIndex;
-
         private Camera _camera;
         private FMODUnity.StudioEventEmitter _selectEmitter;
 
@@ -140,14 +139,15 @@ namespace MapObjects
 
             Player player = _hexGrid.FindPlayerOfID(ownerID);
             Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID, unit.name);
-            if (newUnit.IronCost > player.TotalIronCount || newUnit.WoodCost > player.TotalWoodCount)
+            /* if (newUnit.IronCost > player.TotalIronCount || newUnit.WoodCost > player.TotalWoodCount)
             {
                 Debug.Log("not enough resources!");
                 _unitTypeSelector.ResetOnlyButtons();
                 return;
-            }
+            }*/
             
             GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
+
             _anim.Play();
             _hexGrid.GetUnitDictionary()
                 .Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
