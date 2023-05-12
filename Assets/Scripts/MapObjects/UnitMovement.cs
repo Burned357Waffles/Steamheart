@@ -5,6 +5,7 @@ using Hex;
 using Misc;
 using UI.HUD;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace MapObjects
 {
@@ -16,7 +17,7 @@ namespace MapObjects
     /// TODO: maybe transfer some of the combat related functions to the combat file
     public class UnitMovement : MonoBehaviour
     {
-        [SerializeField] public GameObject InfoPanel;
+        [SerializeField] public GameObject infoPanel;
         
         private HexGrid _hexGrid;
         private int _currentHexIndex;
@@ -137,7 +138,7 @@ namespace MapObjects
             _hexGrid = FindObjectOfType<HexGrid>();
             ResetIndices();
             _currentPlayer = 1;
-            _unitInfo = InfoPanel.GetComponent<MapObjectInfo>();
+            _unitInfo = infoPanel.GetComponent<MapObjectInfo>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
         }
 

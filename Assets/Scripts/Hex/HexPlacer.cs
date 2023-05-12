@@ -13,7 +13,8 @@ namespace Hex
     public class HexPlacer : MonoBehaviour
     {
         [SerializeField] public GameObject hexPrefab; // this will be changed depending on button selected
-    
+        [SerializeField] public GameObject infoPanel;
+        
         public int placementCount;
 
         private int _currentPlayer;

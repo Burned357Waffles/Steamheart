@@ -22,7 +22,7 @@ namespace MapObjects
         [SerializeField] public GameObject rangedUnit;
         [SerializeField] public GameObject airshipUnit;
         [SerializeField] public GameObject settlerUnit;
-        [SerializeField] public GameObject InfoPanel;
+        [SerializeField] public GameObject infoPanel;
         
         public bool unitTypeSelected;
         private Transform _unitSelectorPanel;
@@ -52,7 +52,7 @@ namespace MapObjects
             _unitMovement = FindObjectOfType<UnitMovement>();
             _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
             _resourceCounter = FindObjectOfType<ResourceCounter>();
-            _cityInfo = InfoPanel.GetComponent<MapObjectInfo>();
+            _cityInfo = infoPanel.GetComponent<MapObjectInfo>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
             _currentPlayer = 1;
             unitTypeSelected = false;
