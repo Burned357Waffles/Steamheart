@@ -26,8 +26,8 @@ namespace UI.HUD
         public void UpdateResourceCounts(Player player)
         {
             Debug.Log("this player: " + player.GetPlayerID());
-            _ironNumber.text = player.TotalIronCount.ToString();
-            _woodNumber.text = player.TotalWoodCount.ToString();
+            _ironNumber.text = player.TotalIronCount + " (+" + player.IronCountPerTurn +")";
+            _woodNumber.text = player.TotalWoodCount + " (+" + player.WoodCountPerTurn +")";
         }
     }
 }

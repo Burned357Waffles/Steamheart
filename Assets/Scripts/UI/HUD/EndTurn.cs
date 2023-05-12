@@ -142,10 +142,12 @@ namespace UI.HUD
         public void AccumulateMaterials()
         {
             Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
-            int mountainCount = 0;
-            int forestCount = 0;
+            int totalMountainCount = 0;
+            int totalForestCount = 0;
             foreach (City city in player.GetOwnedCities())
             {
+                int mountainCount = 0;
+                int forestCount = 0;
                 foreach (Hex.Hex hex in city.GetCityHexes())
                 {
                     if (hex.GetHexType() == Hex.Hex.HexType.Mountain)
@@ -160,9 +162,15 @@ namespace UI.HUD
                     }
                 }
 
+                totalMountainCount += mountainCount;
+                totalForestCount += forestCount;
                 city.IronCount = mountainCount;
                 city.WoodCount = forestCount;
             }
+
+            player.IronCountPerTurn = totalMountainCount;
+            player.WoodCountPerTurn = totalForestCount;
+            
             _resourceCounter.Init();
             _resourceCounter.UpdateResourceCounts(player);
         }

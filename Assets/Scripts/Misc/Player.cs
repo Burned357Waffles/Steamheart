@@ -11,6 +11,8 @@ namespace Misc
     public class Player
     {
         public bool IsAlive;
+        public int IronCountPerTurn = 0;
+        public int WoodCountPerTurn = 0;
         public int TotalIronCount = 0;
         public int TotalWoodCount = 0;
         
