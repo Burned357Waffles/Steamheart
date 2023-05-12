@@ -44,6 +44,18 @@ namespace Misc
             HandleMouseInput();
         }
 
+        public void CenterCamera(Vector3 tPos)
+        {
+            Vector3 finalPos = new Vector3(tPos.x, transform.position.y, tPos.z);
+            newPosition = finalPos;
+        }
+        
+        public void CenterCamera(GameObject obj)
+        {
+            Vector3 objPos = obj.transform.position;
+            CenterCamera(objPos);
+        }
+
         private void HandleMouseInput()
         {
             if(Input.mouseScrollDelta.y != 0)

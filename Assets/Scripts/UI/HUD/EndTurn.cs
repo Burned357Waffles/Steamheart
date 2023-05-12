@@ -24,6 +24,7 @@ namespace UI.HUD
         private int _currentPlayer;
         private UnitMovement _unitMovement;
         private FMODUnity.StudioEventEmitter _endTurnEmitter;
+        private MoveCamera _cameraRig;
 
         private Dictionary<GameObject, GameObject> _hexPrefabsDict = new Dictionary<GameObject, GameObject>();
 
@@ -38,6 +39,7 @@ namespace UI.HUD
             _hexTypeSelector = FindObjectOfType<HexTypeSelector>();
             _spawner = FindObjectOfType<Spawner>();
             _unitMovement = FindObjectOfType<UnitMovement>();
+            _cameraRig = FindObjectOfType<MoveCamera>();
             _resourceCounter = FindObjectOfType<ResourceCounter>();
             _endTurnEmitter = endTurnButton.GetComponent<FMODUnity.StudioEventEmitter>();
             playerIndicator.text = _currentPlayer.ToString();
@@ -186,6 +188,7 @@ namespace UI.HUD
             ResetUnitMovementPoints();
             //ChangeViews();
             AdvancePlayer();
+            CenterCameraToPlayerCapital();
             AccumulateMaterials();
             _hexTypeSelector.ResetPlacementCount();
             CheckForWin();

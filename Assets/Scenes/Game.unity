@@ -8205,15 +8205,15 @@ PrefabInstance:
     - target: {fileID: 7615661337215990409, guid: 64d9405a9a1b70449bb1a96b4089ac8a, type: 3}
       propertyPath: basicButton
       value: 
-      objectReference: {fileID: 504014924}
+      objectReference: {fileID: 1657402048}
     - target: {fileID: 7615661337215990409, guid: 64d9405a9a1b70449bb1a96b4089ac8a, type: 3}
       propertyPath: forestButton
       value: 
-      objectReference: {fileID: 1733117726}
+      objectReference: {fileID: 583223726}
     - target: {fileID: 7615661337215990409, guid: 64d9405a9a1b70449bb1a96b4089ac8a, type: 3}
       propertyPath: mountainButton
       value: 
-      objectReference: {fileID: 1707429368}
+      objectReference: {fileID: 146021092}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
