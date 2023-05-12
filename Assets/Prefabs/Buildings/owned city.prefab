@@ -50567,7 +50567,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1706338181375559823}
   m_Layer: 0
-  m_Name: city owned
+  m_Name: owned city
   m_TagString: Undefined
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

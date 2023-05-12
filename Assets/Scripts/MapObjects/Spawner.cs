@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using TMPro;
 using System.Linq;
 using Hex;
+using Misc;
 using UI.HUD;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace MapObjects
@@ -23,12 +25,11 @@ namespace MapObjects
         
         
         public bool unitTypeSelected;
-        //public bool citySpawnedThisTurn;
-        
         private Transform _unitSelectorPanel;
         private HexGrid _hexGrid;
         private Hex.Hex _currentHex;
         private UnitMovement _hexMovement;
+        private ResourceCounter _resourceCounter;
         private int _currentPlayer;
         private Animation _anim;
 
@@ -50,6 +51,7 @@ namespace MapObjects
             _currentHexIndex = -1;
             _unitMovement = FindObjectOfType<UnitMovement>();
             _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
+            _resourceCounter = FindObjectOfType<ResourceCounter>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
             _currentPlayer = 1;
             unitTypeSelected = false;
@@ -82,8 +84,8 @@ namespace MapObjects
             if (!_city.CanSpawnThisTurn) return;
             
             // bring up unit selection menu
-            var obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
-            _unitSelectorPanel = obj.transform.GetChild(0);
+            GameObject obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            _unitSelectorPanel = obj.transform.Find("UnitMenu");
             UnitProductionSelector.AssignButtons(_unitSelectorPanel);
             _unitSelectorPanel.gameObject.SetActive(true);
             _selectEmitter.Play();
@@ -93,15 +95,10 @@ namespace MapObjects
         {
             if (hit.collider.CompareTag("UnitSelectButton") ||
                 hit.transform.CompareTag("City"))
-            {
-                Debug.Log("true");
                 return true;
-            }
 
             if (_unitSelectorPanel != null) _unitSelectorPanel.gameObject.SetActive(false);
-            Debug.Log(hit.collider.tag);
-            Debug.Log("false");
-            
+
             return false;   
         }
         
@@ -140,14 +137,26 @@ namespace MapObjects
                 _unitTypeSelector.ResetOnlyButtons();
                 return;
             }
+
+            Player player = _hexGrid.FindPlayerOfID(ownerID);
+            Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID, unit.name);
+            if (newUnit.IronCost > player.TotalIronCount || newUnit.WoodCost > player.TotalWoodCount)
+            {
+                Debug.Log("not enough resources!");
+                _unitTypeSelector.ResetOnlyButtons();
+                return;
+            }
             
             GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
             _anim.Play();
-            Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID);
-            newUnit.SetType(unit.name);
-            _hexGrid.GetUnitDictionary().Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
+            _hexGrid.GetUnitDictionary()
+                .Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
             _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
 
+            player.TotalIronCount -= newUnit.IronCost;
+            player.TotalWoodCount -= newUnit.WoodCost;
+            _resourceCounter.UpdateResourceCounts(player);
+            
             city.CanSpawnThisTurn = false;
         }
 
