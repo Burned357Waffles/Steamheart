@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hex;
 using Misc;
+using UI.HUD;
 using UnityEngine;
 
 namespace MapObjects
@@ -15,12 +16,15 @@ namespace MapObjects
     /// TODO: maybe transfer some of the combat related functions to the combat file
     public class UnitMovement : MonoBehaviour
     {
+        [SerializeField] public GameObject unitInfoPanel;
+        
         private HexGrid _hexGrid;
         private int _currentHexIndex;
         private int _goalHexIndex;
         private Hex.Hex _currentHex;
         private Hex.Hex _goalHex;
         private Unit _selectedUnit;
+        private UnitInfo _unitInfo;
         private GameObject _selectedUnitObject;
 
         private int _currentPlayer;
@@ -133,7 +137,7 @@ namespace MapObjects
             _hexGrid = FindObjectOfType<HexGrid>();
             ResetIndices();
             _currentPlayer = 1;
-
+            _unitInfo = unitInfoPanel.GetComponent<UnitInfo>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
         }
 
@@ -158,14 +162,21 @@ namespace MapObjects
                 _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
                 if (_currentHexIndex < 0) return;
                 _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
+                _selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
+                _selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
+                _unitInfo.DisplayUnitInfo(_selectedUnit);
+                
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                 {
+                    _selectedUnit = null;
+                    _selectedUnitObject = null;
                     _currentHexIndex = -1;
                     return;
                 }
                 
-                _selectEmitter.Play();
                 
+                
+                _selectEmitter.Play();
                 return;
             }
 
@@ -181,11 +192,20 @@ namespace MapObjects
                 if (_currentHexIndex < 0 || _goalHexIndex < 0) return;
                 _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
                 _goalHex = _hexGrid.GetHexList()[_goalHexIndex];
-
+                
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetCurrentMovementPoints() <= 0)
                 {
                     ResetIndices();
                     return;
+                }
+
+                if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
+                {
+                    if (_hexGrid.GetUnitDictionary()[_goalHex].GetOwnerID() == _currentPlayer)
+                    {
+                        ResetIndices();
+                        return;
+                    }
                 }
 
                 bool doDeplete = false;
@@ -193,14 +213,9 @@ namespace MapObjects
                 if (_hexGrid.GetCityAt(_goalHex) != null)
                 {
                     // if another player's city is clicked
-                    Debug.Log("City Clicked");
-                    if (_hexGrid.GetCityAt(_goalHex) != null &&
-                        _hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() ==
+                    if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() ==
                         _hexGrid.GetCityAt(_goalHex).GetOwnerID())
-                    {
-                        Debug.Log("first if return");
-                        return;
-                    }
+                        goto AfterCombatCheck;
                     
                     doDeplete = true;
                     // if target is still alive
@@ -243,7 +258,9 @@ namespace MapObjects
                         return;
                     }
                 }
-
+                
+                AfterCombatCheck:
+                
                 if (!SelectedTileIsNeighbor()) return;
                 if (_goalHex.IsBlocked() && 
                     _hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Airship)
@@ -258,8 +275,8 @@ namespace MapObjects
                     }
                 }
                 
-                _selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
-                _selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
+                //_selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
+                //_selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
                 // TODO: add variables to network
@@ -312,15 +329,10 @@ namespace MapObjects
         /// </summary> **********************************************
         private bool MoveUnit()
         {
-            if ((_currentHex.GetHexType() == Hex.Hex.HexType.Forest || _goalHex.GetHexType() == Hex.Hex.HexType.Forest)
+            if (_goalHex.GetHexType() == Hex.Hex.HexType.Forest
                 && _selectedUnit.GetUnitType() != Unit.UnitType.Airship)
             {
-                if (_selectedUnit.GetCurrentMovementPoints() < 2)
-                {
-                    Debug.Log("returning on forest");
-                    return false;
-                }
-                Debug.Log("using movement on forest");
+                if (_selectedUnit.GetCurrentMovementPoints() < 2) return false;
                 _selectedUnit.UseMovementPoints();
             }
                 
@@ -334,7 +346,9 @@ namespace MapObjects
         
             _hexGrid.GetUnitDictionary().Remove(_currentHex);
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
+            
             _selectedUnit.UseMovementPoints();
+            _unitInfo.DisplayUnitInfo(_selectedUnit);
             return true;
         }
 
@@ -360,7 +374,7 @@ namespace MapObjects
             
             if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
             {
-                return DoCombat(); //TODO: return after attack
+                return DoCombat();
             }
             
             bool taken = Combat.InitiateCombat(attacker, city);
@@ -371,7 +385,7 @@ namespace MapObjects
                 if (IsTargetInRange(_goalHex, _currentHex, city.AttackRadius))
                 {
                     Debug.Log("City retaliating");
-                    dead = Combat.InitiateCombat(city, attacker);
+                    dead = Combat.InitiateRetaliation(city, attacker);
                     Debug.Log(dead ? "dead" : "not dead");
                 }
                 
@@ -403,16 +417,23 @@ namespace MapObjects
 
             Debug.Log("ATTACKING UNIT");
             bool dead = Combat.InitiateCombat(attacker, defender);
+            _unitInfo.DisplayUnitInfo(_selectedUnit);
             if (!dead)
             {
                 Debug.Log("Defender Not Dead");
                 bool attackerDead = false;
                 if (IsTargetInRange(_goalHex, _currentHex, defender.AttackRadius))
-                    attackerDead = Combat.InitiateCombat(defender, attacker);
-                
-                Debug.Log("Attacker Health: " + attacker.Health);
+                {
+                    if (defender.GetUnitType() == Unit.UnitType.Ranged)
+                        attackerDead = Combat.InitiateRetaliation(defender, attacker);
+                    else if (defender.GetUnitType() == Unit.UnitType.Airship) return true;
+                    // is melee
+                    else attackerDead = Combat.InitiateCombat(defender, attacker);
+                }
+                _unitInfo.DisplayUnitInfo(_selectedUnit);
                 if (!attackerDead) return true;
                 
+                _unitInfo.DisplayUnitInfo(_selectedUnit);
                 Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
                 _hexGrid.GetUnitObjectDictionary().Remove(attacker);
                 _hexGrid.GetUnitDictionary().Remove(_currentHex);
@@ -449,7 +470,7 @@ namespace MapObjects
             }
             
             _hexGrid.GetPlayerList().Remove(defenderPlayer);
-            // TODO: send player to end screen
+            // TODO: send player to end screen if networking
             return false;
         }
 

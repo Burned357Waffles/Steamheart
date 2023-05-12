@@ -57,7 +57,7 @@ namespace Hex
                 int hexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
                 if (hexIndex < 0) return;
                 
-                if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_currentPlayer)) return;
+                //if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_currentPlayer)) return;
                 if (!SelectedTileIsNeighbor(hexIndex))
                 {
                     if (!CheckForUnit(hexIndex)) return;

@@ -14,7 +14,7 @@ namespace UI.HUD
         private TMP_Text _ironNumber;
         private TMP_Text _woodNumber;
 
-        private void Start()
+        public void Init()
         {
             _hexGrid = FindObjectOfType<HexGrid>();
             _ironNumber = ironCounter.GetComponent<TMP_Text>();
@@ -25,6 +25,7 @@ namespace UI.HUD
 
         public void UpdateResourceCounts(Player player)
         {
+            Debug.Log("this player: " + player.GetPlayerID());
             _ironNumber.text = player.TotalIronCount.ToString();
             _woodNumber.text = player.TotalWoodCount.ToString();
         }

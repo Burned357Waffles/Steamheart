@@ -95,15 +95,10 @@ namespace MapObjects
         {
             if (hit.collider.CompareTag("UnitSelectButton") ||
                 hit.transform.CompareTag("City"))
-            {
-                Debug.Log("true");
                 return true;
-            }
 
             if (_unitSelectorPanel != null) _unitSelectorPanel.gameObject.SetActive(false);
-            Debug.Log(hit.collider.tag);
-            Debug.Log("false");
-            
+
             return false;   
         }
         
@@ -145,9 +140,6 @@ namespace MapObjects
 
             Player player = _hexGrid.FindPlayerOfID(ownerID);
             Unit newUnit = new Unit(city.GetCityCenter().Q, city.GetCityCenter().R, ownerID, unit.name);
-            Debug.Log("before resource check");
-            Debug.Log("Iron Cost: " + newUnit.IronCost + " Total Iron: " + player.TotalIronCount);
-            Debug.Log("Wood Cost: " + newUnit.WoodCost + " Total Wood: " + player.TotalWoodCount);
             if (newUnit.IronCost > player.TotalIronCount || newUnit.WoodCost > player.TotalWoodCount)
             {
                 Debug.Log("not enough resources!");
@@ -164,9 +156,6 @@ namespace MapObjects
             player.TotalIronCount -= newUnit.IronCost;
             player.TotalWoodCount -= newUnit.WoodCost;
             _resourceCounter.UpdateResourceCounts(player);
-            Debug.Log("after unit creation");
-            Debug.Log("Iron Cost: " + newUnit.IronCost + " Total Iron: " + player.TotalIronCount);
-            Debug.Log("Wood Cost: " + newUnit.WoodCost + " Total Wood: " + player.TotalWoodCount);
             
             city.CanSpawnThisTurn = false;
         }

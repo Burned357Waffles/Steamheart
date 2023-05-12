@@ -143,7 +143,7 @@ namespace Hex
         /// <summary> ***********************************************
         /// Runs once on startup. This is from MonoBehavior.
         /// </summary> **********************************************
-        private void Awake()
+        private void Start()
         {
             playerCount = MatchSettings.GetPlayerCount();
             mapRadius = MatchSettings.GetMapSize();
@@ -153,8 +153,8 @@ namespace Hex
             //playerCount = 1; // for debugging
             GenerateGrid();
             CreateCapitols();
-            //EndTurn endTurn = FindObjectOfType<EndTurn>();
-            //endTurn.AccumulateMaterials();
+            EndTurn endTurn = FindObjectOfType<EndTurn>();
+            endTurn.InitEndTurn();
         }
 
         /// <summary> ***********************************************

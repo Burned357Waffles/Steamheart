@@ -5,7 +5,6 @@ using MapObjects;
 using Misc;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UI.HUD
 {
@@ -13,14 +12,15 @@ namespace UI.HUD
     {
         [SerializeField] public TextMeshProUGUI playerIndicator;
         [SerializeField] public GameObject endTurnButton;
+        [SerializeField] public GameObject unitInfoPanel;
         [SerializeField] public GameObject hexPrefab;
-        //[SerializeField] public HexGrid _hexGrid;
-        
+
         private HexGrid _hexGrid;
         private HexPlacer _hexPlacer;
         private HexTypeSelector _hexTypeSelector;
         private Spawner _spawner;
         private ResourceCounter _resourceCounter;
+        private UnitInfo _unitInfo;
         private int _currentPlayer;
         private UnitMovement _unitMovement;
         private FMODUnity.StudioEventEmitter _endTurnEmitter;
@@ -31,7 +31,7 @@ namespace UI.HUD
         private Dictionary<Hex.Hex.HexType, GameObject> _hexTypeDict = new Dictionary<Hex.Hex.HexType, GameObject>();
 
 
-        private void Start()
+        public void InitEndTurn()
         {
             _currentPlayer = 1;
             _hexGrid = FindObjectOfType<HexGrid>();
@@ -41,6 +41,7 @@ namespace UI.HUD
             _unitMovement = FindObjectOfType<UnitMovement>();
             _cameraRig = FindObjectOfType<MoveCamera>();
             _resourceCounter = FindObjectOfType<ResourceCounter>();
+            _unitInfo = unitInfoPanel.GetComponent<UnitInfo>();
             _endTurnEmitter = endTurnButton.GetComponent<FMODUnity.StudioEventEmitter>();
             playerIndicator.text = _currentPlayer.ToString();
             
@@ -53,7 +54,6 @@ namespace UI.HUD
             _hexTypeDict.Add(Hex.Hex.HexType.Forest, _hexGrid.forestHex);
             _hexTypeDict.Add(Hex.Hex.HexType.Mountain, _hexGrid.mountainHex);
             _hexTypeDict.Add(Hex.Hex.HexType.Building, _hexGrid.ownedCityPrefab);
-            CenterCameraToPlayerCapital();
             //ChangeViews();
             AccumulateMaterials();
         }
@@ -62,15 +62,10 @@ namespace UI.HUD
         {
             foreach (var city in _hexGrid.GetCityList().Where(city => city.GetOwnerID() == _currentPlayer))
             {
-                Debug.Log("city belongs to player: " + city.GetOwnerID());
-                Debug.Log("City health before: " + city.Health);
                 if (city.Health >= 25) continue;
                 int add = 25 - (city.Health % 25);
-                Debug.Log("First value: " + add);
                 if (add > 4) add = 4;
-                Debug.Log("Final value: " + add);
                 city.Health += add;
-                Debug.Log("City health after: " + city.Health);
             }
         }
 
@@ -146,7 +141,6 @@ namespace UI.HUD
 
         public void AccumulateMaterials()
         {
-            Debug.Log("Players: " + _hexGrid.GetPlayerList().Count);
             Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
             foreach (City city in player.GetOwnedCities())
             {
@@ -164,6 +158,7 @@ namespace UI.HUD
                     }
                 }
             }
+            _resourceCounter.Init();
             _resourceCounter.UpdateResourceCounts(player);
         }
 
@@ -191,6 +186,7 @@ namespace UI.HUD
             CenterCameraToPlayerCapital();
             AccumulateMaterials();
             _hexTypeSelector.ResetPlacementCount();
+            _unitInfo.DisableUnitInfo();
             CheckForWin();
         }
 

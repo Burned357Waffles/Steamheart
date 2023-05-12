@@ -25,11 +25,18 @@
             return _attackerUnit.GetOwnerID() != _defenderCity.GetOwnerID() && CityFight();
         }
         
-        public static bool InitiateCombat(City attacker, Unit defender)
+        public static bool InitiateRetaliation(Unit attacker, Unit defender)
+        {
+            _attackerUnit = attacker;
+            _defenderUnit = defender;
+            return _attackerCity.GetOwnerID() != _defenderUnit.GetOwnerID() && UnitRetaliation();
+        }
+        
+        public static bool InitiateRetaliation(City attacker, Unit defender)
         {
             _attackerCity = attacker;
             _defenderUnit = defender;
-            return _attackerCity.GetOwnerID() != _defenderUnit.GetOwnerID() && CityAttack();
+            return _attackerCity.GetOwnerID() != _defenderUnit.GetOwnerID() && CityRetaliation();
         }
 
         /// <summary> ***********************************************
@@ -58,7 +65,16 @@
             return false;
         }
         
-        private static bool CityAttack()
+        private static bool UnitRetaliation()
+        {
+            int retaliationDamage = _attackerUnit.Damage / 2;
+            if (retaliationDamage >= _defenderUnit.Health) return true;
+
+            _defenderUnit.Health -= retaliationDamage;
+            return false;
+        }        
+        
+        private static bool CityRetaliation()
         {
             if (_attackerCity.Damage >= _defenderUnit.Health) return true;
 
