@@ -22,7 +22,7 @@ namespace MapObjects
         [SerializeField] public GameObject rangedUnit;
         [SerializeField] public GameObject airshipUnit;
         [SerializeField] public GameObject settlerUnit;
-        
+        [SerializeField] public GameObject InfoPanel;
         
         public bool unitTypeSelected;
         private Transform _unitSelectorPanel;
@@ -30,6 +30,7 @@ namespace MapObjects
         private Hex.Hex _currentHex;
         private UnitMovement _hexMovement;
         private ResourceCounter _resourceCounter;
+        private MapObjectInfo _cityInfo;
         private int _currentPlayer;
         private Animation _anim;
 
@@ -52,6 +53,7 @@ namespace MapObjects
             _unitMovement = FindObjectOfType<UnitMovement>();
             _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
             _resourceCounter = FindObjectOfType<ResourceCounter>();
+            _cityInfo = InfoPanel.GetComponent<MapObjectInfo>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
             _currentPlayer = 1;
             unitTypeSelected = false;
@@ -76,11 +78,14 @@ namespace MapObjects
             _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
             _city = FindSelectedCity(_hexGrid.GetHexList()[_currentHexIndex]);
             if (_city == null) return;
+            _cityInfo.DisplayInfo(_city);
+            _selectEmitter.Play();
             if (_city.GetOwnerID() != _currentPlayer)
             {
                 _currentHexIndex = -1;
                 return;
             }
+
             if (!_city.CanSpawnThisTurn) return;
             
             // bring up unit selection menu
@@ -88,7 +93,6 @@ namespace MapObjects
             _unitSelectorPanel = obj.transform.Find("UnitMenu");
             UnitProductionSelector.AssignButtons(_unitSelectorPanel);
             _unitSelectorPanel.gameObject.SetActive(true);
-            _selectEmitter.Play();
         }
 
         private bool CheckIfCityOrButton(RaycastHit hit)

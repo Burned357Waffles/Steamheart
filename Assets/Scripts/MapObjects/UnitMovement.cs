@@ -16,7 +16,7 @@ namespace MapObjects
     /// TODO: maybe transfer some of the combat related functions to the combat file
     public class UnitMovement : MonoBehaviour
     {
-        [SerializeField] public GameObject unitInfoPanel;
+        [SerializeField] public GameObject InfoPanel;
         
         private HexGrid _hexGrid;
         private int _currentHexIndex;
@@ -24,7 +24,7 @@ namespace MapObjects
         private Hex.Hex _currentHex;
         private Hex.Hex _goalHex;
         private Unit _selectedUnit;
-        private UnitInfo _unitInfo;
+        private MapObjectInfo _unitInfo;
         private GameObject _selectedUnitObject;
 
         private int _currentPlayer;
@@ -137,7 +137,7 @@ namespace MapObjects
             _hexGrid = FindObjectOfType<HexGrid>();
             ResetIndices();
             _currentPlayer = 1;
-            _unitInfo = unitInfoPanel.GetComponent<UnitInfo>();
+            _unitInfo = InfoPanel.GetComponent<MapObjectInfo>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
         }
 
@@ -164,7 +164,7 @@ namespace MapObjects
                 _currentHex = _hexGrid.GetHexList()[_currentHexIndex];
                 _selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
                 _selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
-                _unitInfo.DisplayUnitInfo(_selectedUnit);
+                _unitInfo.DisplayInfo(_selectedUnit);
                 
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                 {
@@ -348,7 +348,7 @@ namespace MapObjects
             _hexGrid.GetUnitDictionary().Add(_goalHex, _selectedUnit);
             
             _selectedUnit.UseMovementPoints();
-            _unitInfo.DisplayUnitInfo(_selectedUnit);
+            _unitInfo.DisplayInfo(_selectedUnit);
             return true;
         }
 
@@ -417,7 +417,7 @@ namespace MapObjects
 
             Debug.Log("ATTACKING UNIT");
             bool dead = Combat.InitiateCombat(attacker, defender);
-            _unitInfo.DisplayUnitInfo(_selectedUnit);
+            _unitInfo.DisplayInfo(_selectedUnit);
             if (!dead)
             {
                 Debug.Log("Defender Not Dead");
@@ -430,10 +430,10 @@ namespace MapObjects
                     // is melee
                     else attackerDead = Combat.InitiateCombat(defender, attacker);
                 }
-                _unitInfo.DisplayUnitInfo(_selectedUnit);
+                _unitInfo.DisplayInfo(_selectedUnit);
                 if (!attackerDead) return true;
                 
-                _unitInfo.DisplayUnitInfo(_selectedUnit);
+                _unitInfo.DisplayInfo(_selectedUnit);
                 Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
                 _hexGrid.GetUnitObjectDictionary().Remove(attacker);
                 _hexGrid.GetUnitDictionary().Remove(_currentHex);
