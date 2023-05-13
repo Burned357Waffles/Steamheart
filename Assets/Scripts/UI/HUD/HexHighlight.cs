@@ -28,6 +28,7 @@ namespace UI.HUD
 
             highlighter.SetActive(true);
             int currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
+            
             Hex.Hex hex = _hexGrid.GetHexList()[currentHexIndex];
 
             highlighter.transform.position = hex.WorldPosition;
