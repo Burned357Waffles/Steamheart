@@ -33,7 +33,7 @@ namespace Hex
         {
             _isHexPrefabNull = hexPrefab == null;
             _camera = Camera.main;
-            _hexGrid = GameObject.FindObjectOfType<HexGrid>();
+            _hexGrid = FindObjectOfType<HexGrid>();
             _unitMovement = FindObjectOfType<UnitMovement>();
             SetPlayer(1);
         }

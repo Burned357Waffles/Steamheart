@@ -372,6 +372,7 @@ namespace MapObjects
             
             Debug.Log("Attacker health before attack: " + attacker.Health);
             Debug.Log("Defender health before attack: " + city.Health);
+            Debug.Log("City owned by player: " + city.GetOwnerID());
             
             if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
             {
@@ -399,7 +400,7 @@ namespace MapObjects
                 return true;
             }
             
-            Debug.Log("TAKEN");
+            Debug.Log("TAKEN city from player: " + city.GetOwnerID());
             return RemovePlayer(_hexGrid.FindPlayerOfID(attacker.GetOwnerID()),
                 _hexGrid.FindPlayerOfID(city.GetOwnerID()),
                 city);
@@ -472,6 +473,10 @@ namespace MapObjects
             
             _hexGrid.GetPlayerList().Remove(defenderPlayer);
             // TODO: send player to end screen if networking
+            foreach (Player player in _hexGrid.GetPlayerList())
+            {
+                Debug.Log("Player: " + player.GetPlayerID() + " is in the game");
+            }
             return false;
         }
 

@@ -71,12 +71,29 @@ namespace UI.HUD
 
         private void AdvancePlayer()
         {
-            _currentPlayer++;
-            if (_currentPlayer > _hexGrid.GetPlayerList().Count) _currentPlayer = 1;
+            Debug.Log("Player before advance: " + _currentPlayer);
+            bool searching = true;
+            while (searching)
+            {
+                _currentPlayer++;
+                if (_currentPlayer > _hexGrid.GetPlayerList().Last().GetPlayerID()) _currentPlayer = 1;
+                foreach (Player player in _hexGrid.GetPlayerList())
+                {
+                    Debug.Log("looping: " + _currentPlayer);
+                    if (player.GetPlayerID() == _currentPlayer)
+                    {
+                        searching = false;
+                        break;
+                    }
+                } 
+            }
+            
+            
+            Debug.Log("Player after advance: " + _currentPlayer);
             _hexPlacer.SetPlayer(_currentPlayer);
             _unitMovement.SetPlayer(_currentPlayer);
             _spawner.SetPlayer(_currentPlayer);
-            Debug.Log("Player count = " + _hexGrid.playerCount);
+            Debug.Log("Player count = " + _hexGrid.GetPlayerList().Count);
             playerIndicator.text = _currentPlayer.ToString();
         }
 
@@ -205,6 +222,7 @@ namespace UI.HUD
 
         private void CenterCameraToPlayerCapital()
         {
+            // TODO: if player has no capitol left, zoom in on next owned city
             Debug.Log("Centering on player: " + _currentPlayer);
             Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
             Vector3 capitalPosition = player.GetOwnedCities().Find(x => x.IsCapitol()).GetCityCenter().WorldPosition;

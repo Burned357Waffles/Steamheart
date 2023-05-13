@@ -63,11 +63,13 @@ namespace UI.HUD
         /// </summary> ***********************************************
         public void ResetPlacementCount()
         {
+            Debug.Log("resetting buttons");
             _hexPlacer.placementCount = 0;
             _hexPlacer.hexPrefab = NONE;
             basicButton.GetComponent<Button>().interactable = true;
             forestButton.GetComponent<Button>().interactable = true;
             mountainButton.GetComponent<Button>().interactable = true;
+            Debug.Log("reset buttons");
         }
     }
 }
