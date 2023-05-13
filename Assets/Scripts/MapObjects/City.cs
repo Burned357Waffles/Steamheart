@@ -14,7 +14,7 @@ namespace MapObjects
     {
         private Hex.Hex _center;
         private int _ownerID;
-        private readonly bool _isCapitol;
+        private bool _isCapitol;
         public int Health;
         public readonly int Damage;
         public readonly int AttackRadius;
@@ -83,6 +83,8 @@ namespace MapObjects
                 hex.SetOwnerID(id);
             }
         }
+        
+        public void RemoveCapitolTag() { _isCapitol = false; }
 
         /// <summary> ***********************************************
         /// Getter methods

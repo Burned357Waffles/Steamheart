@@ -453,6 +453,7 @@ namespace MapObjects
         {
             defenderPlayer.RemoveCity(city);
             attackerPlayer.AssignCity(city);
+            city.RemoveCapitolTag();
             
             if (defenderPlayer.IsAlive) return true;
             Debug.Log("Player " + defenderPlayer.GetPlayerID() + " has been defeated");

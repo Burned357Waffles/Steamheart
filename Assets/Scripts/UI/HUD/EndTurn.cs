@@ -56,6 +56,7 @@ namespace UI.HUD
             _hexTypeDict.Add(Hex.Hex.HexType.Building, _hexGrid.ownedCityPrefab);
             //ChangeViews();
             AccumulateMaterials();
+            CenterCameraToPlayerCapital();
         }
 
         private void HealCity()
@@ -225,7 +226,18 @@ namespace UI.HUD
             // TODO: if player has no capitol left, zoom in on next owned city
             Debug.Log("Centering on player: " + _currentPlayer);
             Player player = _hexGrid.FindPlayerOfID(_currentPlayer);
-            Vector3 capitalPosition = player.GetOwnedCities().Find(x => x.IsCapitol()).GetCityCenter().WorldPosition;
+            Vector3 capitalPosition = new Vector3(-1, -1, -1);
+            
+            foreach (var city in player.GetOwnedCities().Where(city => city.IsCapitol()))
+            {
+                capitalPosition = city.GetCityCenter().WorldPosition;
+            }
+            
+            // if capitol not found
+            if (capitalPosition == new Vector3(-1, -1, -1))
+            {
+                capitalPosition = player.GetOwnedCities()[0].GetCityCenter().WorldPosition;
+            }
             _cameraRig.CenterCamera(capitalPosition);
         }
     }

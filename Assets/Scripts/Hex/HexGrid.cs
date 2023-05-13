@@ -277,7 +277,6 @@ namespace Hex
 
         public City GetCityAt(Hex hex)
         {
-            Debug.Log("City Coords: " + hex.WorldPosition);
             return _cityList.FirstOrDefault(iHex => hex == iHex.GetCityCenter());
         }
     
