@@ -24,6 +24,8 @@ namespace Hex
         private bool _isHexPrefabNull;
         private bool _isSelecting;
 
+        private Animator _animator;
+
         public void SetPlayer(int id)
         {
             _currentPlayer = id;
@@ -133,6 +135,10 @@ namespace Hex
                 Quaternion.identity,
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+            
+            _animator = newHex.transform.GetChild(0).GetComponent<Animator>();
+            _animator.Play("LandCreation");
+
             _hexGrid.GetGameObjectList()[hexIndex] = newHex;
             _hexGrid.GetHexObjectDictionary()[_hexGrid.GetHexList()[hexIndex]] = newHex;
             selectedHex.SetHexType(hexPrefab.name);

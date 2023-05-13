@@ -199,6 +199,8 @@ namespace UI.HUD
             {
                 
                 GameObject obj = _hexGrid.GetHexObjectDictionary()[city.GetCityCenter()];
+                var border = obj.transform.GetChild(1);
+                border.gameObject.SetActive(false);
                 Transform unitSelectorPanel = obj.transform.GetChild(0);
                 if (unitSelectorPanel != null) 
                     unitSelectorPanel.gameObject.SetActive(false);

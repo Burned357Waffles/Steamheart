@@ -33,6 +33,7 @@ namespace MapObjects
         private MapObjectInfo _cityInfo;
         private int _currentPlayer;
         private Animation _anim;
+        private GameObject _cityObject;
 
 
         private List<City> _cityList;
@@ -77,8 +78,19 @@ namespace MapObjects
             _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
             _city = FindSelectedCity(_hexGrid.GetHexList()[_currentHexIndex]);
             if (_city == null) return;
+            
             _cityInfo.DisplayInfo(_city);
+            GameObject obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            if (_cityObject != null && _cityObject != obj)
+            {
+                _cityObject.transform.GetChild(1).gameObject.SetActive(false);
+                _cityObject = obj;
+            }
+           
+            _cityObject = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            _cityObject.transform.GetChild(1).gameObject.SetActive(true);
             _selectEmitter.Play();
+            
             if (_city.GetOwnerID() != _currentPlayer)
             {
                 _currentHexIndex = -1;
@@ -88,8 +100,8 @@ namespace MapObjects
             if (!_city.CanSpawnThisTurn) return;
             
             // bring up unit selection menu
-            GameObject obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
-            _unitSelectorPanel = obj.transform.Find("UnitMenu");
+            //GameObject obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            _unitSelectorPanel = _cityObject.transform.Find("UnitMenu");
             UnitProductionSelector.AssignButtons(_unitSelectorPanel);
             _unitSelectorPanel.gameObject.SetActive(true);
         }
