@@ -87,6 +87,7 @@ namespace Hex
         public void MakeHexBuildingType()
         {
             _hexType = HexType.Building;
+            _isBlocked = false;
             _isLand = true;
         }
 
