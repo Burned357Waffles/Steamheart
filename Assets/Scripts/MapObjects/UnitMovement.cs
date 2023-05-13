@@ -261,28 +261,36 @@ namespace MapObjects
                 }
                 
                 AfterCombatCheck:
-                
+                Debug.Log("1");
                 if (!SelectedTileIsNeighbor()) return;
+                Debug.Log("2");
+                Debug.Log(_goalHex.GetHexType());
+                Debug.Log(_goalHex.IsBlocked());
+                
+                //_selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
+                //_selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 if (_goalHex.IsBlocked() && 
                     _hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Airship)
                     return;
+                Debug.Log("3");
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                     {
+                        Debug.Log("4");
                         ResetIndices();
                         return;
                     }
                 }
+                Debug.Log("5");
                 
-                //_selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
-                //_selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
+                Debug.Log("6");
                 // TODO: add variables to network
                 if (!MoveUnit()) return;
-                
+                Debug.Log("7");
                 if (doDeplete) _selectedUnit.DepleteMovementPoints();
                 _currentHexIndex = _goalHexIndex;
                 _goalHexIndex = -1;

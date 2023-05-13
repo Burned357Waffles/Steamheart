@@ -265,7 +265,14 @@ namespace Hex
                 else if (typeCount[3] > 1) hexPrefab = mountainHex;
                 else hexPrefab = airHex;   
             }
-            else hexPrefab = basicHex;
+
+            else
+            {
+                if (noise < .1) hexPrefab = basicHex;
+                else if (noise > .1 && noise < .45) hexPrefab = forestHex;
+                else if (noise > .45 && noise < 1) hexPrefab = mountainHex;
+                
+            }
         }
     
         /// <summary> ***********************************************
