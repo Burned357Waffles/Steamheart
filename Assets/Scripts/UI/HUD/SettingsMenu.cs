@@ -15,7 +15,7 @@ namespace UI.HUD
         private void Start()
         {
             settingsCanvas.enabled = false;
-            _uiClickEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
+            _uiClickEmitter = GameObject.Find("UIClick").GetComponent<FMODUnity.StudioEventEmitter>();
         }
 
         private void Update()
