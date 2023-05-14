@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MapObjects;
+using Hex;
 using UnityEngine;
 
 namespace Misc
@@ -15,6 +16,7 @@ namespace Misc
         public int WoodCountPerTurn = 0;
         public int TotalIronCount = 0;
         public int TotalWoodCount = 0;
+        private Visibility _visibility = new Visibility();
         
         private readonly int _playerID;
         private int _ownedCapitols;
@@ -40,6 +42,11 @@ namespace Misc
         {
             _ownedCities.Remove(city);
             if (_ownedCities.Count == 0) { IsAlive = false; }
+        }
+        
+        public void UpdateUnitVisibility(Unit unit)
+        {
+            _visibility.AddUnitVisibility(unit);
         }
     }
 }
