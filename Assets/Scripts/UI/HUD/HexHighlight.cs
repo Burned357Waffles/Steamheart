@@ -15,6 +15,7 @@ namespace UI.HUD
         {
             _camera = Camera.main;
             _hexGrid = FindObjectOfType<HexGrid>();
+            highlighter.SetActive(true);
         }
 
         private void Update()
