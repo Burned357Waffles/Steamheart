@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1503459293318615440}
   m_Layer: 0
   m_Name: air_tile
-  m_TagString: Untagged
+  m_TagString: Hex
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,6 +43,10 @@ PrefabInstance:
     - target: {fileID: 1256744629263667134, guid: aa389d3d0cc07614f95a691efe6f9f96, type: 3}
       propertyPath: m_Name
       value: air_tile Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 1256744629263667134, guid: aa389d3d0cc07614f95a691efe6f9f96, type: 3}
+      propertyPath: m_TagString
+      value: Hex
       objectReference: {fileID: 0}
     - target: {fileID: 1890115706026218756, guid: aa389d3d0cc07614f95a691efe6f9f96, type: 3}
       propertyPath: m_RootOrder

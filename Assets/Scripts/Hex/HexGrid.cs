@@ -4,6 +4,8 @@ using MapObjects;
 using Misc;
 using UI.HUD;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -39,6 +41,8 @@ namespace Hex
         public int playerCount;
         
         private int _capitolDistance;
+        private Animator _animator;
+        
         private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
         private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
         private readonly Dictionary<Hex, Unit> _unitDictionary = new Dictionary<Hex, Unit>();
@@ -261,7 +265,14 @@ namespace Hex
                 else if (typeCount[3] > 1) hexPrefab = mountainHex;
                 else hexPrefab = airHex;   
             }
-            else hexPrefab = basicHex;
+
+            else
+            {
+                if (noise < .1) hexPrefab = basicHex;
+                else if (noise > .1 && noise < .45) hexPrefab = forestHex;
+                else if (noise > .45 && noise < 1) hexPrefab = mountainHex;
+                
+            }
         }
     
         /// <summary> ***********************************************
@@ -343,12 +354,24 @@ namespace Hex
                     Quaternion.identity,
                     this.transform);
                 cityObject.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+                    
                 _hexList[i].MakeHexBuildingType();
                 _gameObjects[i] = cityObject;
                 _cityList.Add(city);
                 _hexDictionary[_hexList[i]] = cityObject;
                 ChangeCityHexPrefabs(city);
+                
                 Transform unitSelectorPanel = cityObject.transform.GetChild(0);
+                
+                
+                var border = cityObject.transform.GetChild(1);
+                /*
+                var volume = border.GetChild(0).GetComponent<Volume>();
+                Bloom bloom = (Bloom)volume.profile.components[0];
+                bloom.tint = new ColorParameter(Color.red);
+                */
+                border.gameObject.SetActive(false);
+
                 unitSelectorPanel.gameObject.SetActive(false);
                 UnitProductionSelector.AssignButtons(unitSelectorPanel);
                 return;
@@ -376,6 +399,8 @@ namespace Hex
                     Quaternion.identity,
                     this.transform);
                 newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+                _animator = newHex.transform.GetChild(0).GetComponent<Animator>();
+                _animator.enabled = false;
                 _gameObjects[entry.Value] = newHex;
             }
         }

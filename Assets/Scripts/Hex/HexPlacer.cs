@@ -24,6 +24,8 @@ namespace Hex
         private bool _isHexPrefabNull;
         private bool _isSelecting;
 
+        private Animator _animator;
+
         public void SetPlayer(int id)
         {
             _currentPlayer = id;
@@ -133,10 +135,20 @@ namespace Hex
                 Quaternion.identity,
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
-            _hexGrid.GetGameObjectList()[hexIndex] = newHex;
-            _hexGrid.GetHexObjectDictionary()[_hexGrid.GetHexList()[hexIndex]] = newHex;
+            
+            _animator = newHex.transform.GetChild(0).GetComponent<Animator>();
             selectedHex.SetHexType(hexPrefab.name);
             selectedHex.SetOwnerID(_currentPlayer);
+
+            if (selectedHex.GetHexType() == Hex.HexType.Mountain)
+            {
+                _animator.Play("MountainCreation");
+            }
+            else { _animator.Play("LandCreation"); }
+
+            _hexGrid.GetGameObjectList()[hexIndex] = newHex;
+            _hexGrid.GetHexObjectDictionary()[_hexGrid.GetHexList()[hexIndex]] = newHex;
+            
         }
 
         /// <summary> ***********************************************

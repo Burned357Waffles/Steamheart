@@ -27,7 +27,7 @@ namespace MapObjects
         private Unit _selectedUnit;
         private MapObjectInfo _unitInfo;
         private GameObject _selectedUnitObject;
-
+        private bool _infoPanelOpen;
         private int _currentPlayer;
         private Camera _camera;
         private FMODUnity.StudioEventEmitter _selectEmitter;
@@ -153,6 +153,16 @@ namespace MapObjects
         /// </summary> **********************************************
         private void DetectClick()
         {
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (_infoPanelOpen)
+                {
+                    _unitInfo.DisableInfoPanel();
+                    _infoPanelOpen = false;
+                    return;
+                }
+            }
             // check if a unit is clicked
             if (Input.GetMouseButtonDown(0))
             {
@@ -166,6 +176,7 @@ namespace MapObjects
                 _selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
                 _selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 _unitInfo.DisplayInfo(_selectedUnit);
+                _infoPanelOpen = true;
                 
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                 {
@@ -261,28 +272,36 @@ namespace MapObjects
                 }
                 
                 AfterCombatCheck:
-                
+                Debug.Log("1");
                 if (!SelectedTileIsNeighbor()) return;
+                Debug.Log("2");
+                Debug.Log(_goalHex.GetHexType());
+                Debug.Log(_goalHex.IsBlocked());
+                
+                //_selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
+                //_selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 if (_goalHex.IsBlocked() && 
                     _hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Airship)
                     return;
+                Debug.Log("3");
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                     {
+                        Debug.Log("4");
                         ResetIndices();
                         return;
                     }
                 }
+                Debug.Log("5");
                 
-                //_selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
-                //_selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
+                Debug.Log("6");
                 // TODO: add variables to network
                 if (!MoveUnit()) return;
-                
+                Debug.Log("7");
                 if (doDeplete) _selectedUnit.DepleteMovementPoints();
                 _currentHexIndex = _goalHexIndex;
                 _goalHexIndex = -1;

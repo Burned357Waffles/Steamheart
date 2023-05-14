@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine.Device;
 
 namespace MapObjects
 {
@@ -18,9 +19,10 @@ namespace MapObjects
         {
             return UnitTypeDataDictionary[type];
         }
-            public static void InitUnitTypeDict()
-        {
-            StreamReader reader = new StreamReader("Assets/Scripts/MapObjects/UnitTypeData.txt");
+        public static void InitUnitTypeDict()
+        { 
+            string path = Path.Combine(Application.streamingAssetsPath, "UnitTypeData.txt");
+            StreamReader reader = new StreamReader(path);
             while (!reader.EndOfStream)
             {
                 string line = reader.ReadLine();

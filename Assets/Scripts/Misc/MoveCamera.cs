@@ -29,7 +29,7 @@ namespace Misc
         public Vector3 rotateCurrentPosition;
         private Camera _camera;
 
-        public void Start()
+        public void Awake()
         {
             _camera = Camera.main;
             var transform1 = transform;

@@ -63,6 +63,6 @@ namespace UI.HUD
             movementLabel.SetActive(false);
         }
 
-        public void DisableUnitInfo() { infoPanel.SetActive(false); }
+        public void DisableInfoPanel() { infoPanel.SetActive(false); }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Misc;
+﻿using System;
+using Misc;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace UI.HUD
@@ -8,9 +10,30 @@ namespace UI.HUD
         [SerializeField] public GameObject cameraRig;
         [SerializeField] public Canvas settingsCanvas;
 
+        private FMODUnity.StudioEventEmitter _uiClickEmitter;
+        
         private void Start()
         {
             settingsCanvas.enabled = false;
+            _uiClickEmitter = GameObject.Find("UIClick").GetComponent<FMODUnity.StudioEventEmitter>();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (settingsCanvas.enabled)
+                {
+                    Resume();
+                    _uiClickEmitter.Play();
+                }
+                else 
+                {
+                    OpenMenu();
+                    _uiClickEmitter.Play();
+                    
+                }
+            }
         }
 
         public void OpenMenu()

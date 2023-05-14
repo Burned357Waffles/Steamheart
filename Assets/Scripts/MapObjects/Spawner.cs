@@ -25,6 +25,8 @@ namespace MapObjects
         [SerializeField] public GameObject infoPanel;
         
         public bool unitTypeSelected;
+        public bool unitPanelOpen;
+        
         private Transform _unitSelectorPanel;
         private HexGrid _hexGrid;
         private Hex.Hex _currentHex;
@@ -32,13 +34,9 @@ namespace MapObjects
         private ResourceCounter _resourceCounter;
         private MapObjectInfo _cityInfo;
         private int _currentPlayer;
-        // private Animation _anim;    5/13
-        [SerializeField] private Animator _animator;
-
-
-        private List<City> _cityList;
+        private Animation _anim;
+        private GameObject _cityObject;
         private City _city;
-        private UnitMovement _unitMovement;
         private UnitProductionSelector _unitTypeSelector;
         private int _currentHexIndex;
         private Camera _camera;
@@ -50,16 +48,13 @@ namespace MapObjects
             _camera = Camera.main;
             _hexGrid = FindObjectOfType<HexGrid>();
             _currentHexIndex = -1;
-            _unitMovement = FindObjectOfType<UnitMovement>();
             _unitTypeSelector = FindObjectOfType<UnitProductionSelector>();
             _resourceCounter = FindObjectOfType<ResourceCounter>();
             _cityInfo = infoPanel.GetComponent<MapObjectInfo>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
             _currentPlayer = 1;
             unitTypeSelected = false;
-            _cityList = new List<City>();
-            _animator=GetComponent<Animator>();
-            //_anim = gameObject.GetComponent<Animation>();    5/13
+            _anim = gameObject.GetComponent<Animation>();
         }
 
         private void Update()
@@ -69,6 +64,19 @@ namespace MapObjects
 
         private void DetectClick()
         {
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (unitPanelOpen)
+                {
+                    _unitSelectorPanel.gameObject.SetActive(false);
+                    _cityObject.transform.GetChild(1).gameObject.SetActive(false);
+                    _cityInfo.DisableInfoPanel();
+                    _selectEmitter.Play();
+                    unitPanelOpen = false;
+                }
+                    
+            }
+            
             if (!Input.GetMouseButtonDown(0)) return;
             
             Ray ray = _camera!.ScreenPointToRay(Input.mousePosition);
@@ -79,8 +87,20 @@ namespace MapObjects
             _currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
             _city = FindSelectedCity(_hexGrid.GetHexList()[_currentHexIndex]);
             if (_city == null) return;
+            
             _cityInfo.DisplayInfo(_city);
+            GameObject obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            if (_cityObject != null && _cityObject != obj)
+            {
+                _cityObject.transform.GetChild(1).gameObject.SetActive(false);
+                _cityObject = obj;
+            }
+           
+            _cityObject = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            _cityObject.transform.GetChild(1).gameObject.SetActive(true);
             _selectEmitter.Play();
+            unitPanelOpen = true;
+            
             if (_city.GetOwnerID() != _currentPlayer)
             {
                 _currentHexIndex = -1;
@@ -90,10 +110,11 @@ namespace MapObjects
             if (!_city.CanSpawnThisTurn) return;
             
             // bring up unit selection menu
-            GameObject obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
-            _unitSelectorPanel = obj.transform.Find("UnitMenu");
+            //GameObject obj = _hexGrid.GetGameObjectList()[_currentHexIndex];
+            _unitSelectorPanel = _cityObject.transform.Find("UnitMenu");
             UnitProductionSelector.AssignButtons(_unitSelectorPanel);
             _unitSelectorPanel.gameObject.SetActive(true);
+            unitPanelOpen = true;
         }
 
         private bool CheckIfCityOrButton(RaycastHit hit)
@@ -154,7 +175,7 @@ namespace MapObjects
 
             GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
 
-            // _anim.Play();    5/13
+            _anim.Play();
             _hexGrid.GetUnitDictionary()
                 .Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
             _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
