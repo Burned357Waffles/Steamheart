@@ -1,4 +1,5 @@
-﻿using Hex;
+﻿using System;
+using Hex;
 using MapObjects;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,8 +21,7 @@ namespace UI.HUD
             _hexGrid = FindObjectOfType<HexGrid>();
             _spawner = FindObjectOfType<Spawner>();
         }
-        
-        
+
         public static void AssignButtons(Transform canvas)
         {
             _meleeButton = canvas.Find("Melee").gameObject;

@@ -24,8 +24,23 @@ namespace UI.HUD
             if (!hit.transform.CompareTag("Hex")) 
                 if (!hit.transform.CompareTag("City") )
                     if (!hit.transform.CompareTag("Unit"))
-                        return;
+                    {
+                        highlighter.SetActive(false);
+                        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("UI"))
+                        {
+                            Debug.Log("inner if");
+                            highlighter.SetActive(false);
+                            return;
+                        }
 
+                        return;
+                    }
+
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("UI"))
+            {
+                highlighter.SetActive(false);
+                return;
+            }
             highlighter.SetActive(true);
             int currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
             
