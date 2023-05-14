@@ -74,8 +74,8 @@ namespace UI.HUD
             
             //ChangeViews();
             InitColors();
-            _startColor = _light.color;
-            _endColor = _startColor;
+            _currentSunIndex = -1;
+            CycleTime();
             AccumulateMaterials();
             CenterCameraToPlayerCapital();
         }
