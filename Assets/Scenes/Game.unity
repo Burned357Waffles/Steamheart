@@ -821,7 +821,7 @@ GameObject:
   - component: {fileID: 158086779}
   - component: {fileID: 158086780}
   m_Layer: 0
-  m_Name: ButtonClick
+  m_Name: UIClick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
