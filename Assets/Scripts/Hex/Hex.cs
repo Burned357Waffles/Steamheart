@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Hex
@@ -113,6 +115,11 @@ namespace Hex
 
         public bool IsBlocked() {return _isBlocked;}
 
+        public static implicit operator HexCoord(Hex hex)
+        {
+            return hex.HexCoord;
+        }
+
         /// <summary> ***********************************************
         /// This enum stores the different types of hexes.
         /// </summary> **********************************************
@@ -157,5 +164,57 @@ namespace Hex
         {
             return new HexCoord(a.Q + b.Q, a.R + b.R);
         }
+
+        public static HexCoord operator- (HexCoord a, HexCoord b)
+        {
+            return new HexCoord(a.Q - b.Q, a.R - b.R);
+        }
+
+        public static List<HexCoord> GetNeighbors(HexCoord hexCoord)
+        {
+            return new List<HexCoord>
+            {
+                hexCoord + new HexCoord(1, 0),
+                hexCoord + new HexCoord(1, -1),
+                hexCoord + new HexCoord(0, -1),
+                hexCoord + new HexCoord(-1, 0),
+                hexCoord + new HexCoord(-1, 1),
+                hexCoord + new HexCoord(0, 1)
+            };
+        }
+
+        public List<HexCoord> GetNeighbors()
+        {
+            return GetNeighbors(this);
+        }
+        
+        public static List<HexCoord> GetNeighborsInRange(HexCoord hexCoord, int range)
+        {
+            List<HexCoord> neighbors = new List<HexCoord>();
+            for (int dx = -range; dx <= range; dx++)
+            {
+                for (int dy = Mathf.Max(-range, -dx - range); dy <= Mathf.Min(range, -dx + range); dy++)
+                {
+                    neighbors.Add(hexCoord + new HexCoord(dx, dy));
+                }
+            }
+            return neighbors;
+        }
+
+        public static List<HexCoord> ToHexCoordList(List<Hex> hexes)
+        {
+            List<HexCoord> hexCoords = new List<HexCoord>();
+            foreach (Hex hex in hexes)
+            {
+                hexCoords.Add(hex);
+            }
+            return hexCoords;
+        }
+
+        public List<HexCoord> GetNeighborsInRange(int range)
+        {
+            return GetNeighborsInRange(this, range);
+        }
+
     }
 }
