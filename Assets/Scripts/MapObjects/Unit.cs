@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Hex;
 
 namespace MapObjects
 {
@@ -20,7 +22,7 @@ namespace MapObjects
         public int AttackRadius;
         public int IronCost;
         public int WoodCost;
-
+        public int VisibilityRadius;
         private readonly int _ownerID;
         private UnitType _unitType;
         
@@ -60,12 +62,18 @@ namespace MapObjects
             };
             
             int[] stats = UnitTypesData.GetStats(_unitType);
-            Damage= stats[0];
+            Damage = stats[0];
             Health = stats[1];
             BaseMovementPoints = stats[2];
             AttackRadius= stats[3];
             IronCost = stats[4];
             WoodCost = stats[5];
+            VisibilityRadius = stats[6];
+        }
+
+        public List<HexCoord> GetVisibleHexes()
+        {
+            return HexCoord.GetNeighborsInRange(new HexCoord(Q, R), VisibilityRadius);
         }
         public enum  UnitType
         {
