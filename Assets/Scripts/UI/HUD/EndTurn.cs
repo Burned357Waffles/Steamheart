@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hex;
 using MapObjects;
 using Misc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UI.HUD
 {
@@ -12,8 +14,9 @@ namespace UI.HUD
     {
         [SerializeField] public TextMeshProUGUI playerIndicator;
         [SerializeField] public GameObject endTurnButton;
-        [SerializeField] public GameObject InfoPanel;
+        [SerializeField] public GameObject infoPanel;
         [SerializeField] public GameObject hexPrefab;
+        [SerializeField] public GameObject sunLight;
 
         private HexGrid _hexGrid;
         private HexPlacer _hexPlacer;
@@ -25,10 +28,22 @@ namespace UI.HUD
         private UnitMovement _unitMovement;
         private FMODUnity.StudioEventEmitter _endTurnEmitter;
         private MoveCamera _cameraRig;
+        private Light _light;
+        private int _currentSunIndex;
+
+        private bool _shouldLerp;
+        private float _timeStarted;
+        private float _lerpTime;
+        private Vector3 _startPos;
+        private Vector3 _endPos;
+        private Color _startColor;
+        private Color _endColor;
 
         private Dictionary<GameObject, GameObject> _hexPrefabsDict = new Dictionary<GameObject, GameObject>();
-
         private Dictionary<Hex.Hex.HexType, GameObject> _hexTypeDict = new Dictionary<Hex.Hex.HexType, GameObject>();
+
+        // angle : color
+        private Dictionary<Vector3, Color> _sunSettings = new Dictionary<Vector3, Color>();
 
 
         public void InitEndTurn()
@@ -41,10 +56,12 @@ namespace UI.HUD
             _unitMovement = FindObjectOfType<UnitMovement>();
             _cameraRig = FindObjectOfType<MoveCamera>();
             _resourceCounter = FindObjectOfType<ResourceCounter>();
-            _objectInfo = InfoPanel.GetComponent<MapObjectInfo>();
+            _objectInfo = infoPanel.GetComponent<MapObjectInfo>();
+            _light = sunLight.GetComponent<Light>();
             _endTurnEmitter = endTurnButton.GetComponent<FMODUnity.StudioEventEmitter>();
             playerIndicator.text = _currentPlayer.ToString();
-            
+            _lerpTime = 1f;
+
             _hexPrefabsDict.Add(_hexGrid.ownedBasicHex, _hexGrid.basicHex);
             _hexPrefabsDict.Add(_hexGrid.ownedForestHex, _hexGrid.forestHex);
             _hexPrefabsDict.Add(_hexGrid.ownedMountainHex, _hexGrid.mountainHex);
@@ -54,9 +71,80 @@ namespace UI.HUD
             _hexTypeDict.Add(Hex.Hex.HexType.Forest, _hexGrid.forestHex);
             _hexTypeDict.Add(Hex.Hex.HexType.Mountain, _hexGrid.mountainHex);
             _hexTypeDict.Add(Hex.Hex.HexType.Building, _hexGrid.ownedCityPrefab);
+            
             //ChangeViews();
+            InitColors();
+            _startColor = _light.color;
+            _endColor = _startColor;
             AccumulateMaterials();
             CenterCameraToPlayerCapital();
+        }
+
+        private void Update()
+        {
+            if (!_shouldLerp) return;
+            
+            _light.color = LerpColor(_startColor, _endColor, _timeStarted, _lerpTime);
+            _light.intensity = 0.004f;
+            Vector3 rot = LerpRotation(_startPos, _endPos, _timeStarted, _lerpTime);
+            sunLight.transform.localRotation = Quaternion.Euler(rot);
+            
+        }
+
+        private void InitColors()
+        {
+            // sunrise
+            _sunSettings.Add(new Vector3(20, 15, 0), new Color(255, 222, 221, 255));
+            // morning
+            _sunSettings.Add(new Vector3(40, 30, 0), new Color(255, 235, 221, 255));
+            // noon
+            _sunSettings.Add(new Vector3(60, 45, 0), new Color(255, 244, 214, 255));
+            // afternoon
+            _sunSettings.Add(new Vector3(40, 75, 0), new Color(222, 197, 166, 255));
+            // sunset
+            _sunSettings.Add(new Vector3(20, 90, 0), new Color(214, 90, 60, 255));
+            // midnight
+            _sunSettings.Add(new Vector3(40, 60, 1), new Color(53, 46, 108, 255));
+        }
+
+        private Vector3 LerpRotation(Vector3 start, Vector3 end, float timeStarted, float lerpTime = 1)
+        {
+            float timeSinceStart = Time.time - timeStarted;
+            return Vector3.Lerp(start, end, timeSinceStart / lerpTime);
+        }
+        
+        private Color LerpColor(Color start, Color end, float timeStarted, float lerpTime = 1)
+        {
+            float timeSinceStart = Time.time - timeStarted;
+            return Color.Lerp(start, end, timeSinceStart / lerpTime);
+        }
+        
+        private void CycleTime()
+        {
+            if (_currentPlayer != 1) return;
+                
+            int i = 0;
+            //KeyValuePair<Vector3, Color> currentKV = new KeyValuePair<Vector3, Color>();
+            foreach (var kv in _sunSettings)
+            {
+                //if (_currentSunIndex == i) currentKV = kv;
+                Debug.Log("csi: " + _currentSunIndex + " i: " + i);
+                if (_currentSunIndex + 1 == i)
+                {
+                    _timeStarted = Time.time;
+                    _shouldLerp = true;
+                    
+                    _startPos = sunLight.transform.localRotation.eulerAngles;;
+                    _endPos = kv.Key;
+                    _startColor = _light.color;
+                    _endColor = kv.Value;
+                    
+                    _currentSunIndex = i;
+                    if (_currentSunIndex >= _sunSettings.Count - 1) _currentSunIndex = -1;
+                    return;
+                }
+                i++;
+            }
         }
 
         private void HealCity()
@@ -216,10 +304,11 @@ namespace UI.HUD
             ResetUnitMovementPoints();
             //ChangeViews();
             AdvancePlayer();
+            CycleTime();
             CenterCameraToPlayerCapital();
             AccumulateMaterials();
             _hexTypeSelector.ResetPlacementCount();
-            _objectInfo.DisableUnitInfo();
+            _objectInfo.DisableInfoPanel();
             CheckForWin();
         }
 

@@ -27,7 +27,7 @@ namespace MapObjects
         private Unit _selectedUnit;
         private MapObjectInfo _unitInfo;
         private GameObject _selectedUnitObject;
-
+        private bool _infoPanelOpen;
         private int _currentPlayer;
         private Camera _camera;
         private FMODUnity.StudioEventEmitter _selectEmitter;
@@ -153,6 +153,16 @@ namespace MapObjects
         /// </summary> **********************************************
         private void DetectClick()
         {
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (_infoPanelOpen)
+                {
+                    _unitInfo.DisableInfoPanel();
+                    _infoPanelOpen = false;
+                    return;
+                }
+            }
             // check if a unit is clicked
             if (Input.GetMouseButtonDown(0))
             {
@@ -166,6 +176,7 @@ namespace MapObjects
                 _selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
                 _selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 _unitInfo.DisplayInfo(_selectedUnit);
+                _infoPanelOpen = true;
                 
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                 {

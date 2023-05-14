@@ -197,7 +197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3652732531354750722, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.8660254
       objectReference: {fileID: 0}
     - target: {fileID: 3652732531354750722, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: m_LocalRotation.x
@@ -205,7 +205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3652732531354750722, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3652732531354750722, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: m_LocalRotation.z
@@ -217,7 +217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3652732531354750722, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 3652732531354750722, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -2222,8 +2222,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerIndicator: {fileID: 1728168694}
   endTurnButton: {fileID: 1027663935}
-  InfoPanel: {fileID: 1027320856}
+  infoPanel: {fileID: 1027320856}
   hexPrefab: {fileID: 0}
+  sunLight: {fileID: 705507993}
 --- !u!1 &583223726
 GameObject:
   m_ObjectHideFlags: 0
@@ -2931,7 +2932,7 @@ GameObject:
   - component: {fileID: 705507994}
   - component: {fileID: 705507996}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Sun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2948,8 +2949,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.20784314, g: 0.18039216, b: 0.42352942, a: 1}
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -3006,14 +3007,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.17216258, y: 0.12854317, z: -0.022665627, w: 0.9763827}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 20, y: 15, z: 0}
 --- !u!114 &705507996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6389,8 +6390,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerIndicator: {fileID: 1728168694}
   endTurnButton: {fileID: 0}
-  InfoPanel: {fileID: 0}
+  infoPanel: {fileID: 0}
   hexPrefab: {fileID: 0}
+  sunLight: {fileID: 0}
 --- !u!1001 &1422337841
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10522,19 +10524,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3006650013380184609, guid: cc65a32c576764346be1250f15265156, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.8660254
       objectReference: {fileID: 0}
     - target: {fileID: 3006650013380184609, guid: cc65a32c576764346be1250f15265156, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3006650013380184609, guid: cc65a32c576764346be1250f15265156, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3006650013380184609, guid: cc65a32c576764346be1250f15265156, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3006650013380184609, guid: cc65a32c576764346be1250f15265156, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -10542,7 +10544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3006650013380184609, guid: cc65a32c576764346be1250f15265156, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 3006650013380184609, guid: cc65a32c576764346be1250f15265156, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

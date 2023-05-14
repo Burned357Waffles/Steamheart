@@ -70,6 +70,7 @@ namespace MapObjects
                 {
                     _unitSelectorPanel.gameObject.SetActive(false);
                     _cityObject.transform.GetChild(1).gameObject.SetActive(false);
+                    _cityInfo.DisableInfoPanel();
                     _selectEmitter.Play();
                     unitPanelOpen = false;
                 }
