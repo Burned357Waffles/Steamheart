@@ -14,9 +14,10 @@ namespace Hex
         // go to https://www.redblobgames.com/grids/hexagons/ to see how grid system works
         // Q + R + S = 0
         
-        public readonly int Q;
-        public readonly int R;
-        public readonly int S;
+        public readonly HexCoord HexCoord;
+        public int Q { get { return HexCoord.Q; } }
+        public int R { get { return HexCoord.R; } }
+        public int S { get { return HexCoord.S; } }
         public Vector3 WorldPosition;
     
         private HexType _hexType;
@@ -27,9 +28,7 @@ namespace Hex
 
         public Hex(int q, int r)
         {
-            Q = q;
-            R = r;
-            S = -(q + r);
+            HexCoord = new HexCoord(q, r);
             _ownerID = 0;
         }
     
@@ -126,5 +125,37 @@ namespace Hex
             Building
         }
 
+    }
+
+    public class HexCoord
+    {
+        public int Q => _vec.x;
+
+        public int R => _vec.y;
+        public int S => _vec.z;
+
+        private Vector3Int _vec;
+
+        public HexCoord(int q, int r)
+        {
+            _vec = new Vector3Int(q, r, -(q + r));
+        }
+
+        // define type conversion from HexCoord to Vector3
+        public static implicit operator Vector3(HexCoord hexCoord)
+        {
+            return new Vector3(hexCoord.Q, hexCoord.R, hexCoord.S);
+        }
+
+        // define type conversion from Vector3 to HexCoord
+        public static implicit operator HexCoord(Vector3 vec)
+        {
+            return new HexCoord((int)vec.x, (int)vec.y);
+        }
+
+        public static HexCoord operator+ (HexCoord a, HexCoord b)
+        {
+            return new HexCoord(a.Q + b.Q, a.R + b.R);
+        }
     }
 }
