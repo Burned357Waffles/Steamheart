@@ -36,7 +36,8 @@ namespace MapObjects
                         Int32.Parse(splitLine[3]),
                         Int32.Parse(splitLine[4]),
                         Int32.Parse(splitLine[5]),
-                        Int32.Parse(splitLine[6])
+                        Int32.Parse(splitLine[6]),
+                        Int32.Parse(splitLine[7])
                     };
                     
                     switch (splitLine[0])
