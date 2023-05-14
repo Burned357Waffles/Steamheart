@@ -137,12 +137,18 @@ namespace Hex
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
             
             _animator = newHex.transform.GetChild(0).GetComponent<Animator>();
-            _animator.Play("LandCreation");
+            selectedHex.SetHexType(hexPrefab.name);
+            selectedHex.SetOwnerID(_currentPlayer);
+
+            if (selectedHex.GetHexType() == Hex.HexType.Mountain)
+            {
+                _animator.Play("MountainCreation");
+            }
+            else { _animator.Play("LandCreation"); }
 
             _hexGrid.GetGameObjectList()[hexIndex] = newHex;
             _hexGrid.GetHexObjectDictionary()[_hexGrid.GetHexList()[hexIndex]] = newHex;
-            selectedHex.SetHexType(hexPrefab.name);
-            selectedHex.SetOwnerID(_currentPlayer);
+            
         }
 
         /// <summary> ***********************************************
