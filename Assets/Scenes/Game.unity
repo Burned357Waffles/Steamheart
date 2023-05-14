@@ -152,7 +152,7 @@ MonoBehaviour:
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
-  m_Antialiasing: 0
+  m_Antialiasing: 3
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -870,6 +870,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileHighlight
       objectReference: {fileID: 0}
+    - target: {fileID: 3717548862318053373, guid: f8dfcd6abda08a6438dc7439299676c5, type: 3}
+      propertyPath: highlighter
+      value: 
+      objectReference: {fileID: 1884080911}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9598,6 +9602,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879062642}
   m_CullTransparentMesh: 1
+--- !u!1 &1884080911 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2034169387375110995, guid: f8dfcd6abda08a6438dc7439299676c5, type: 3}
+  m_PrefabInstance: {fileID: 160488945}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1950282552
 GameObject:
   m_ObjectHideFlags: 0

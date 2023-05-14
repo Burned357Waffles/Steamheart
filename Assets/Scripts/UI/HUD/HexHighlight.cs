@@ -15,6 +15,7 @@ namespace UI.HUD
         {
             _camera = Camera.main;
             _hexGrid = FindObjectOfType<HexGrid>();
+            highlighter.SetActive(true);
         }
 
         private void Update()
@@ -24,7 +25,10 @@ namespace UI.HUD
             if (!hit.transform.CompareTag("Hex")) 
                 if (!hit.transform.CompareTag("City") )
                     if (!hit.transform.CompareTag("Unit"))
+                    {
+                        highlighter.SetActive(false);
                         return;
+                    }
 
             highlighter.SetActive(true);
             int currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
