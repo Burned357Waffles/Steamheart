@@ -1,4 +1,6 @@
-﻿namespace MapObjects
+﻿using UnityEngine;
+
+namespace MapObjects
 {
     /// <summary> ************************************************************
     /// This class handles the health reduction of the defender by the
@@ -10,7 +12,8 @@
         private static Unit _defenderUnit;
         private static City _attackerCity;
         private static City _defenderCity;
-        
+        private static Animator animator;
+
         public static bool InitiateCombat(Unit attacker, Unit defender)
         {
             _attackerUnit = attacker;

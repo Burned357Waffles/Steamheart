@@ -32,7 +32,8 @@ namespace MapObjects
         private ResourceCounter _resourceCounter;
         private MapObjectInfo _cityInfo;
         private int _currentPlayer;
-        private Animation _anim;
+        // private Animation _anim;    5/13
+        [SerializeField] private Animator _animator;
 
 
         private List<City> _cityList;
@@ -57,7 +58,8 @@ namespace MapObjects
             _currentPlayer = 1;
             unitTypeSelected = false;
             _cityList = new List<City>();
-            _anim = gameObject.GetComponent<Animation>();
+            _animator=GetComponent<Animator>();
+            //_anim = gameObject.GetComponent<Animation>();    5/13
         }
 
         private void Update()
@@ -152,7 +154,7 @@ namespace MapObjects
 
             GameObject newUnitObject = Instantiate(unit, city.GetCityHexes()[0].WorldPosition, transform.rotation);
 
-            _anim.Play();
+            // _anim.Play();    5/13
             _hexGrid.GetUnitDictionary()
                 .Add(_hexGrid.GetHexAt(city.GetCityHexes()[0].GetVectorCoordinates()), newUnit);
             _hexGrid.GetUnitObjectDictionary().Add(newUnit, newUnitObject);
