@@ -415,7 +415,7 @@ namespace MapObjects
                 
                 Debug.Log("Attacker Health: " + attacker.Health);
                 if (!dead) return true;
-                animator.SetTrigger("UnitDeath");               // start death animation on unit
+                animator.SetTrigger("dead");               // start death animation on unit
                 Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
                 _hexGrid.GetUnitObjectDictionary().Remove(attacker);
                 _hexGrid.GetUnitDictionary().Remove(_currentHex);
@@ -458,7 +458,7 @@ namespace MapObjects
                 }
                 _unitInfo.DisplayInfo(_selectedUnit);
                 if (!attackerDead) return true;
-                animator.SetTrigger("UnitDeath");               // start death animation on unit
+                animator.SetTrigger("dead");               // start death animation on unit
                 _unitInfo.DisplayInfo(_selectedUnit);
                 Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
                 _hexGrid.GetUnitObjectDictionary().Remove(attacker);
@@ -466,7 +466,7 @@ namespace MapObjects
 
                 return true;
             }
-            animator.SetTrigger("UnitDeath");               // start death animation on unit
+            animator.SetTrigger("dead");               // start death animation on unit
             Destroy(_hexGrid.GetUnitObjectDictionary()[defender]);
             _hexGrid.GetUnitObjectDictionary().Remove(defender);
             _hexGrid.GetUnitDictionary().Remove(_goalHex);
@@ -486,6 +486,7 @@ namespace MapObjects
                          .Where(pair => pair.Value.GetOwnerID() == defenderPlayer.GetPlayerID()).ToList())
             {
                 Debug.Log("Removing Unit");
+                animator.SetTrigger("dead");               // start death animation on unit
                 Destroy(_hexGrid.GetUnitObjectDictionary()[keyValue.Value]);
                 _hexGrid.GetUnitObjectDictionary().Remove(keyValue.Value);
                 _hexGrid.GetUnitDictionary().Remove(keyValue.Key);
