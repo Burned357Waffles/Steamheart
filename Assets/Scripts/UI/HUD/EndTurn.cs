@@ -94,17 +94,17 @@ namespace UI.HUD
         private void InitColors()
         {
             // sunrise
-            _sunSettings.Add(new Vector3(20, 15, 0), new Color(255, 222, 221, 255));
+            _sunSettings.Add(new Vector3(20, 145, 0), new Color(255, 222, 221, 255));
             // morning
-            _sunSettings.Add(new Vector3(40, 30, 0), new Color(255, 235, 221, 255));
+            _sunSettings.Add(new Vector3(40, 160, 0), new Color(255, 235, 221, 255));
             // noon
-            _sunSettings.Add(new Vector3(60, 45, 0), new Color(255, 244, 214, 255));
+            _sunSettings.Add(new Vector3(60, 175, 0), new Color(255, 244, 214, 255));
             // afternoon
-            _sunSettings.Add(new Vector3(40, 75, 0), new Color(222, 197, 166, 255));
+            _sunSettings.Add(new Vector3(40, 205, 0), new Color(222, 197, 166, 255));
             // sunset
-            _sunSettings.Add(new Vector3(20, 90, 0), new Color(214, 90, 60, 255));
+            _sunSettings.Add(new Vector3(20, 220, 0), new Color(214, 90, 60, 255));
             // midnight
-            _sunSettings.Add(new Vector3(40, 60, 1), new Color(53, 46, 108, 255));
+            _sunSettings.Add(new Vector3(40, 190, 0), new Color(53, 46, 108, 255));
         }
 
         private Vector3 LerpRotation(Vector3 start, Vector3 end, float timeStarted, float lerpTime = 1)

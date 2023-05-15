@@ -269,8 +269,8 @@ namespace Hex
             else
             {
                 if (noise < .1) hexPrefab = basicHex;
-                else if (noise > .1 && noise < .45) hexPrefab = forestHex;
-                else if (noise > .45 && noise < 1) hexPrefab = mountainHex;
+                else if (noise > .1 && noise < .47) hexPrefab = forestHex;
+                else if (noise > .47 && noise < 1) hexPrefab = mountainHex;
                 
             }
         }
