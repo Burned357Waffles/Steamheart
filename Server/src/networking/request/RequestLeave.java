@@ -20,6 +20,7 @@ public class RequestLeave extends GameRequest {
     public void doBusiness() throws Exception {
         ResponseLeave response = new ResponseLeave();
         Player player = client.getPlayer();
+        System.out.println("player " + player + " requested to leave");
         response.setPlayer(player);
         responses.add(response);
         NetworkManager.addResponseForAllOnlinePlayers(player.getID(), response);

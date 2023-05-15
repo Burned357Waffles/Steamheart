@@ -20,5 +20,6 @@ public class RequestEnd extends GameRequest {
         ResponseEnd response = new ResponseEnd(thisClientID);
         responses.add(response);
         NetworkManager.addResponseForAllOnlinePlayers(thisClientID, response);
+        System.out.println("received END_GAME from player ID: " + thisClientID);
     }
 }

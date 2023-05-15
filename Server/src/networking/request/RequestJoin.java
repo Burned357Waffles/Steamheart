@@ -37,6 +37,7 @@ public class RequestJoin extends GameRequest {
         int newID = server.getID();
         if (newID == 0) {
             responses.add(new ResponseJoin(server.isStarted ? "Game has already started" : "Lobby is full"));
+            System.out.println("request join denied");
             return;
         }
         Player joiningPlayer = new Player(newID, username);
@@ -52,7 +53,7 @@ public class RequestJoin extends GameRequest {
                 responses.add(new ResponseJoin(player));
             }
         }
-        System.out.println(joiningPlayer);
+        System.out.println(joiningPlayer + " has joined");
 
     }
 }

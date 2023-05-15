@@ -193,10 +193,10 @@ public class GameServer {
     public boolean isEmpty() {
         for (boolean slot : occupied) {
             if (slot) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
 

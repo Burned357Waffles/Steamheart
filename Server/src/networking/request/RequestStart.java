@@ -19,5 +19,6 @@ public class RequestStart extends GameRequest {
         ResponseStart response = new ResponseStart(client.getPlayer().getID());
         responses.add(response);
         NetworkManager.addResponseForAllOnlinePlayers(client.getUserID(), response);
+        System.out.println("player " + client.getPlayer() + " has started the game");
     }
 }

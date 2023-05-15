@@ -27,6 +27,7 @@ public class ResponseLeave extends GameResponse {
         server.removeActivePlayer(player.getID());
         if (server.isEmpty()) {
             server.isStarted = false;
+            System.out.println("Last player left the lobby, server.isStarted = false");
         }
 
         return packet.getBytes();

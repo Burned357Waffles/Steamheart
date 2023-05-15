@@ -10,6 +10,7 @@ namespace testNetwork
         [SerializeField] GameObject[] _playerList = new GameObject[LobbySize];
         private Lobby _lobby;
         private Player _thisPlayer;
+        private Player _currentTurnPlayer;
 
         public void Awake()
         {
@@ -28,6 +29,7 @@ namespace testNetwork
         public void UpdateCards()
         {
             _thisPlayer = _lobby.GetThisPlayer();
+            _currentTurnPlayer = _lobby.GetTurnPlayer();
             if (_thisPlayer == null)
             {
                 for (int i = 0; i < LobbySize; i++)
@@ -38,13 +40,15 @@ namespace testNetwork
                 return;
             }
             int index = 0;
-            _playerList[index].GetComponentInChildren<TMP_Text>().text = _thisPlayer.GetUsername();
+            _playerList[index].GetComponentInChildren<TMP_Text>().text
+                = _thisPlayer.GetUsername() + (_thisPlayer == _currentTurnPlayer ? " *" : "");
             _playerList[index++].SetActive(true);
             foreach(Player player in _lobby.GetPlayers())
             {
                 if (player != _thisPlayer)
                 {
-                    _playerList[index].GetComponentInChildren<TMP_Text>().text = player.GetUsername();
+                    _playerList[index].GetComponentInChildren<TMP_Text>().text
+                        = player.GetUsername() + (player == _currentTurnPlayer ? " *" : "");
                     _playerList[index++].SetActive(true);
                 }
             }
