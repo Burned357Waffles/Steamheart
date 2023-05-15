@@ -243,10 +243,14 @@ PrefabInstance:
       propertyPath: worldBorderZ
       value: 100
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 476436288511350864, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5772078114697161539, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1290427850}
     - targetCorrespondingSourceObject: {fileID: 267560266037539038, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3226941}
@@ -1014,6 +1018,7 @@ Transform:
   - {fileID: 1259472779}
   - {fileID: 228368543}
   - {fileID: 1663720618}
+  - {fileID: 695440132}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2856,6 +2861,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 619763762}
   m_CullTransparentMesh: 1
+--- !u!1 &695440131
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 695440132}
+  m_Layer: 0
+  m_Name: LandCreate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &695440132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695440131}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 246949152}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -6058,6 +6094,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5772078114697161539, guid: 7862613f65cdcc3428e3adfeede4a77c, type: 3}
   m_PrefabInstance: {fileID: 40357119}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1290427850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290427848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 0}
 --- !u!1 &1335157623 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4380779352131735518, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
@@ -9433,6 +9482,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5a6803109c450e4695f178538ae4716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cityMaxDistance: 20
+  cityFadeDistance: 2
   cameraRig: {fileID: 600101633}
   hexGrid: {fileID: 250597338}
 --- !u!114 &1849815608
