@@ -359,8 +359,10 @@ namespace MapObjects
             _selectedUnit.UseMovementPoints();
             _unitInfo.DisplayInfo(_selectedUnit);
 
+            _selectedUnitObject.GetComponent<FMODUnity.StudioEventEmitter>().Play();
+
             // update player visibility
-            _hexGrid.GetPlayerList()[_currentPlayer].UpdateUnitVisibility(_selectedUnit);          
+            // _hexGrid.GetPlayerList()[_currentPlayer].UpdateUnitVisibility(_selectedUnit);          
 
             return true;
         }
