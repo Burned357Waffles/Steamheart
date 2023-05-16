@@ -7,6 +7,7 @@ using Misc;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using QualitySettings = Settings.QualitySettings;
 
 namespace UI.HUD
 {
@@ -17,6 +18,7 @@ namespace UI.HUD
         [SerializeField] public GameObject infoPanel;
         [SerializeField] public GameObject hexPrefab;
         [SerializeField] public GameObject sunLight;
+        [SerializeField] public GameObject constantSunLight;
 
         private HexGrid _hexGrid;
         private HexPlacer _hexPlacer;
@@ -30,6 +32,7 @@ namespace UI.HUD
         private MoveCamera _cameraRig;
         private Light _light;
         private int _currentSunIndex;
+        private bool _dayNightOn;
 
         private bool _shouldLerp;
         private float _timeStarted;
@@ -48,6 +51,8 @@ namespace UI.HUD
 
         public void InitEndTurn()
         {
+            _dayNightOn = true;
+            if (QualitySettings.GetDayNightQuality() == 1) _dayNightOn = false; 
             _currentPlayer = 1;
             _hexGrid = FindObjectOfType<HexGrid>();
             _hexPlacer = FindObjectOfType<HexPlacer>();
@@ -75,7 +80,12 @@ namespace UI.HUD
             //ChangeViews();
             InitColors();
             _currentSunIndex = -1;
-            CycleTime();
+            if (_dayNightOn) CycleTime();
+            else
+            {
+                sunLight.SetActive(false);
+                constantSunLight.SetActive(true);
+            }
             AccumulateMaterials();
             CenterCameraToPlayerCapital();
         }
@@ -94,17 +104,17 @@ namespace UI.HUD
         private void InitColors()
         {
             // sunrise
-            _sunSettings.Add(new Vector3(20, 15, 0), new Color(255, 222, 221, 255));
+            _sunSettings.Add(new Vector3(20, 145, 0), new Color(255, 222, 221, 255));
             // morning
-            _sunSettings.Add(new Vector3(40, 30, 0), new Color(255, 235, 221, 255));
+            _sunSettings.Add(new Vector3(40, 160, 0), new Color(255, 235, 221, 255));
             // noon
-            _sunSettings.Add(new Vector3(60, 45, 0), new Color(255, 244, 214, 255));
+            _sunSettings.Add(new Vector3(60, 175, 0), new Color(255, 244, 214, 255));
             // afternoon
-            _sunSettings.Add(new Vector3(40, 75, 0), new Color(222, 197, 166, 255));
+            _sunSettings.Add(new Vector3(40, 205, 0), new Color(222, 197, 166, 255));
             // sunset
-            _sunSettings.Add(new Vector3(20, 90, 0), new Color(214, 90, 60, 255));
+            _sunSettings.Add(new Vector3(20, 220, 0), new Color(214, 90, 60, 255));
             // midnight
-            _sunSettings.Add(new Vector3(40, 60, 1), new Color(53, 46, 108, 255));
+            _sunSettings.Add(new Vector3(40, 190, 0), new Color(53, 46, 108, 255));
         }
 
         private Vector3 LerpRotation(Vector3 start, Vector3 end, float timeStarted, float lerpTime = 1)
@@ -295,23 +305,7 @@ namespace UI.HUD
             }
             
         }
-
-        public void ProcessEndTurn()
-        {
-            _endTurnEmitter.Play();
-            HealCity(); 
-            ResetCityUI();
-            ResetUnitMovementPoints();
-            //ChangeViews();
-            AdvancePlayer();
-            CycleTime();
-            CenterCameraToPlayerCapital();
-            AccumulateMaterials();
-            _hexTypeSelector.ResetPlacementCount();
-            _objectInfo.DisableInfoPanel();
-            CheckForWin();
-        }
-
+        
         private void CenterCameraToPlayerCapital()
         {
             // TODO: if player has no capitol left, zoom in on next owned city
@@ -331,5 +325,23 @@ namespace UI.HUD
             }
             _cameraRig.CenterCamera(capitalPosition);
         }
+        
+        public void ProcessEndTurn()
+        {
+            _endTurnEmitter.Play();
+            HealCity(); 
+            ResetCityUI();
+            ResetUnitMovementPoints();
+            //ChangeViews();
+            AdvancePlayer();
+            if (_dayNightOn) CycleTime();
+            CenterCameraToPlayerCapital();
+            AccumulateMaterials();
+            _hexTypeSelector.ResetPlacementCount();
+            _objectInfo.DisableInfoPanel();
+            CheckForWin();
+        }
+
+        
     }
 }

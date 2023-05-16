@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Misc
+namespace Settings
 {
     public class MatchSettings : MonoBehaviour
     {

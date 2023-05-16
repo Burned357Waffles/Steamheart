@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using MapObjects;
 using Misc;
+using Settings;
 using UI.HUD;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Serialization;
+using QualitySettings = Settings.QualitySettings;
 using Random = UnityEngine.Random;
 
 namespace Hex
@@ -31,10 +33,15 @@ namespace Hex
         [SerializeField] public GameObject ownedForestHex;
         [SerializeField] public GameObject ownedMountainHex;
 
-        //[SerializeField] public GameObject cityPrefab;
+        
         [SerializeField] public GameObject ownedCityPrefab;
-
+        
         [SerializeField] public GameObject CameraRig;
+        
+        // QUALITY SETTINGS
+        [SerializeField] public GameObject lowQualityCity;
+        [SerializeField] public GameObject highQualityWater;
+        [SerializeField] public GameObject lowQualityWater;
 
         public int mapRadius;
         public int centerIslandRadius;
@@ -151,6 +158,12 @@ namespace Hex
         {
             playerCount = MatchSettings.GetPlayerCount();
             mapRadius = MatchSettings.GetMapSize();
+            if (QualitySettings.GetParticleQuality() == 1) ownedCityPrefab = lowQualityCity;
+            if (QualitySettings.GetWaterQuality() == 1)
+            {
+                highQualityWater.SetActive(false);
+                lowQualityWater.SetActive(true);
+            }
             _capitolDistance = (int)(mapRadius * 0.65f);
             CameraRig.GetComponent<MoveCamera>().worldBorderZ = 1.5625f * mapRadius;
             CameraRig.GetComponent<MoveCamera>().worldBorderX = 1.5625f * mapRadius;
@@ -269,8 +282,8 @@ namespace Hex
             else
             {
                 if (noise < .1) hexPrefab = basicHex;
-                else if (noise > .1 && noise < .45) hexPrefab = forestHex;
-                else if (noise > .45 && noise < 1) hexPrefab = mountainHex;
+                else if (noise > .1 && noise < .47) hexPrefab = forestHex;
+                else if (noise > .47 && noise < 1) hexPrefab = mountainHex;
                 
             }
         }

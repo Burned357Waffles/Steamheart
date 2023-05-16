@@ -32,7 +32,7 @@ public class CloudGenerator : MonoBehaviour
 
         _startPosition.x = Random.Range(_startX - 50f, _startX);
         _startPosition.y = Random.Range(- 5f, + 5f);
-        _startPosition.z = Random.Range(- 300f, 100f);
+        _startPosition.z = Random.Range(- 200f, 100f);
         
         float speed1 = Random.Range(1f, 1.5f);
 

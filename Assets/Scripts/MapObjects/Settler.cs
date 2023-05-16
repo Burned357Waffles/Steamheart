@@ -74,6 +74,7 @@ namespace MapObjects
             if(Input.GetKeyDown(KeyCode.N)) // this will be replaced soon
             {
                 _selectedPosition = _hexGrid.GetHexAt(_unit.GetVectorCoordinates());
+                if (!_hexGrid.GetUnitDictionary().ContainsKey(_selectedPosition)) return;
                 if (_hexGrid.GetUnitDictionary()[_selectedPosition].GetCurrentMovementPoints() <= 0) return; // TODO: error here sometimes
                 if(CheckValidPlacement(_selectedPosition))
                 {
