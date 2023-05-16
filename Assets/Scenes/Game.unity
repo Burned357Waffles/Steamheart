@@ -7626,7 +7626,7 @@ MonoBehaviour:
   NONE: {fileID: 0}
   meleeUnit: {fileID: 805241029478433215, guid: 7323a218684777f4f836bdc435909acb, type: 3}
   rangedUnit: {fileID: 8501518584329758249, guid: fe23f35faac88694498dd5d906f51242, type: 3}
-  airshipUnit: {fileID: 311624380264057446, guid: 4df28dfe96e618641a8d0be6957c650c, type: 3}
+  airshipUnit: {fileID: 5738138191836050519, guid: 0fe68a6f9e8276746aef97ecbb3e9dd8, type: 3}
   settlerUnit: {fileID: 2962891210008775736, guid: c080612c53cc64f4e86aff38f4f7b489, type: 3}
   infoPanel: {fileID: 1027320856}
   unitTypeSelected: 0
