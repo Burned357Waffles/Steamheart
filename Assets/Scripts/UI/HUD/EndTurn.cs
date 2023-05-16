@@ -7,6 +7,7 @@ using Misc;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using QualitySettings = Settings.QualitySettings;
 
 namespace UI.HUD
 {
@@ -17,6 +18,7 @@ namespace UI.HUD
         [SerializeField] public GameObject infoPanel;
         [SerializeField] public GameObject hexPrefab;
         [SerializeField] public GameObject sunLight;
+        [SerializeField] public GameObject constantSunLight;
 
         private HexGrid _hexGrid;
         private HexPlacer _hexPlacer;
@@ -30,6 +32,7 @@ namespace UI.HUD
         private MoveCamera _cameraRig;
         private Light _light;
         private int _currentSunIndex;
+        private bool _dayNightOn;
 
         private bool _shouldLerp;
         private float _timeStarted;
@@ -48,6 +51,8 @@ namespace UI.HUD
 
         public void InitEndTurn()
         {
+            _dayNightOn = true;
+            if (QualitySettings.GetDayNightQuality() == 1) _dayNightOn = false; 
             _currentPlayer = 1;
             _hexGrid = FindObjectOfType<HexGrid>();
             _hexPlacer = FindObjectOfType<HexPlacer>();
@@ -75,7 +80,12 @@ namespace UI.HUD
             //ChangeViews();
             InitColors();
             _currentSunIndex = -1;
-            CycleTime();
+            if (_dayNightOn) CycleTime();
+            else
+            {
+                sunLight.SetActive(false);
+                constantSunLight.SetActive(true);
+            }
             AccumulateMaterials();
             CenterCameraToPlayerCapital();
         }
@@ -295,23 +305,7 @@ namespace UI.HUD
             }
             
         }
-
-        public void ProcessEndTurn()
-        {
-            _endTurnEmitter.Play();
-            HealCity(); 
-            ResetCityUI();
-            ResetUnitMovementPoints();
-            //ChangeViews();
-            AdvancePlayer();
-            CycleTime();
-            CenterCameraToPlayerCapital();
-            AccumulateMaterials();
-            _hexTypeSelector.ResetPlacementCount();
-            _objectInfo.DisableInfoPanel();
-            CheckForWin();
-        }
-
+        
         private void CenterCameraToPlayerCapital()
         {
             // TODO: if player has no capitol left, zoom in on next owned city
@@ -331,5 +325,23 @@ namespace UI.HUD
             }
             _cameraRig.CenterCamera(capitalPosition);
         }
+        
+        public void ProcessEndTurn()
+        {
+            _endTurnEmitter.Play();
+            HealCity(); 
+            ResetCityUI();
+            ResetUnitMovementPoints();
+            //ChangeViews();
+            AdvancePlayer();
+            if (_dayNightOn) CycleTime();
+            CenterCameraToPlayerCapital();
+            AccumulateMaterials();
+            _hexTypeSelector.ResetPlacementCount();
+            _objectInfo.DisableInfoPanel();
+            CheckForWin();
+        }
+
+        
     }
 }
