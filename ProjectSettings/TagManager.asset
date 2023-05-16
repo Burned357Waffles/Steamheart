@@ -9,6 +9,8 @@ TagManager:
   - Water
   - City
   - Undefined
+  - Button
+  - UnitSelectButton
   layers:
   - Default
   - TransparentFX

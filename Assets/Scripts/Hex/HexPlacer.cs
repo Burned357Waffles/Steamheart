@@ -13,28 +13,31 @@ namespace Hex
     public class HexPlacer : MonoBehaviour
     {
         [SerializeField] public GameObject hexPrefab; // this will be changed depending on button selected
-    
+        [SerializeField] public GameObject infoPanel;
+        
         public int placementCount;
 
-        private int _playerID;
+        private int _currentPlayer;
         private HexGrid _hexGrid;
         private UnitMovement _unitMovement;
         private Camera _camera;
         private bool _isHexPrefabNull;
         private bool _isSelecting;
 
+        private Animator _animator;
+
         public void SetPlayer(int id)
         {
-            _playerID = id;
+            _currentPlayer = id;
         }
 
         private void Start()
         {
             _isHexPrefabNull = hexPrefab == null;
             _camera = Camera.main;
-            _hexGrid = GameObject.FindObjectOfType<HexGrid>();
+            _hexGrid = FindObjectOfType<HexGrid>();
             _unitMovement = FindObjectOfType<UnitMovement>();
-            _playerID = 1;
+            SetPlayer(1);
         }
 
         private void Update()
@@ -57,11 +60,43 @@ namespace Hex
                 int hexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
                 if (hexIndex < 0) return;
                 
-                if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_playerID)) return;
+                //if (!_hexGrid.GetHexList()[hexIndex].IsValidLocation(_currentPlayer)) return;
+                if (!SelectedTileIsNeighbor(hexIndex))
+                {
+                    if (!CheckForUnit(hexIndex)) return;
+                }
+                
                 if (!PlacementCount(hexIndex)) return;
                 _unitMovement.SetCurrentIndex(-1);
                 ConvertHex(hexIndex);
             }
+        }
+
+        private bool SelectedTileIsNeighbor(int hexIndex)
+        {
+            Hex selectedHex = _hexGrid.GetHexList()[hexIndex];
+            for (int j = 0; j < 6; j++)
+            {
+                Vector3 neighbor = HexGrid.HexNeighbor(selectedHex.GetVectorCoordinates(), j);
+                if (_hexGrid.GetHexAt(neighbor).GetOwnerID() == _currentPlayer )
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool CheckForUnit(int hexIndex)
+        {
+            Hex selectedHex = _hexGrid.GetHexList()[hexIndex];
+            for (int j = 0; j < 6; j++)
+            {
+                Vector3 neighbor = HexGrid.HexNeighbor(selectedHex.GetVectorCoordinates(), j);
+                if (!_hexGrid.GetUnitDictionary().ContainsKey(_hexGrid.GetHexAt(neighbor))) continue;
+                if (_hexGrid.GetUnitDictionary()[_hexGrid.GetHexAt(neighbor)].GetOwnerID() == _currentPlayer)
+                    return true;
+            }
+            return false;
         }
 
         /// <summary> ***********************************************
@@ -100,8 +135,20 @@ namespace Hex
                 Quaternion.identity,
                 this.transform);
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
-            _hexGrid.GetGameObjectList()[hexIndex] = newHex;
+            
+            _animator = newHex.transform.GetChild(0).GetComponent<Animator>();
             selectedHex.SetHexType(hexPrefab.name);
+            selectedHex.SetOwnerID(_currentPlayer);
+
+            if (selectedHex.GetHexType() == Hex.HexType.Mountain)
+            {
+                _animator.Play("MountainCreation");
+            }
+            else { _animator.Play("LandCreation"); }
+
+            _hexGrid.GetGameObjectList()[hexIndex] = newHex;
+            _hexGrid.GetHexObjectDictionary()[_hexGrid.GetHexList()[hexIndex]] = newHex;
+            
         }
 
         /// <summary> ***********************************************

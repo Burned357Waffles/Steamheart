@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using MapObjects;
+using Misc;
 using UI.HUD;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Hex
@@ -27,19 +31,25 @@ namespace Hex
         [SerializeField] public GameObject ownedForestHex;
         [SerializeField] public GameObject ownedMountainHex;
 
-        [SerializeField] public GameObject cityPrefab;
+        //[SerializeField] public GameObject cityPrefab;
+        [SerializeField] public GameObject ownedCityPrefab;
+
+        [SerializeField] public GameObject CameraRig;
 
         public int mapRadius;
         public int centerIslandRadius;
         public int playerCount;
-        public int capitolDistance;
-
+        
+        private int _capitolDistance;
+        private Animator _animator;
+        
         private readonly Dictionary<Hex, GameObject> _hexDictionary = new Dictionary<Hex, GameObject>();
         private readonly Dictionary<Unit, GameObject> _unitObjectDictionary = new Dictionary<Unit, GameObject>();
         private readonly Dictionary<Hex, Unit> _unitDictionary = new Dictionary<Hex, Unit>();
         private readonly List<Hex> _hexList = new List<Hex>();
         private readonly List<GameObject> _gameObjects = new List<GameObject>();
         private readonly List<City> _cityList = new List<City>();
+        private List<Player> _playerList = new List<Player>();
 
         private static readonly Vector3[] DirectionVectors =
         {
@@ -124,6 +134,7 @@ namespace Hex
         public List<Hex> GetHexList() { return _hexList; }
         public List<GameObject> GetGameObjectList() { return _gameObjects; }
         public List<City> GetCityList() { return _cityList; }
+        public List<Player> GetPlayerList() { return _playerList; }
         public Dictionary<Hex, Unit> GetUnitDictionary() { return _unitDictionary; } 
         public Dictionary<Unit, GameObject> GetUnitObjectDictionary() { return _unitObjectDictionary; } 
         public Dictionary<Hex, GameObject> GetHexObjectDictionary() { return _hexDictionary; }
@@ -138,8 +149,16 @@ namespace Hex
         /// </summary> **********************************************
         private void Start()
         {
+            playerCount = MatchSettings.GetPlayerCount();
+            mapRadius = MatchSettings.GetMapSize();
+            _capitolDistance = (int)(mapRadius * 0.65f);
+            CameraRig.GetComponent<MoveCamera>().worldBorderZ = 1.5625f * mapRadius;
+            CameraRig.GetComponent<MoveCamera>().worldBorderX = 1.5625f * mapRadius;
+            //playerCount = 1; // for debugging
             GenerateGrid();
             CreateCapitols();
+            EndTurn endTurn = FindObjectOfType<EndTurn>();
+            endTurn.InitEndTurn();
         }
 
         /// <summary> ***********************************************
@@ -216,7 +235,7 @@ namespace Hex
         /// It takes in coordinates and a boolean to signify if
         /// air hexes will be generated.
         /// </summary> **********************************************
-        private void GetHexType(Hex hex, bool hasAir)
+        public void GetHexType(Hex hex, bool hasAir)
         {
             // air, basic, forest, mountain
             int[] typeCount = new int[4];
@@ -246,7 +265,14 @@ namespace Hex
                 else if (typeCount[3] > 1) hexPrefab = mountainHex;
                 else hexPrefab = airHex;   
             }
-            else hexPrefab = basicHex;
+
+            else
+            {
+                if (noise < .1) hexPrefab = basicHex;
+                else if (noise > .1 && noise < .47) hexPrefab = forestHex;
+                else if (noise > .47 && noise < 1) hexPrefab = mountainHex;
+                
+            }
         }
     
         /// <summary> ***********************************************
@@ -270,12 +296,17 @@ namespace Hex
         /// hexes. It returns the new Vector3 with the changed
         /// y-value.
         /// </summary> **********************************************
-        private static Vector3 AddHeight(Vector3 hex)
+        public static Vector3 AddHeight(Vector3 hex)
         {
             float randomOffset = Random.Range(0, 8);
             hex.y += randomOffset/100;
 
             return hex;
+        }
+
+        public Player FindPlayerOfID(int id)
+        {
+            return _playerList.FirstOrDefault(player => player.GetPlayerID() == id);
         }
     
         /// <summary> ***********************************************
@@ -284,9 +315,20 @@ namespace Hex
         /// </summary> ***********************************************
         private void CreateCapitols()
         {
+            int[] arrayToShuffle = {0, 4, 2, 1, 3, 5};
+            for (int t = 0; t < arrayToShuffle.Length; t++ )
+            {
+                int tmp = arrayToShuffle[t];
+                int r = Random.Range(t, arrayToShuffle.Length);
+                arrayToShuffle[t] = arrayToShuffle[r];
+                arrayToShuffle[r] = tmp;
+            }
+            
             for (int i = 0; i < playerCount; i++)
             {
-                Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(), CoordinateScale(DirectionVectors[i], capitolDistance)));
+                Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(),
+                    CoordinateScale(DirectionVectors[arrayToShuffle[i]], _capitolDistance)));
+                _playerList.Add(new Player(i + 1));
                 CreateCityAt(hexToPut, i + 1, true);
             }
         }
@@ -296,7 +338,9 @@ namespace Hex
         /// </summary> **********************************************
         public void CreateCityAt(Hex cityCenter, int ownerID, bool isCapitol)
         {
+            Player player = FindPlayerOfID(ownerID);
             City city = new City(cityCenter, ownerID, isCapitol);
+            player.AssignCity(city);
 
             for (int i = 0; i < _hexList.Count(); i++)
             {
@@ -305,16 +349,29 @@ namespace Hex
                 Destroy(_gameObjects[i]);
                 
                 // TODO: City instantiated here
-                GameObject cityObject = Instantiate(cityPrefab,
+                GameObject cityObject = Instantiate(ownedCityPrefab,
                     cityCenter.WorldPosition,
                     Quaternion.identity,
                     this.transform);
-                
+                cityObject.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+                    
                 _hexList[i].MakeHexBuildingType();
                 _gameObjects[i] = cityObject;
                 _cityList.Add(city);
+                _hexDictionary[_hexList[i]] = cityObject;
                 ChangeCityHexPrefabs(city);
+                
                 Transform unitSelectorPanel = cityObject.transform.GetChild(0);
+                
+                
+                var border = cityObject.transform.GetChild(1);
+                /*
+                var volume = border.GetChild(0).GetComponent<Volume>();
+                Bloom bloom = (Bloom)volume.profile.components[0];
+                bloom.tint = new ColorParameter(Color.red);
+                */
+                border.gameObject.SetActive(false);
+
                 unitSelectorPanel.gameObject.SetActive(false);
                 UnitProductionSelector.AssignButtons(unitSelectorPanel);
                 return;
@@ -342,6 +399,8 @@ namespace Hex
                     Quaternion.identity,
                     this.transform);
                 newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
+                _animator = newHex.transform.GetChild(0).GetComponent<Animator>();
+                _animator.enabled = false;
                 _gameObjects[entry.Value] = newHex;
             }
         }

@@ -17,11 +17,9 @@ namespace UI.HUD
 
         private HexGrid _hexGrid;
         private HexPlacer _hexPlacer;
-        private int _currentPlayer;
     
         private void Start()
         {
-            _currentPlayer = 1;
             _hexGrid = FindObjectOfType<HexGrid>();
             _hexPlacer = FindObjectOfType<HexPlacer>();
         }
@@ -65,18 +63,13 @@ namespace UI.HUD
         /// </summary> ***********************************************
         public void ResetPlacementCount()
         {
+            Debug.Log("resetting buttons");
             _hexPlacer.placementCount = 0;
             _hexPlacer.hexPrefab = NONE;
             basicButton.GetComponent<Button>().interactable = true;
             forestButton.GetComponent<Button>().interactable = true;
             mountainButton.GetComponent<Button>().interactable = true;
-        }
-
-        public void SetNextPlayer()
-        {
-            _currentPlayer++;
-            if (_currentPlayer > _hexGrid.playerCount) _currentPlayer = 1;
-            _hexPlacer.SetPlayer(_currentPlayer);
+            Debug.Log("reset buttons");
         }
     }
 }

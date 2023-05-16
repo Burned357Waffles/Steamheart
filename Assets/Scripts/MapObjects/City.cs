@@ -13,13 +13,16 @@ namespace MapObjects
     public class City
     {
         private Hex.Hex _center;
-        private readonly int _ownerID;
+        private int _ownerID;
         private bool _isCapitol;
         public int Health;
-        public int Damage;
+        public readonly int Damage;
+        public readonly int AttackRadius;
         private readonly int _cityRadius;
         private readonly HexGrid _hexGrid;
         public bool CanSpawnThisTurn;
+        public int IronCount;
+        public int WoodCount;
 
         private readonly Dictionary<Hex.Hex, int> _controlledHexDictionary = new Dictionary<Hex.Hex, int>();
         private readonly List<Hex.Hex> _controlledHexes = new List<Hex.Hex>();
@@ -30,19 +33,16 @@ namespace MapObjects
             _cityRadius = 4;
             _ownerID = ownerID;
             _isCapitol = isCapitol;
-            Health = 100; // we can play with values
-            Damage = 10; // we can play with values
+            Health = 25; // we can play with values
+            Damage = 5; // we can play with values
+            AttackRadius = 2;
             _controlledHexes.Add(_center);
             _hexGrid = Object.FindObjectOfType<HexGrid>();
             CreateCity();
             CanSpawnThisTurn = true;
         }
 
-        public int OwnerID()
-        {
-            return _ownerID;
-        }
-
+        public int GetOwnerID() { return _ownerID; }
 
         /// <summary> ***********************************************
         /// This is the same logic of creating the map.
@@ -55,6 +55,11 @@ namespace MapObjects
             {
                 _hexGrid.HexRing(center.GetVectorCoordinates(), i, _controlledHexDictionary);
             }
+
+            foreach (Hex.Hex hex in _controlledHexDictionary.Keys)
+            {
+                _controlledHexes.Add(hex);
+            }
             SetOwnership();
         }
         
@@ -64,11 +69,22 @@ namespace MapObjects
         /// </summary> **********************************************
         private void SetOwnership()
         {
-            foreach (var key in _controlledHexDictionary.Keys)
+            foreach (Hex.Hex hex in _controlledHexes)
             {
-                key.SetOwnerID(_ownerID);
+                hex.SetOwnerID(_ownerID);
             }
         }
+        
+        public void SetOwnership(int id)
+        {
+            _ownerID = id;
+            foreach (Hex.Hex hex in _controlledHexes)
+            {
+                hex.SetOwnerID(id);
+            }
+        }
+        
+        public void RemoveCapitolTag() { _isCapitol = false; }
 
         /// <summary> ***********************************************
         /// Getter methods
@@ -76,5 +92,6 @@ namespace MapObjects
         public List<Hex.Hex> GetCityHexes(){ return _controlledHexes; }
         public Dictionary<Hex.Hex, int> GetCityDictionary() { return _controlledHexDictionary; }
         public Hex.Hex GetCityCenter() { return _center; }
+        public bool IsCapitol() { return _isCapitol; }
     }
 }

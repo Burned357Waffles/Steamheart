@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Misc
 {
@@ -14,7 +15,7 @@ namespace Misc
         public float minZoom;
         public float maxZoom;
         public float worldBorderX;
-        public float wordBorderZ;
+        public float worldBorderZ;
         public Vector3 zoomAmount;
 
         public Vector3 newPosition;
@@ -28,11 +29,12 @@ namespace Misc
         public Vector3 rotateCurrentPosition;
         private Camera _camera;
 
-        public void Start()
+        public void Awake()
         {
             _camera = Camera.main;
-            newPosition = transform.position;
-            newRotation = transform.rotation;
+            var transform1 = transform;
+            newPosition = transform1.position;
+            newRotation = transform1.rotation;
             newZoom = cameraTransform.localPosition;
         }
 
@@ -40,6 +42,18 @@ namespace Misc
         {
             HandleMovementInput();
             HandleMouseInput();
+        }
+
+        public void CenterCamera(Vector3 tPos)
+        {
+            Vector3 finalPos = new Vector3(tPos.x, transform.position.y, tPos.z);
+            newPosition = finalPos;
+        }
+        
+        public void CenterCamera(GameObject obj)
+        {
+            Vector3 objPos = obj.transform.position;
+            CenterCamera(objPos);
         }
 
         private void HandleMouseInput()
@@ -144,8 +158,9 @@ namespace Misc
             }
 
             clampCamera();
-            transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * movementTime);
+            Transform transform1;
+            (transform1 = transform).position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
+            transform.rotation = Quaternion.Lerp(transform1.rotation, newRotation, Time.deltaTime * movementTime);
             cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);        
         }
 
@@ -153,7 +168,7 @@ namespace Misc
         {
             // binds position to world border
             float clampedPositionX = Mathf.Clamp(newPosition.x, -worldBorderX, worldBorderX);
-            float clampedPositionZ = Mathf.Clamp(newPosition.z, -wordBorderZ, wordBorderZ);
+            float clampedPositionZ = Mathf.Clamp(newPosition.z, -worldBorderZ, worldBorderZ);
             newPosition = new Vector3(clampedPositionX, 0.1f, clampedPositionZ);
 
             // binds position to min and max zoom amount
