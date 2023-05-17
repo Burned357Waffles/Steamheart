@@ -36,15 +36,21 @@ namespace UI.HUD
 
                         return;
                     }
-
+            if (hit.transform.CompareTag("Unit") || hit.transform.CompareTag("City"))
+            {
+                Debug.Log(hit.transform.position);
+            }
+            
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("UI"))
             {
                 highlighter.SetActive(false);
                 return;
             }
             highlighter.SetActive(true);
+            
             int currentHexIndex = _hexGrid.GetHexIndexAtWorldPos(hit.transform.position);
             
+
             Hex.Hex hex = _hexGrid.GetHexList()[currentHexIndex];
 
             highlighter.transform.position = hex.WorldPosition;
