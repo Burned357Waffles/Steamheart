@@ -46,7 +46,11 @@
         /// </summary> **********************************************
         private static bool UnitFight()
         {
-            if (_attackerUnit.Damage >= _defenderUnit.Health) return true;
+            if (_attackerUnit.Damage >= _defenderUnit.Health)
+            {
+                _defenderUnit.Health -= _attackerUnit.Damage;
+                return true;
+            }
 
             _defenderUnit.Health -= _attackerUnit.Damage;
             return false;
