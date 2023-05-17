@@ -126,12 +126,9 @@ namespace Hex
             int hexIndex = -1;
             for (int i = 0; i < GetHexList().Count; i++)
             {
-                //Debug.Log("hit coords: " + coordinates);
-                //Debug.Log("Hex coords: " + GetHexList()[i].WorldPosition);
                 if (GetHexList()[i].WorldPosition.x == coordinates.x &&
                     GetHexList()[i].WorldPosition.z == coordinates.z)
                 {
-                    Debug.Log("MATCH");
                     hexIndex = i;
                     break;
                 }

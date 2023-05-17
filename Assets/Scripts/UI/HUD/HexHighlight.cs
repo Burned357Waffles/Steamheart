@@ -36,11 +36,7 @@ namespace UI.HUD
 
                         return;
                     }
-            if (hit.transform.CompareTag("Unit") || hit.transform.CompareTag("City"))
-            {
-                Debug.Log(hit.transform.position);
-            }
-            
+
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("UI"))
             {
                 highlighter.SetActive(false);

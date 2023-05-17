@@ -32,7 +32,8 @@ namespace MapObjects
         private Camera _camera;
         private FMODUnity.StudioEventEmitter _selectEmitter;
         [SerializeField] private Animator animator;
-        
+        private static readonly int InCombat = Animator.StringToHash("InCombat");
+
         /* Heuristic was needed for A* algorithm
      https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
     */
@@ -434,14 +435,19 @@ namespace MapObjects
                 !_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
                 return true;
             
+            
             animator.SetBool("InCombat", true);                // start combat idle animation on unit
             Unit attacker = _hexGrid.GetUnitDictionary()[_currentHex];
             Unit defender = _hexGrid.GetUnitDictionary()[_goalHex];
+
+            Animator attackerAnimator = _hexGrid.GetUnitObjectDictionary()[attacker]
+                .transform.GetChild(0).GetComponent<Animator>();
+            attackerAnimator.SetBool(InCombat, true);
             
             //if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer) return true;
 
             Debug.Log("ATTACKING UNIT");
-            animator.SetTrigger("Attacking");                // start combat animation on unit
+            attackerAnimator.SetTrigger("Attacking");                // start combat animation on unit
             bool dead = Combat.InitiateCombat(attacker, defender);
             _unitInfo.DisplayInfo(_selectedUnit);
             if (!dead)
