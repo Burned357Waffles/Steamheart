@@ -221,6 +221,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5613325174192657293}
+  - {fileID: 4031811130743588313}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4694,3 +4695,97 @@ Transform:
   m_Father: {fileID: 3424390287630182843}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &7243786519646591470
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8647715133721235359}
+    m_Modifications:
+    - target: {fileID: 3583393104171147079, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_Name
+      value: Audio
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.8972313
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.01460582
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Path
+      value: event:/SFX/Melee Unit Strike
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: OverrideMinDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data1
+      value: -1690506866
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data2
+      value: 1145994418
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data3
+      value: 1643482012
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data4
+      value: -1450644422
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+--- !u!4 &4031811130743588313 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+  m_PrefabInstance: {fileID: 7243786519646591470}
+  m_PrefabAsset: {fileID: 0}

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3356958451887890072}
   - component: {fileID: 7062044693746896924}
+  - component: {fileID: 7311080440484738255}
   m_Layer: 0
   m_Name: airship_unit
   m_TagString: Untagged
@@ -30,6 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3794659835819355141}
+  - {fileID: 2450915571876196660}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -54,6 +56,36 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7311080440484738255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5738138191836050519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1214268469
+      Data2: 1188239927
+      Data3: -80801151
+      Data4: -2063127598
+    Path: event:/SFX/Air Unit Movement
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1001 &3685051125654424558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -179,3 +211,125 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1001 &8176180752851610883
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3356958451887890072}
+    m_Modifications:
+    - target: {fileID: 2297294603601757967, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Path
+      value: event:/SFX/Air Unit Movement
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297294603601757967, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297294603601757967, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: OverrideMinDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297294603601757967, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data1
+      value: -1214268469
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297294603601757967, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data2
+      value: 1188239927
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297294603601757967, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data3
+      value: -80801151
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297294603601757967, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data4
+      value: -2063127598
+      objectReference: {fileID: 0}
+    - target: {fileID: 3583393104171147079, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_Name
+      value: Audio
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.8972313
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.01460582
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Path
+      value: event:/SFX/Air Unit Strike
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: OverrideMinDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data1
+      value: 570173765
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data2
+      value: 1274378304
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data3
+      value: 385480590
+      objectReference: {fileID: 0}
+    - target: {fileID: 7242936442731182201, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+      propertyPath: EventReference.Guid.Data4
+      value: 1927565732
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+--- !u!4 &2450915571876196660 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6013650933076745271, guid: b7023854630da0f44842c5a1cadd8b80, type: 3}
+  m_PrefabInstance: {fileID: 8176180752851610883}
+  m_PrefabAsset: {fileID: 0}
