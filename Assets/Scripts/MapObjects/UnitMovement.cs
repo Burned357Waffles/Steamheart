@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Hex;
@@ -31,6 +32,11 @@ namespace MapObjects
         private int _currentPlayer;
         private Camera _camera;
         private FMODUnity.StudioEventEmitter _selectEmitter;
+        [SerializeField] private Animator animator;
+        private static readonly int InCombat = Animator.StringToHash("InCombat");
+        private static readonly int Attacking = Animator.StringToHash("Attacking");
+        private static readonly int Dying = Animator.StringToHash("dead");
+        private static readonly int GetHit = Animator.StringToHash("GetHit");
         
         /* Heuristic was needed for A* algorithm
      https://www.redblobgames.com/pathfinding/a-star/introduction.html#greedy-best-first
@@ -131,7 +137,17 @@ namespace MapObjects
         // use WorldPosition in Hex to get actual position
 
         public void SetCurrentIndex(int index) { _currentHexIndex = index; }
-        
+
+        private IEnumerator RemoveUnit(Unit unit)
+        {
+            yield return new WaitForSeconds(8);
+            Debug.Log("Despawning unit");
+            _unitInfo.DisplayInfo(_selectedUnit);
+            Destroy(_hexGrid.GetUnitObjectDictionary()[unit]);
+            _hexGrid.GetUnitObjectDictionary().Remove(unit);
+            _hexGrid.GetUnitDictionary().Remove(_currentHex);
+            
+        }
         private void Start()
         {
             _camera = Camera.main;
@@ -140,6 +156,8 @@ namespace MapObjects
             _currentPlayer = 1;
             _unitInfo = infoPanel.GetComponent<MapObjectInfo>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
+            animator = GetComponent<Animator>();
+            
         }
 
         private void Update()
@@ -229,9 +247,6 @@ namespace MapObjects
                         _hexGrid.GetCityAt(_goalHex).GetOwnerID())
                         goto AfterCombatCheck;
                     
-                    if (!IsTargetInRange(_currentHex, _goalHex, _hexGrid.GetUnitDictionary()[_currentHex].AttackRadius))
-                        return;
-                    
                     doDeplete = true;
                     // if target is still alive
                     if (DoCityCombat()) 
@@ -241,13 +256,6 @@ namespace MapObjects
                             ResetIndices();
                             return;
                         }
-                        _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
-                        ResetIndices();
-                        return;
-                    }
-                    
-                    if (_hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Melee)
-                    {
                         _hexGrid.GetUnitDictionary()[_currentHex].DepleteMovementPoints();
                         ResetIndices();
                         return;
@@ -282,9 +290,9 @@ namespace MapObjects
                 }
                 
                 AfterCombatCheck:
-                
+                Debug.Log("1");
                 if (!SelectedTileIsNeighbor()) return;
-                
+                Debug.Log("2");
                 Debug.Log(_goalHex.GetHexType());
                 Debug.Log(_goalHex.IsBlocked());
                 
@@ -293,20 +301,25 @@ namespace MapObjects
                 if (_goalHex.IsBlocked() && 
                     _hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Airship)
                     return;
+                Debug.Log("3");
                 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                     {
+                        Debug.Log("4");
                         ResetIndices();
                         return;
                     }
                 }
-
-                if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
+                Debug.Log("5");
                 
+                
+                if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
+                Debug.Log("6");
                 // TODO: add variables to network
                 if (!MoveUnit()) return;
+                Debug.Log("7");
                 if (doDeplete) _selectedUnit.DepleteMovementPoints();
                 _currentHexIndex = _goalHexIndex;
                 _goalHexIndex = -1;
@@ -394,21 +407,17 @@ namespace MapObjects
             Unit attacker = _hexGrid.GetUnitDictionary()[_currentHex];
             City city = _hexGrid.GetCityAt(_goalHex);
             
+            Animator attackerAnimator = _hexGrid.GetUnitObjectDictionary()[attacker]
+                            .transform.GetChild(0).GetComponent<Animator>();
+            attackerAnimator.SetBool(InCombat, true);                 // start combat idle animation on unit
+            attackerAnimator.SetTrigger(Attacking);                 // start attack animation on unit
             Debug.Log("Attacker health before attack: " + attacker.Health);
             Debug.Log("Defender health before attack: " + city.Health);
             Debug.Log("City owned by player: " + city.GetOwnerID());
             
-            // attack garrisoned unit
-            int damageBefore = attacker.Damage;
             if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
             {
-                int healthBefore = _hexGrid.GetUnitDictionary()[_goalHex].Health;
-                
-                DoCombat();
-                if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return true;
-                
-                int damageModifier = attacker.Damage - healthBefore;
-                attacker.Damage = damageModifier;
+                return DoCombat();
             }
             
             bool taken = Combat.InitiateCombat(attacker, city);
@@ -424,38 +433,42 @@ namespace MapObjects
                 }
                 
                 Debug.Log("Attacker Health: " + attacker.Health);
-                if (!dead)
-                {
-                    attacker.Damage = damageBefore;
-                    return true;
-                }
-                
-                Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
-                _hexGrid.GetUnitObjectDictionary().Remove(attacker);
-                _hexGrid.GetUnitDictionary().Remove(_currentHex);
+                if (!dead) return true;
+                attackerAnimator.SetTrigger(Dying);               // start death animation on unit
+                StartCoroutine(RemoveUnit(attacker));
+                // Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
+                // _hexGrid.GetUnitObjectDictionary().Remove(attacker);
+                // _hexGrid.GetUnitDictionary().Remove(_currentHex);
                 return true;
             }
             
-            Debug.Log("TAKEN city from player: " + city.GetOwnerID()); 
-            attacker.Damage = damageBefore;
-            
+            Debug.Log("TAKEN city from player: " + city.GetOwnerID());
             return RemovePlayer(_hexGrid.FindPlayerOfID(attacker.GetOwnerID()),
                 _hexGrid.FindPlayerOfID(city.GetOwnerID()),
                 city);
         }
-
+        
         private bool DoCombat()
         {
             if (!_hexGrid.GetUnitDictionary().ContainsKey(_currentHex) ||
                 !_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
                 return true;
-
+            
             Unit attacker = _hexGrid.GetUnitDictionary()[_currentHex];
             Unit defender = _hexGrid.GetUnitDictionary()[_goalHex];
+
+            Animator attackerAnimator = _hexGrid.GetUnitObjectDictionary()[attacker]
+                .transform.GetChild(0).GetComponent<Animator>();
+            Animator defenderAnimator = _hexGrid.GetUnitObjectDictionary()[defender]
+                .transform.GetChild(0).GetComponent<Animator>();
+            attackerAnimator.SetBool(InCombat, true);
+            defenderAnimator.SetBool(InCombat, true);
             
             //if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer) return true;
 
             Debug.Log("ATTACKING UNIT");
+            attackerAnimator.SetTrigger(Attacking);                // start attack animation on unit
+            defenderAnimator.SetTrigger(GetHit);
             bool dead = Combat.InitiateCombat(attacker, defender);
             _unitInfo.DisplayInfo(_selectedUnit);
             if (!dead)
@@ -472,21 +485,25 @@ namespace MapObjects
                 }
                 _unitInfo.DisplayInfo(_selectedUnit);
                 if (!attackerDead) return true;
-                
-                _unitInfo.DisplayInfo(_selectedUnit);
-                Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
-                _hexGrid.GetUnitObjectDictionary().Remove(attacker);
-                _hexGrid.GetUnitDictionary().Remove(_currentHex);
+                attackerAnimator.SetTrigger(Dying);
+                StartCoroutine(RemoveUnit(attacker));
+                // _unitInfo.DisplayInfo(_selectedUnit);
+                // Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
+                // _hexGrid.GetUnitObjectDictionary().Remove(attacker);
+                // _hexGrid.GetUnitDictionary().Remove(_currentHex);
 
                 return true;
             }
-            Destroy(_hexGrid.GetUnitObjectDictionary()[defender]);
-            _hexGrid.GetUnitObjectDictionary().Remove(defender);
-            _hexGrid.GetUnitDictionary().Remove(_goalHex);
+            defenderAnimator.SetTrigger(Dying);               // start death animation on unit
+            attackerAnimator.SetBool(InCombat, false);
+            StartCoroutine(RemoveUnit(defender));
+            // Destroy(_hexGrid.GetUnitObjectDictionary()[defender]);
+            // _hexGrid.GetUnitObjectDictionary().Remove(defender);
+            // _hexGrid.GetUnitDictionary().Remove(_goalHex);
             
             return false;
         }
-
+        
         private bool RemovePlayer(Player attackerPlayer, Player defenderPlayer, City city)
         {
             defenderPlayer.RemoveCity(city);
