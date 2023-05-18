@@ -245,6 +245,9 @@ namespace MapObjects
                         _hexGrid.GetCityAt(_goalHex).GetOwnerID())
                         goto AfterCombatCheck;
                     
+                    if (!IsTargetInRange(_currentHex, _goalHex, _hexGrid.GetUnitDictionary()[_currentHex].AttackRadius))
+                        return;
+                    
                     doDeplete = true;
                     // if target is still alive
                     if (DoCityCombat()) 
@@ -288,36 +291,33 @@ namespace MapObjects
                 }
                 
                 AfterCombatCheck:
-                Debug.Log("1");
+                
                 if (!SelectedTileIsNeighbor()) return;
-                Debug.Log("2");
+                
                 Debug.Log(_goalHex.GetHexType());
                 Debug.Log(_goalHex.IsBlocked());
                 
-                //_selectedUnit = _hexGrid.GetUnitDictionary()[_currentHex];
-                //_selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[_selectedUnit];
                 if (_goalHex.IsBlocked() && 
                     _hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Airship)
                     return;
-                Debug.Log("3");
-                
+
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                     {
-                        Debug.Log("4");
                         ResetIndices();
                         return;
                     }
                 }
-                Debug.Log("5");
-                
-                
-                if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return;
-                Debug.Log("6");
+
+                if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
+                {
+                    Debug.Log("here");
+                    return;
+                }
                 // TODO: add variables to network
                 if (!MoveUnit()) return;
-                Debug.Log("7");
+                
                 if (doDeplete) _selectedUnit.DepleteMovementPoints();
                 _currentHexIndex = _goalHexIndex;
                 _goalHexIndex = -1;
@@ -413,9 +413,17 @@ namespace MapObjects
             Debug.Log("Defender health before attack: " + city.Health);
             Debug.Log("City owned by player: " + city.GetOwnerID());
             
+            // attack garrisoned unit
+            int damageBefore = attacker.Damage;
             if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex))
             {
-                return DoCombat();
+                int healthBefore = _hexGrid.GetUnitDictionary()[_goalHex].Health;
+                
+                DoCombat();
+                if (_hexGrid.GetUnitDictionary().ContainsKey(_goalHex)) return true;
+                
+                int damageModifier = attacker.Damage - healthBefore;
+                attacker.Damage = damageModifier;
             }
             
             bool taken = Combat.InitiateCombat(attacker, city);
@@ -431,7 +439,12 @@ namespace MapObjects
                 }
                 
                 Debug.Log("Attacker Health: " + attacker.Health);
-                if (!dead) return true;
+                if (!dead)
+                {
+                    attacker.Damage = damageBefore;
+                    return true;
+                }
+                
                 attackerAnimator.SetTrigger(Dying);               // start death animation on unit
                 StartCoroutine(RemoveUnit(attacker));
                 // Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
@@ -441,6 +454,8 @@ namespace MapObjects
             }
             
             Debug.Log("TAKEN city from player: " + city.GetOwnerID());
+            attacker.Damage = damageBefore;
+            
             return RemovePlayer(_hexGrid.FindPlayerOfID(attacker.GetOwnerID()),
                 _hexGrid.FindPlayerOfID(city.GetOwnerID()),
                 city);
