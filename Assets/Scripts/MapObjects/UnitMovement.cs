@@ -385,6 +385,9 @@ namespace MapObjects
             
             _selectedUnit.UseMovementPoints();
             _unitInfo.DisplayInfo(_selectedUnit);
+
+            _selectedUnitObject.transform.Find("Audio").Find("Move").gameObject.GetComponent<FMODUnity.StudioEventEmitter>().Play();
+
             return true;
         }
 
