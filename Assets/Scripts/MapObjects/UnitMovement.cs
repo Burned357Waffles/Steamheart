@@ -140,9 +140,9 @@ namespace MapObjects
 
         private IEnumerator RemoveUnit(Unit unit)
         {
-            yield return new WaitForSeconds(8);
+            yield return new WaitForSeconds(5);
             Debug.Log("Despawning unit");
-            _unitInfo.DisplayInfo(_selectedUnit);
+            //_unitInfo.DisplayInfo(_selectedUnit);
             Destroy(_hexGrid.GetUnitObjectDictionary()[unit]);
             _hexGrid.GetUnitObjectDictionary().Remove(unit);
             _hexGrid.GetUnitDictionary().Remove(_currentHex);
@@ -446,10 +446,11 @@ namespace MapObjects
                 }
                 
                 attackerAnimator.SetTrigger(Dying);               // start death animation on unit
-                StartCoroutine(RemoveUnit(attacker));
-                // Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
-                // _hexGrid.GetUnitObjectDictionary().Remove(attacker);
-                // _hexGrid.GetUnitDictionary().Remove(_currentHex);
+                //StartCoroutine(RemoveUnit(attacker));
+                
+                Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
+                _hexGrid.GetUnitObjectDictionary().Remove(attacker);
+                _hexGrid.GetUnitDictionary().Remove(_currentHex);
                 return true;
             }
             
@@ -498,21 +499,23 @@ namespace MapObjects
                 }
                 _unitInfo.DisplayInfo(_selectedUnit);
                 if (!attackerDead) return true;
-                attackerAnimator.SetTrigger(Dying);
-                StartCoroutine(RemoveUnit(attacker));
-                // _unitInfo.DisplayInfo(_selectedUnit);
-                // Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
-                // _hexGrid.GetUnitObjectDictionary().Remove(attacker);
-                // _hexGrid.GetUnitDictionary().Remove(_currentHex);
+                //attackerAnimator.SetTrigger(Dying);
+                //StartCoroutine(RemoveUnit(attacker));
+                
+                _unitInfo.DisplayInfo(_selectedUnit);
+                Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
+                _hexGrid.GetUnitObjectDictionary().Remove(attacker);
+                _hexGrid.GetUnitDictionary().Remove(_currentHex);
 
                 return true;
             }
-            defenderAnimator.SetTrigger(Dying);               // start death animation on unit
+            //defenderAnimator.SetTrigger(Dying);               // start death animation on unit
             attackerAnimator.SetBool(InCombat, false);
-            StartCoroutine(RemoveUnit(defender));
-            // Destroy(_hexGrid.GetUnitObjectDictionary()[defender]);
-            // _hexGrid.GetUnitObjectDictionary().Remove(defender);
-            // _hexGrid.GetUnitDictionary().Remove(_goalHex);
+            //StartCoroutine(RemoveUnit(defender));
+            
+            Destroy(_hexGrid.GetUnitObjectDictionary()[defender]);
+            _hexGrid.GetUnitObjectDictionary().Remove(defender);
+            _hexGrid.GetUnitDictionary().Remove(_goalHex);
             
             return false;
         }
