@@ -141,6 +141,7 @@ namespace MapObjects
         private IEnumerator RemoveUnit(Unit unit)
         {
             yield return new WaitForSeconds(8);
+            Debug.Log("Despawning unit");
             _unitInfo.DisplayInfo(_selectedUnit);
             Destroy(_hexGrid.GetUnitObjectDictionary()[unit]);
             _hexGrid.GetUnitObjectDictionary().Remove(unit);
