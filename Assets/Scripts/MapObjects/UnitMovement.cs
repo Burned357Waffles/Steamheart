@@ -434,12 +434,10 @@ namespace MapObjects
                 Debug.Log("Attacker Health: " + attacker.Health);
                 if (!dead) return true;
                 attackerAnimator.SetTrigger(Dying);               // start death animation on unit
-                // add a wait if possible
-                
-                
-                Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
-                _hexGrid.GetUnitObjectDictionary().Remove(attacker);
-                _hexGrid.GetUnitDictionary().Remove(_currentHex);
+                StartCoroutine(RemoveUnit(attacker));
+                // Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
+                // _hexGrid.GetUnitObjectDictionary().Remove(attacker);
+                // _hexGrid.GetUnitDictionary().Remove(_currentHex);
                 return true;
             }
             
