@@ -186,8 +186,6 @@ namespace MapObjects
                     return;
                 }
                 
-                
-                
                 _selectEmitter.Play();
                 return;
             }

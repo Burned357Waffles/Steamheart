@@ -32,7 +32,7 @@ namespace MapObjects
         {
             _attackerUnit = attacker;
             _defenderUnit = defender;
-            return _attackerCity.GetOwnerID() != _defenderUnit.GetOwnerID() && UnitRetaliation();
+            return _attackerUnit.GetOwnerID() != _defenderUnit.GetOwnerID() && UnitRetaliation();
         }
         
         public static bool InitiateRetaliation(City attacker, Unit defender)
