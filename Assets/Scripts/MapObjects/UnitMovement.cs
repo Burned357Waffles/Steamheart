@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Hex;
@@ -136,7 +137,16 @@ namespace MapObjects
         // use WorldPosition in Hex to get actual position
 
         public void SetCurrentIndex(int index) { _currentHexIndex = index; }
-        
+
+        private IEnumerator RemoveUnit(Unit unit)
+        {
+            yield return new WaitForSeconds(8);
+            _unitInfo.DisplayInfo(_selectedUnit);
+            Destroy(_hexGrid.GetUnitObjectDictionary()[unit]);
+            _hexGrid.GetUnitObjectDictionary().Remove(unit);
+            _hexGrid.GetUnitDictionary().Remove(_currentHex);
+            
+        }
         private void Start()
         {
             _camera = Camera.main;
@@ -425,6 +435,8 @@ namespace MapObjects
                 if (!dead) return true;
                 attackerAnimator.SetTrigger(Dying);               // start death animation on unit
                 // add a wait if possible
+                
+                
                 Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
                 _hexGrid.GetUnitObjectDictionary().Remove(attacker);
                 _hexGrid.GetUnitDictionary().Remove(_currentHex);
@@ -475,22 +487,24 @@ namespace MapObjects
                 _unitInfo.DisplayInfo(_selectedUnit);
                 if (!attackerDead) return true;
                 attackerAnimator.SetTrigger(Dying);
-                _unitInfo.DisplayInfo(_selectedUnit);
-                Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
-                _hexGrid.GetUnitObjectDictionary().Remove(attacker);
-                _hexGrid.GetUnitDictionary().Remove(_currentHex);
+                StartCoroutine(RemoveUnit(attacker));
+                // _unitInfo.DisplayInfo(_selectedUnit);
+                // Destroy(_hexGrid.GetUnitObjectDictionary()[attacker]);
+                // _hexGrid.GetUnitObjectDictionary().Remove(attacker);
+                // _hexGrid.GetUnitDictionary().Remove(_currentHex);
 
                 return true;
             }
             defenderAnimator.SetTrigger(Dying);               // start death animation on unit
             attackerAnimator.SetBool(InCombat, false);
-            Destroy(_hexGrid.GetUnitObjectDictionary()[defender]);
-            _hexGrid.GetUnitObjectDictionary().Remove(defender);
-            _hexGrid.GetUnitDictionary().Remove(_goalHex);
+            StartCoroutine(RemoveUnit(defender));
+            // Destroy(_hexGrid.GetUnitObjectDictionary()[defender]);
+            // _hexGrid.GetUnitObjectDictionary().Remove(defender);
+            // _hexGrid.GetUnitDictionary().Remove(_goalHex);
             
             return false;
         }
-
+        
         private bool RemovePlayer(Player attackerPlayer, Player defenderPlayer, City city)
         {
             defenderPlayer.RemoveCity(city);
