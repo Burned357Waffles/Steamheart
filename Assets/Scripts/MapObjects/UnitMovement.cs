@@ -243,7 +243,10 @@ namespace MapObjects
                     // if another player's city is clicked
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() ==
                         _hexGrid.GetCityAt(_goalHex).GetOwnerID())
-                        goto AfterCombatCheck;
+                        {
+                            
+                            goto AfterCombatCheck;
+                        }
                     
                     if (!IsTargetInRange(_currentHex, _goalHex, _hexGrid.GetUnitDictionary()[_currentHex].AttackRadius))
                         return;
@@ -406,6 +409,7 @@ namespace MapObjects
             
             Debug.Log("ATTACKING CITY");
             Unit attacker = _hexGrid.GetUnitDictionary()[_currentHex];
+            
             City city = _hexGrid.GetCityAt(_goalHex);
             
             Animator attackerAnimator = _hexGrid.GetUnitObjectDictionary()[attacker]
@@ -487,6 +491,8 @@ namespace MapObjects
             attackerAnimator.SetTrigger(Attacking);                // start attack animation on unit
             defenderAnimator.SetTrigger(GetHit);
             bool dead = Combat.InitiateCombat(attacker, defender);
+            PlayAttackAudio(attacker);
+
             _unitInfo.DisplayInfo(_selectedUnit);
             if (!dead)
             {
@@ -559,6 +565,13 @@ namespace MapObjects
         {
             _currentHexIndex = -1;
             _goalHexIndex = -1;
+        }
+
+        private void PlayAttackAudio(Unit unit)
+        {
+            GameObject _selectedUnitObject = _hexGrid.GetUnitObjectDictionary()[unit];
+            FMODUnity.StudioEventEmitter audio = _selectedUnitObject.transform.Find("Audio").Find("Strike").gameObject.GetComponent<FMODUnity.StudioEventEmitter>();
+            audio.Play();
         }
     }
 }
