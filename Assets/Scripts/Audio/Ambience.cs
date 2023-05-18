@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Ambience : MonoBehaviour
 {    
+    public float cityMaxDistance = 100f;
+    public float cityFadeDistance = 50f;
     [SerializeField]
     private Misc.MoveCamera cameraRig = null;
     [SerializeField]
@@ -35,8 +37,8 @@ public class Ambience : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        emitter.SetParameter("Camera Zoom", GetNormZoom());
-        emitter.SetParameter("City Distance", GetMinCityDistance());
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Camera Zoom", GetNormZoom());
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Balance City Nature", 1 - _CityAttenuation());
     }
 
     private float GetNormZoom()
@@ -51,18 +53,18 @@ public class Ambience : MonoBehaviour
 
     private float GetMinCityDistance()
     {
-        float minCityDistance = 1000f;
+        float minCityDistance = Mathf.Infinity;
         
         List<MapObjects.City> cities = hexGrid.GetCityList();
 
         Vector3 minCityLocation = Vector3.zero;
 
-        Vector3 cameraPosition = cameraRig.GetComponentInChildren<Camera>().transform.position;
+        Vector3 position = cameraRig.transform.position;
 
         for (int i = 0; i < cities.Count; i++)
         {
             Vector3 cityLocation = cities[i].GetCityCenter().WorldPosition;
-            float distance = Vector3.Distance(cameraPosition, cityLocation);
+            float distance = Vector3.Distance(position, cityLocation);
             if (distance < minCityDistance || minCityDistance == 0)
             {
                 minCityDistance = distance;
@@ -71,5 +73,13 @@ public class Ambience : MonoBehaviour
         }
 
         return minCityDistance;
+    }
+
+    private float _CityAttenuation()
+    {
+        float minCityDistance = GetMinCityDistance();
+        float attenuation = 1 - (minCityDistance - cityFadeDistance) / (cityMaxDistance - cityFadeDistance);
+
+        return Mathf.Clamp(attenuation, 0, 1);
     }
 }
