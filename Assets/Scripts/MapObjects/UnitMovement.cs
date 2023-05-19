@@ -32,6 +32,7 @@ namespace MapObjects
         private int _currentPlayer;
         private Camera _camera;
         private FMODUnity.StudioEventEmitter _selectEmitter;
+        private FMODUnity.StudioEventEmitter _invalidEmitter;
         [SerializeField] private Animator animator;
         private static readonly int InCombat = Animator.StringToHash("InCombat");
         private static readonly int Attacking = Animator.StringToHash("Attacking");
@@ -156,6 +157,7 @@ namespace MapObjects
             _currentPlayer = 1;
             _unitInfo = infoPanel.GetComponent<MapObjectInfo>();
             _selectEmitter = GameObject.Find("Select").GetComponent<FMODUnity.StudioEventEmitter>();
+            _invalidEmitter = GameObject.Find("UIInvalidMove").GetComponent<FMODUnity.StudioEventEmitter>();
             animator = GetComponent<Animator>();
             
         }
@@ -223,6 +225,7 @@ namespace MapObjects
                 
                 if (_hexGrid.GetUnitDictionary()[_currentHex].GetCurrentMovementPoints() <= 0)
                 {
+                    _invalidEmitter.Play();
                     ResetIndices();
                     return;
                 }
@@ -231,6 +234,7 @@ namespace MapObjects
                 {
                     if (_hexGrid.GetUnitDictionary()[_goalHex].GetOwnerID() == _currentPlayer)
                     {
+                        _invalidEmitter.Play();
                         ResetIndices();
                         return;
                     }
@@ -244,7 +248,6 @@ namespace MapObjects
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() ==
                         _hexGrid.GetCityAt(_goalHex).GetOwnerID())
                         {
-                            
                             goto AfterCombatCheck;
                         }
                     
@@ -295,19 +298,28 @@ namespace MapObjects
                 
                 AfterCombatCheck:
                 
-                if (!SelectedTileIsNeighbor()) return;
+                if (!SelectedTileIsNeighbor())
+                {
+                    _invalidEmitter.Play();
+                    return;
+                }
                 
                 Debug.Log(_goalHex.GetHexType());
                 Debug.Log(_goalHex.IsBlocked());
                 
                 if (_goalHex.IsBlocked() && 
                     _hexGrid.GetUnitDictionary()[_currentHex].GetUnitType() != Unit.UnitType.Airship)
-                    return;
+                    {
+                        _invalidEmitter.Play();
+                        ResetIndices();
+                        return; 
+                    }
 
                 if (_hexGrid.GetUnitDictionary().ContainsKey(_currentHex))
                 {
                     if (_hexGrid.GetUnitDictionary()[_currentHex].GetOwnerID() != _currentPlayer)
                     {
+                        _invalidEmitter.Play();
                         ResetIndices();
                         return;
                     }
@@ -371,10 +383,13 @@ namespace MapObjects
             if (_goalHex.GetHexType() == Hex.Hex.HexType.Forest
                 && _selectedUnit.GetUnitType() != Unit.UnitType.Airship)
             {
-                if (_selectedUnit.GetCurrentMovementPoints() < 2) return false;
+                if (_selectedUnit.GetCurrentMovementPoints() < 2) 
+                {
+                    _invalidEmitter.Play();
+                    return false;
+                }
                 _selectedUnit.UseMovementPoints();
             }
-                
             
             _selectedUnit.Q = _goalHex.Q;
             _selectedUnit.R = _goalHex.R;

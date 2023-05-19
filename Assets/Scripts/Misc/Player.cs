@@ -24,6 +24,12 @@ namespace Misc
         {
             _playerID = id;
             IsAlive = true;
+
+            if (DebugSettings.debugMode && DebugSettings.overrideStartingMaterials)
+            {
+                TotalIronCount = DebugSettings.startingIron;
+                TotalWoodCount = DebugSettings.startingWood;
+            }
         }
         
         public int GetPlayerID() { return _playerID; }
