@@ -7942,7 +7942,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 721c08c8c5e8a07439615e24af9793b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugMode: 0
+  _debugMode: 1
+  _overrideStartingMaterials: 1
   _startingIron: 100
   _startingWood: 100
 --- !u!4 &1560087798
