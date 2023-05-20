@@ -47,5 +47,15 @@ namespace Misc
             _ownedCities.Remove(city);
             if (_ownedCities.Count == 0) { IsAlive = false; }
         }
+
+        public int GetMinAliveCityHealth()
+        {
+            int minHealth = _ownedCities[0].Health;
+            foreach (City city in _ownedCities)
+            {
+                if ((city.Health < minHealth && city.Health > 0) || minHealth <= 0) minHealth = city.Health;
+            }
+            return minHealth;
+        }
     }
 }
