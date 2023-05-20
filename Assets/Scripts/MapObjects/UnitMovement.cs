@@ -431,6 +431,7 @@ namespace MapObjects
                             .transform.GetChild(0).GetComponent<Animator>();
             attackerAnimator.SetBool(InCombat, true);                 // start combat idle animation on unit
             attackerAnimator.SetTrigger(Attacking);                 // start attack animation on unit
+            PlayAttackAudio(attacker);
             Debug.Log("Attacker health before attack: " + attacker.Health);
             Debug.Log("Defender health before attack: " + city.Health);
             Debug.Log("City owned by player: " + city.GetOwnerID());
