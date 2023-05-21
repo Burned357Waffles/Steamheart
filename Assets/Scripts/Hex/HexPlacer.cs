@@ -25,6 +25,7 @@ namespace Hex
         private bool _isSelecting;
 
         private Animator _animator;
+        private FMODUnity.StudioEventEmitter _createEmitter;
 
         public void SetPlayer(int id)
         {
@@ -137,6 +138,7 @@ namespace Hex
             newHex.transform.Rotate(0f, Random.Range(0, 7) * 60, 0f, Space.Self);
             
             _animator = newHex.transform.GetChild(0).GetComponent<Animator>();
+            _createEmitter = newHex.GetComponent<FMODUnity.StudioEventEmitter>();
             selectedHex.SetHexType(hexPrefab.name);
             selectedHex.SetOwnerID(_currentPlayer);
 
@@ -145,6 +147,8 @@ namespace Hex
                 _animator.Play("MountainCreation");
             }
             else { _animator.Play("LandCreation"); }
+            _createEmitter.Play();
+
 
             _hexGrid.GetGameObjectList()[hexIndex] = newHex;
             _hexGrid.GetHexObjectDictionary()[_hexGrid.GetHexList()[hexIndex]] = newHex;
