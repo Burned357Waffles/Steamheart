@@ -19,7 +19,7 @@ namespace Settings
         
         private static int _playerCount = 3;
         private static int _mapSize = 20;
-        private static int _seed = 963; //Random.Range(0, 1000);
+        private static int _seed = 963; // 963 for best seed
         
 
         private static int[] _mapSizes = { 16, 32, 64, 96, 128 };
@@ -29,6 +29,7 @@ namespace Settings
             _playerDropdown = playerCountMenu.GetComponent<TMP_Dropdown>();
             _sizeDropdown = mapSizeMenu.GetComponent<TMP_Dropdown>();
             _seedEntry = seedMenu.GetComponent<TMP_InputField>();
+            _seed = Random.Range(0, 1000);
         }
 
         /// <summary> ***********************************************
