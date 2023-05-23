@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.044
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1673635755}
-  m_IndirectSpecularColor: {r: 0.208482, g: 0.22973055, b: 0.25417253, a: 0.044}
+  m_IndirectSpecularColor: {r: 0.20848203, g: 0.22973058, b: 0.25417265, a: 0.044}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6283,6 +6283,30 @@ PrefabInstance:
     - target: {fileID: 4940158467195899156, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5433404186300861807, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
+      propertyPath: m_text
+      value: "Random\u200B"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703364831733100150, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703364831733100150, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703364831733100150, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703364831733100150, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1607109616}
+    - target: {fileID: 6703364831733100150, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetSeed
       objectReference: {fileID: 0}
     - target: {fileID: 8181671699244065938, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
       propertyPath: m_Enabled
