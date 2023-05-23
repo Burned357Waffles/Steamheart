@@ -5,9 +5,6 @@ using Misc;
 using Settings;
 using UI.HUD;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.Serialization;
 using QualitySettings = Settings.QualitySettings;
 using Random = UnityEngine.Random;
 
@@ -167,7 +164,7 @@ namespace Hex
             _capitolDistance = (int)(mapRadius * 0.65f);
             CameraRig.GetComponent<MoveCamera>().worldBorderZ = 1.5625f * mapRadius;
             CameraRig.GetComponent<MoveCamera>().worldBorderX = 1.5625f * mapRadius;
-            //playerCount = 1; // for debugging
+            Random.InitState(MatchSettings.GetSeed());
             GenerateGrid();
             CreateCapitols();
             EndTurn endTurn = FindObjectOfType<EndTurn>();
@@ -336,8 +333,10 @@ namespace Hex
                 arrayToShuffle[t] = arrayToShuffle[r];
                 arrayToShuffle[r] = tmp;
             }
-            
-            for (int i = 0; i < playerCount; i++)
+
+            if (playerCount == 3) arrayToShuffle = new[] { 0, 2, 4, 1, 3, 5 };
+
+                for (int i = 0; i < playerCount; i++)
             {
                 Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(),
                     CoordinateScale(DirectionVectors[arrayToShuffle[i]], _capitolDistance)));

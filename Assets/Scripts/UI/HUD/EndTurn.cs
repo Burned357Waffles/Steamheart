@@ -50,6 +50,7 @@ namespace UI.HUD
         // angle : color
         private Dictionary<Vector3, Color> _sunSettings = new Dictionary<Vector3, Color>();
 
+        private FMODUnity.StudioEventEmitter _bgmEmitter;
 
         public void InitEndTurn()
         {
@@ -66,6 +67,7 @@ namespace UI.HUD
             _objectInfo = infoPanel.GetComponent<MapObjectInfo>();
             _light = sunLight.GetComponent<Light>();
             _endTurnEmitter = endTurnButton.GetComponent<FMODUnity.StudioEventEmitter>();
+            _bgmEmitter = GameObject.Find("BGM").GetComponent<FMODUnity.StudioEventEmitter>();
             playerIndicator.text = _currentPlayer.ToString();
 
             Color player1IconColor = player1Icon.color;
@@ -368,6 +370,7 @@ namespace UI.HUD
             AdvancePlayer();
             if (_dayNightOn) CycleTime();
             CenterCameraToPlayerCapital();
+            _bgmEmitter.SetParameter("City Health", _hexGrid.GetPlayerList()[_currentPlayer - 1].GetMinAliveCityHealth());
             AccumulateMaterials();
             _hexTypeSelector.ResetPlacementCount();
             _objectInfo.DisableInfoPanel();

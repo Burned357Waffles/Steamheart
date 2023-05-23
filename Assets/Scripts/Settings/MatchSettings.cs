@@ -3,6 +3,7 @@ using TMPro;
 
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Settings
 {
@@ -10,12 +11,16 @@ namespace Settings
     {
         [SerializeField] public GameObject playerCountMenu;
         [SerializeField] public GameObject mapSizeMenu;
+        [SerializeField] public GameObject seedMenu;
         
         private static TMP_Dropdown _playerDropdown;
         private static TMP_Dropdown _sizeDropdown;
+        private static TMP_InputField _seedEntry;
         
-        private static int _playerCount = 2;
-        private static int _mapSize = 16;
+        private static int _playerCount = 3;
+        private static int _mapSize = 20;
+        private static int _seed = 963; // 963 for best seed
+        
 
         private static int[] _mapSizes = { 16, 32, 64, 96, 128 };
 
@@ -23,6 +28,8 @@ namespace Settings
         {
             _playerDropdown = playerCountMenu.GetComponent<TMP_Dropdown>();
             _sizeDropdown = mapSizeMenu.GetComponent<TMP_Dropdown>();
+            _seedEntry = seedMenu.GetComponent<TMP_InputField>();
+            _seed = Random.Range(0, 1000);
         }
 
         /// <summary> ***********************************************
@@ -46,5 +53,18 @@ namespace Settings
             Debug.Log("Setting map size to: " + _mapSize);
         }
         public static int GetMapSize() { return _mapSize; }
+
+        public static void SetSeed()
+        {
+            _seed = Int32.Parse(_seedEntry.text);
+            Debug.Log("Seed set to " + _seed);
+        }
+
+        public static int GetSeed()
+        {
+            Debug.Log("SEED: " + _seed);
+            return _seed;
+        }
+        
     }
 }
