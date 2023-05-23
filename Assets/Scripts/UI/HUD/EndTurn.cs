@@ -14,6 +14,8 @@ namespace UI.HUD
     public class EndTurn : MonoBehaviour
     {
         [SerializeField] public TextMeshProUGUI playerIndicator;
+        [SerializeField] public UnityEngine.UI.Image player1Icon;
+        [SerializeField] public UnityEngine.UI.Image player2Icon;
         [SerializeField] public GameObject endTurnButton;
         [SerializeField] public GameObject infoPanel;
         [SerializeField] public GameObject hexPrefab;
@@ -67,6 +69,15 @@ namespace UI.HUD
             _endTurnEmitter = endTurnButton.GetComponent<FMODUnity.StudioEventEmitter>();
             _bgmEmitter = GameObject.Find("BGM").GetComponent<FMODUnity.StudioEventEmitter>();
             playerIndicator.text = _currentPlayer.ToString();
+
+            Color player1IconColor = player1Icon.color;
+            Color player2IconColor = player2Icon.color;
+            // make P1's icon visible and P2's icon transparent
+            player1IconColor.a = 1f;
+            player1Icon.color = player1IconColor;
+            player2IconColor.a = 0f;
+            player2Icon.color = player2IconColor;
+
             _lerpTime = 1f;
 
             _hexPrefabsDict.Add(_hexGrid.ownedBasicHex, _hexGrid.basicHex);
@@ -188,14 +199,35 @@ namespace UI.HUD
                     }
                 } 
             }
-            
-            
+            Color player1IconColor = player1Icon.color;
+            Color player2IconColor = player2Icon.color;
+
             Debug.Log("Player after advance: " + _currentPlayer);
             _hexPlacer.SetPlayer(_currentPlayer);
             _unitMovement.SetPlayer(_currentPlayer);
             _spawner.SetPlayer(_currentPlayer);
             Debug.Log("Player count = " + _hexGrid.GetPlayerList().Count);
             playerIndicator.text = _currentPlayer.ToString();
+
+            if (_currentPlayer == 1)
+            {
+                // make P1's icon visible and P2's icon transparent
+                player1IconColor.a = 1f;
+                player1Icon.color = player1IconColor;
+                player2IconColor.a = 0f;
+                player2Icon.color = player2IconColor;
+
+            }
+
+            else if (_currentPlayer == 2)
+            {
+                // make P2's icon visible and P1's icon transparent
+                player1IconColor.a = 0f;
+                player1Icon.color = player1IconColor;
+                player2IconColor.a = 1f;
+                player2Icon.color = player2IconColor;
+            }
+            
         }
 
         private void CheckForWin()
