@@ -106,13 +106,13 @@ namespace UI.HUD
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Alpha4)) ProcessEndTurn();
             if (!_shouldLerp) return;
             
             _light.color = LerpColor(_startColor, _endColor, _timeStarted, _lerpTime);
             _light.intensity = 0.004f;
             Vector3 rot = LerpRotation(_startPos, _endPos, _timeStarted, _lerpTime);
             sunLight.transform.localRotation = Quaternion.Euler(rot);
-            
         }
 
         private void InitColors()
@@ -373,7 +373,7 @@ namespace UI.HUD
         
         public void ProcessEndTurn()
         {
-            _endTurnEmitter.Play();
+            //_endTurnEmitter.Play();
             HealCity(); 
             ResetCityUI();
             ResetUnitMovementPoints();

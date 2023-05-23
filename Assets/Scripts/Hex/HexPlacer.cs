@@ -1,6 +1,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 using MapObjects;
+using UI.HUD;
 
 namespace Hex
 {
@@ -21,6 +22,7 @@ namespace Hex
         private HexGrid _hexGrid;
         private UnitMovement _unitMovement;
         private Camera _camera;
+        private HexTypeSelector _hexTypeSelector;
         private bool _isHexPrefabNull;
         private bool _isSelecting;
 
@@ -38,6 +40,7 @@ namespace Hex
             _camera = Camera.main;
             _hexGrid = FindObjectOfType<HexGrid>();
             _unitMovement = FindObjectOfType<UnitMovement>();
+            _hexTypeSelector = FindObjectOfType<HexTypeSelector>();
             SetPlayer(1);
         }
 
@@ -52,6 +55,10 @@ namespace Hex
         /// </summary> **********************************************
         private void DetectClick()
         {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) _hexTypeSelector.SetHexTypeBasicButton();
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) _hexTypeSelector.SetHexTypeForestButton();
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) _hexTypeSelector.SetHexTypeMountainButton();
+
             if (Input.GetMouseButtonDown(1))
             {
                 if (_isHexPrefabNull) return; // if button is not chosen
