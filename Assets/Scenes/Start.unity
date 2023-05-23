@@ -172,8 +172,12 @@ MonoBehaviour:
   mainMenu: {fileID: 1021669237}
   newGame: {fileID: 1370243151}
   hostNewLobby: {fileID: 470643797}
+  characterSelectOpen: {fileID: 2111656164}
   backButton: {fileID: 701577530}
   nextButton: {fileID: 124667281}
+  characterButton: {fileID: 917255748}
+  charSelectButton: {fileID: 1505242505}
+  charSelectButton2: {fileID: 2109090075}
 --- !u!224 &33696288 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1324170479694473244, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
@@ -599,6 +603,7 @@ Transform:
   - {fileID: 30292017}
   - {fileID: 41630075}
   - {fileID: 1938646272}
+  - {fileID: 2111656165}
   m_Father: {fileID: 1453072199}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1881,7 +1886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6732314757170571019, guid: 31db45742e1b6b04a995491e59ce503b, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6892668786904020313, guid: 31db45742e1b6b04a995491e59ce503b, type: 3}
       propertyPath: m_SizeDelta.x
@@ -3405,7 +3410,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2936187540890602988, guid: 83cea3c1aa24ca6429e839b93edc3060, type: 3}
       propertyPath: m_Name
-      value: ButtonWithSound
+      value: Select Char1
       objectReference: {fileID: 0}
     - target: {fileID: 3591709655344109349, guid: 83cea3c1aa24ca6429e839b93edc3060, type: 3}
       propertyPath: m_LocalScale.x
@@ -3628,8 +3633,9 @@ GameObject:
   - component: {fileID: 917255750}
   - component: {fileID: 917255749}
   - component: {fileID: 917255748}
+  - component: {fileID: 917255751}
   m_Layer: 5
-  m_Name: SelectCharacter
+  m_Name: SelectCharacterButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3739,6 +3745,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 917255746}
   m_CullTransparentMesh: 1
+--- !u!114 &917255751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 917255746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ced3f42eb53914caf51ecfa2c64ada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenu: {fileID: 197003880}
+  newGame: {fileID: 1990626289}
+  hostNewLobby: {fileID: 2119624410}
+  characterSelectOpen: {fileID: 2111656164}
+  backButton: {fileID: 0}
+  nextButton: {fileID: 0}
+  characterButton: {fileID: 917255748}
+  charSelectButton: {fileID: 1505242505}
+  charSelectButton2: {fileID: 2109090075}
 --- !u!1 &961399353
 GameObject:
   m_ObjectHideFlags: 0
@@ -6263,7 +6290,6 @@ Transform:
   m_Children:
   - {fileID: 197003881}
   - {fileID: 1310855686}
-  - {fileID: 2111656165}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6551,6 +6577,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 402026, guid: 20822131f7a068849967c4eb0328c80d, type: 3}
   m_PrefabInstance: {fileID: 1498954021}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1505242505 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3438100533674377259, guid: 83cea3c1aa24ca6429e839b93edc3060, type: 3}
+  m_PrefabInstance: {fileID: 876312235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1505896236
 GameObject:
   m_ObjectHideFlags: 0
@@ -9041,7 +9078,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2936187540890602988, guid: 83cea3c1aa24ca6429e839b93edc3060, type: 3}
       propertyPath: m_Name
-      value: ButtonWithSound
+      value: Select Char2
       objectReference: {fileID: 0}
     - target: {fileID: 3591709655344109349, guid: 83cea3c1aa24ca6429e839b93edc3060, type: 3}
       propertyPath: m_LocalScale.x
@@ -9176,6 +9213,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5135878384947178146, guid: 83cea3c1aa24ca6429e839b93edc3060, type: 3}
   m_PrefabInstance: {fileID: 2109090070}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2109090075 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3438100533674377259, guid: 83cea3c1aa24ca6429e839b93edc3060, type: 3}
+  m_PrefabInstance: {fileID: 2109090070}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2111656164
 GameObject:
   m_ObjectHideFlags: 0
@@ -9209,7 +9257,7 @@ RectTransform:
   m_Children:
   - {fileID: 1227858644}
   - {fileID: 1355984351}
-  m_Father: {fileID: 1453072199}
+  m_Father: {fileID: 197003881}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -9249,7 +9297,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -9264,7 +9312,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2111656164}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
