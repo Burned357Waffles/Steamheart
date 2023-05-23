@@ -7,6 +7,7 @@ using Misc;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using QualitySettings = Settings.QualitySettings;
 
 namespace UI.HUD
@@ -21,7 +22,9 @@ namespace UI.HUD
         [SerializeField] public GameObject hexPrefab;
         [SerializeField] public GameObject sunLight;
         [SerializeField] public GameObject constantSunLight;
-
+        [SerializeField] public GameObject victoryScreen;
+        [SerializeField] private Button exitGameButton;
+        
         private HexGrid _hexGrid;
         private HexPlacer _hexPlacer;
         private HexTypeSelector _hexTypeSelector;
@@ -34,6 +37,8 @@ namespace UI.HUD
         private MoveCamera _cameraRig;
         private Light _light;
         private int _currentSunIndex;
+
+        private Canvas _victoryCanvas;
         private bool _dayNightOn;
 
         private bool _shouldLerp;
@@ -248,16 +253,12 @@ namespace UI.HUD
                 Debug.Log("Player " + player.GetPlayerID() + " has " + player.GetOwnedCities().Count +
                           " cities and " + player.GetNumCapitols() + " capitols");
                 if (player.GetNumCapitols() != _hexGrid.playerCount) continue;
+                
                 Debug.Log("Player " + player.GetPlayerID() + " has won!");
-                #if UNITY_EDITOR
-                {
-                    UnityEditor.EditorApplication.isPlaying = false;
-                }
-                #else 
-		        {
-			        Application.Quit();
-		        }
-                #endif
+                _victoryCanvas = victoryScreen.GetComponent<Canvas>();
+                _victoryCanvas.enabled = true;
+                Button exitButton = exitGameButton.GetComponent<Button>();
+                exitButton.onClick.AddListener(ExitGame);
             }
         }
         
@@ -386,6 +387,20 @@ namespace UI.HUD
             _hexTypeSelector.ResetPlacementCount();
             _objectInfo.DisableInfoPanel();
             CheckForWin();
+        }
+
+        public void ExitGame()
+        {
+            #if UNITY_EDITOR
+                {
+                   
+                    UnityEditor.EditorApplication.isPlaying = false;
+                }
+            #else 
+		        {
+			        Application.Quit();
+		        }
+            #endif
         }
 
         
