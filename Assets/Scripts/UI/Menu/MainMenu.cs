@@ -37,7 +37,6 @@ namespace UI.Menu
             _joinGameCanvas = joinGame.GetComponent<Canvas>();
             _settingsCanvas = settings.GetComponent<Canvas>();
             //_quitCanvas = quit.GetComponent<Canvas>();
-            
             Menu.ButtonAction(newGameButton, NewGame);
             Menu.ButtonAction(loadGameButton, LoadGame);
             Menu.ButtonAction(joinGameButton, JoinGame);

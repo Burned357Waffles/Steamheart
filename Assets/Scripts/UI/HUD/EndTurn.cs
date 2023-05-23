@@ -72,6 +72,7 @@ namespace UI.HUD
 
             Color player1IconColor = player1Icon.color;
             Color player2IconColor = player2Icon.color;
+            
             // make P1's icon visible and P2's icon transparent
             player1IconColor.a = 1f;
             player1Icon.color = player1IconColor;
@@ -225,6 +226,16 @@ namespace UI.HUD
                 player1IconColor.a = 0f;
                 player1Icon.color = player1IconColor;
                 player2IconColor.a = 1f;
+                player2Icon.color = player2IconColor;
+            }
+
+            else
+            {
+                // make P1's and P2's icon transparent
+                // later this could make another character icon visible
+                player1IconColor.a = 0f;
+                player1Icon.color = player1IconColor;
+                player2IconColor.a = 0f;
                 player2Icon.color = player2IconColor;
             }
             
