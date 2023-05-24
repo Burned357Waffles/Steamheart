@@ -334,9 +334,7 @@ namespace Hex
                 arrayToShuffle[r] = tmp;
             }
 
-            if (playerCount == 3) arrayToShuffle = new[] { 0, 2, 4, 1, 3, 5 };
-
-                for (int i = 0; i < playerCount; i++)
+            for (int i = 0; i < playerCount; i++)
             {
                 Hex hexToPut = GetHexAt(AddCoordinates(_hexList[0].GetVectorCoordinates(),
                     CoordinateScale(DirectionVectors[arrayToShuffle[i]], _capitolDistance)));
