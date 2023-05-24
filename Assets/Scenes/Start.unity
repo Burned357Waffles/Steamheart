@@ -7636,6 +7636,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4591940783647576272, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1607109616}
+    - target: {fileID: 4591940783647576272, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetMapSize
+      objectReference: {fileID: 0}
     - target: {fileID: 4714045367494206779, guid: 7fedbdf214c8a5644aa704d5bd07efa4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
