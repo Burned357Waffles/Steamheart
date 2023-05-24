@@ -18,7 +18,7 @@ namespace Settings
         private static TMP_InputField _seedEntry;
         
         private static int _playerCount = 3;
-        private static int _mapSize = 20;
+        private static int _mapSize = 16;
         private static int _seed = 963; // 963 for best seed
         
 
