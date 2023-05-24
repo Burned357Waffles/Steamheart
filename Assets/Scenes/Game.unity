@@ -653,7 +653,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6511915781186675094, guid: 6be3b8904028d7343b5adc0de70fe10e, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4777,7 +4777,7 @@ PrefabInstance:
     - target: {fileID: 6948722948100263015, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4068044055246775935, guid: 34a4a0c89db9414489be1315c76bc9f1, type: 2}
+      objectReference: {fileID: 2100000, guid: 747390e5fc076dc4d8ce542a220283e7, type: 2}
     - target: {fileID: 6948722948100263015, guid: 69678fd281c5a314aa6df01b29273670, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4287219948
