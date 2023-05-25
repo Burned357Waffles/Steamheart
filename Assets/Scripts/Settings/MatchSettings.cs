@@ -17,7 +17,7 @@ namespace Settings
         private static TMP_Dropdown _sizeDropdown;
         private static TMP_InputField _seedEntry;
         
-        private static int _playerCount = 3;
+        private static int _playerCount = 2;
         private static int _mapSize = 16;
         private static int _seed = 963; // 963 for best seed
         
