@@ -12,6 +12,10 @@ Steamheart was developed for the CSC631 Game Development class at San Francisco 
 Trailer: https://www.youtube.com/watch?v=DhZIClhsd7o \
 Gameplay: https://www.youtube.com/watch?v=F6YHDg0fp3w
 
+# Game Design Document
+Our game design document containing our plans for developing the game. \
+https://docs.google.com/document/d/1_-wmpoC0c-jBP442gD8gzRbra9lEnFFTCNGD4lFpemg/edit?pli=1
+
 ## Contributors
 ### Code Development
 ```
