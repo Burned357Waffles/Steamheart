@@ -8,6 +8,10 @@ Steamheart is a local-multiplayer 4x style game for 2-6 players. This means that
 # Development Information
 Steamheart was developed for the CSC631 Game Development class at San Francisco State University in the Spring 2023 semester. Steamheart was Team 2's game project and production ran from March to May. The GDD file represents the original vision for the game and not the delivered product.
 
+# Game Trailer and Gameplay
+Trailer: https://www.youtube.com/watch?v=DhZIClhsd7o
+Gameplay: https://www.youtube.com/watch?v=F6YHDg0fp3w
+
 ## Contributors
 ### Code Development
 ```
